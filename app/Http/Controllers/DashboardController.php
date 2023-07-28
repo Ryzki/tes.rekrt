@@ -14,14 +14,19 @@ class DashboardController extends Controller
     {
         // Default
         $selection = false;
-        $images = ['lightning-bolts.svg','arrows.svg','thoughts.svg','gears.svg','keys.svg','lightning-bolts.svg','arrows.svg','thoughts.svg','gears.svg','keys.svg'];
+        $images = ['lightning-bolts.svg','arrows.svg','thoughts.svg','gears.svg','keys.svg','lightning-bolts.svg','arrows.svg','thoughts.svg','gears.svg','keys.svg','lightning-bolts.svg'];
 
         // Get tests
         if(Auth::user()->role->is_global === 1) {
             $tests = Test::all();
         }
+        elseif(Auth::user()->role->is_global === 0 && Auth::user()->role->id === 2){
+            $tests = Auth::user()->attribute->company->tests;
+
+        }
         elseif(Auth::user()->role->is_global === 0) {
             $tests = Auth::user()->attribute->position->tests;
+            // $tests = Auth::user()->attribute->company->tests;
         }
 
         // Get the selection
