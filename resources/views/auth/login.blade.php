@@ -23,7 +23,7 @@
               <div class="wrapper">
                   <div class="card border-0 shadow-sm rounded-1">
                       <div class="card-header text-center pt-4 bg-transparent mx-4">
-                          <img width="200" class="mb-3" src="https://www.psikologanda.com/assets/images/logo/1598935898-logo.png">
+                          <img width="200" class="mb-3" src="https://psikologanda.com/assets/images/logo/logo_2.png">
                           <h5 class="h2 mb-0">Selamat Datang</h5>
                           <p class="m-0">Untuk melakukan tes online, silakan login dengan informasi pribadi Anda melalui Username dan Password 🔔</p>
                       </div>
