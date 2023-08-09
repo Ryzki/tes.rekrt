@@ -8,6 +8,13 @@ use App\Models\Selection;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Test\ISTController;
+use App\Http\Controllers\Test\SDIController;
+use App\Http\Controllers\Test\MSDTController;
+use App\Http\Controllers\Test\RMIBController;
+use App\Http\Controllers\Test\DISC24Controller;
+use App\Http\Controllers\Test\DISC40Controller;
+use App\Http\Controllers\Test\PapikostickController;
 
 class TestController extends Controller
 {    
@@ -35,26 +42,35 @@ class TestController extends Controller
             
         // Test DISC 40
         if($path == 'disc-40-soal')
-            return \App\Http\Controllers\Test\DISC40Controller::index($request, $path, $test, $selection);
+            return DISC40Controller::index($request, $path, $test, $selection);
         // Test DISC 24
         elseif($path == 'disc-24-soal')
-            return \App\Http\Controllers\Test\DISC24Controller::index($request, $path, $test, $selection);
+            return DISC24Controller::index($request, $path, $test, $selection);
         // Test Papikostick
         elseif($path == 'papikostick')
-            return \App\Http\Controllers\Test\PapikostickController::index($request, $path, $test, $selection);
+            return PapikostickController::index($request, $path, $test, $selection);
         // Test SDI
         elseif($path == 'sdi')
-            return \App\Http\Controllers\Test\SDIController::index($request, $path, $test, $selection);
+            return SDIController::index($request, $path, $test, $selection);
         // Test MSDT
         elseif($path == 'msdt')
-            return \App\Http\Controllers\Test\MSDTController::index($request, $path, $test, $selection);
+            return MSDTController::index($request, $path, $test, $selection);
+        // Test Assesment
+        elseif($path == 'assesment')
+            return \App\Http\Controllers\Test\AssesmentController::index($request, $path, $test, $selection);
+		// Test Assesment 1.0
+        elseif($path == 'assesment-10')
+            return \App\Http\Controllers\Test\Assesment10Controller::index($request, $path, $test, $selection);
+		// Test Assesment 2.0
+        elseif($path == 'assesment-20')
+            return \App\Http\Controllers\Test\Assesment20Controller::index($request, $path, $test, $selection);
         // Test IST
         elseif($path == 'ist')
             // return \App\Http\Controllers\Test\ISTController::index($request, $path, $tes, $selection);
-            return \App\Http\Controllers\Test\ISTController::try($request, $path, $test, $selection);
+            return ISTController::try($request, $path, $test, $selection);
         // Test RMIB
         elseif($path == 'rmib' || $path == 'rmib-2')
-            return \App\Http\Controllers\Test\RMIBController::index($request, $path, $test, $selection);
+            return RMIBController::index($request, $path, $test, $selection);
         else
             abort(404);
     }
@@ -81,7 +97,16 @@ class TestController extends Controller
         // Tes MSDT
         elseif($request->path == 'msdt')
             return \App\Http\Controllers\Test\MSDTController::store($request);
-        // Tes IST
+        // Tes Assesment
+        elseif($request->path == 'assesment')
+            return \App\Http\Controllers\Test\AssesmentController::store($request);
+        // Tes Assesment 1.0
+        elseif($request->path == 'assesment-10')
+            return \App\Http\Controllers\Test\Assesment10Controller::store($request);
+        // Tes Assesment 2.0
+        elseif($request->path == 'assesment-20')
+            return \App\Http\Controllers\Test\Assesment20Controller::store($request);
+        // Tes IST        
         elseif($request->path == 'ist')
             return \App\Http\Controllers\Test\ISTController::store($request);
         // Tes RMIB

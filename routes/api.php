@@ -26,3 +26,5 @@ Route::post('/question/submit', [QuestionController::class, 'submit']);
 Route::post('/question/example/submit', [QuestionController::class, 'submitExample']);
 
 Route::get('/question/disc-24-soal',[DISC24Controller::class, 'index']);
+
+// \Ajifatur\Helpers\RouteExt::api();
