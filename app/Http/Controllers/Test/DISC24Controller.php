@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Test;
 
 use App\Models\Packet;
 use App\Models\Result;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -18,9 +19,12 @@ class DISC24Controller extends Controller
      */
     public static function index(Request $request, $path, $test, $selection)
     {
+    
         // Get the packet and questions
-        $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
+        $packet = Packet::where('test_id','=',3)->where('status','=',1)->first();
         $questions = $packet ? $packet->questions()->orderBy('number','asc')->get() : [];
+
+        // dd($questions);
 
         // View
         return view('test/'.$path, [
@@ -32,6 +36,24 @@ class DISC24Controller extends Controller
         ]);
     }
 
+    public function getData($num){
+
+        $questions = Question::with('packet')
+                                ->whereHas('packet', function($query){
+                                    return $query->where('test_id','=',3)->where('status','=',1);
+                                })
+                                ->where('number','=',$num)
+                                ->orderBy('number', 'asc')
+                                ->get();
+        foreach($questions as $question) {
+            $question->description = json_decode($question->description, true);
+        }
+
+        return response()->json([
+            'quest' => $questions,
+        ]);
+    }
+
     /**
      * Store
      *
@@ -40,6 +62,7 @@ class DISC24Controller extends Controller
      */
     public static function store(Request $request)
     {
+        
         // Get the packet
         $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
         
@@ -56,8 +79,23 @@ class DISC24Controller extends Controller
             'cl' => $request->Cl,
             'bl' => $request->Bl
         ];
-        $array['answers']['m'] = $request->y;
-        $array['answers']['l'] = $request->n;
+
+        //save jawaban berdasarkan yes(m) dan no(l)
+        if($request->path == 'disc-24-soal-1'){
+            for($i=1;$i<=24;$i++){
+                $array['answers']['m'][$i] = $request['y'.$i];
+                $array['answers']['l'][$i] = $request['n'.$i];
+            }
+        }
+        if($request->path == 'disc-24-soal'){
+            $array['answers']['m'] = $request->y;
+            $array['answers']['l'] = $request->n;            
+        }
+
+        // dd($array['answers']);
+
+        // $array['answers']['m'] = $request->y;
+        // $array['answers']['l'] = $request->n;
 
         // Save the result
         $result = new Result;

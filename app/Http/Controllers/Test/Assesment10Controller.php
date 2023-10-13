@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Test;
 
 use Auth;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Packet;
 use App\Models\Result;
+use App\Models\Question;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class Assesment10Controller extends Controller
 {    
@@ -19,7 +20,7 @@ class Assesment10Controller extends Controller
     public static function index(Request $request, $path, $test, $selection)
     {
         // Get the packet and questions
-        $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
+        $packet = Packet::where('test_id','=',12)->where('status','=',1)->first();
         $questions = $packet ? $packet->questions()->first() : [];
         $questions->description = json_decode($questions->description, true);
 
@@ -33,6 +34,20 @@ class Assesment10Controller extends Controller
         ]);
     }
 
+    public function getData($num){
+
+        $quest = Question::with('packet')
+                        ->whereHas('packet', function($query){
+                            return $query->where('test_id','=',12)->where('status','=',1);
+                        })->first();
+        
+        $quest->description = json_decode($quest->description, true);
+
+        return response()->json([
+            'quest' => $quest,
+        ]);
+    }
+
     /**
      * Store
      *
@@ -41,11 +56,17 @@ class Assesment10Controller extends Controller
      */
     public static function store(Request $request)
     {
+
         // Get the packet and questions
         $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
         
         // Get jawaban
-        $hasil = $request->get('p');
+        if($request->path == 'assesment-10'){
+            $hasil = $request->get('p');
+        }
+        if($request->path == 'assesment-11'){
+            $hasil = $request->get('inputQ');
+        }
         foreach($hasil as $key=>$value){
             $array[$key-1]['jawaban'] = $value;
         }
@@ -108,7 +129,7 @@ class Assesment10Controller extends Controller
         // // Result
         $array = array(
             'result' => $result,
-            'answers' => $request->p
+            'answers' => $hasil
         );
         //dd($array);
         // Save the result

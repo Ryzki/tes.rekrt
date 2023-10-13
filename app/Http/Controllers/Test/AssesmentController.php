@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Test;
 
 use Auth;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Packet;
 use App\Models\Result;
+use App\Models\Question;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class AssesmentController extends Controller
 {    
@@ -18,8 +19,9 @@ class AssesmentController extends Controller
      */
     public static function index(Request $request, $path, $test, $selection)
     {
+
         // Get the packet and questions
-        $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
+        $packet = Packet::where('test_id','=',11)->where('status','=',1)->first();
         $questions = $packet ? $packet->questions()->first() : [];
         $questions->description = json_decode($questions->description, true);
 
@@ -33,6 +35,19 @@ class AssesmentController extends Controller
         ]);
     }
 
+    public function getData($num){
+        $quest = Question::with('packet')
+                                ->whereHas('packet', function($query){
+                                    return $query->where('test_id','=',11)->where('status','=',1);
+                                })->first();
+                                
+        $quest->description = json_decode($quest->description, true);
+
+        return response()->json([
+            'quest' => $quest,
+        ]);
+    }
+
     /**
      * Store
      *
@@ -41,15 +56,23 @@ class AssesmentController extends Controller
      */
     public static function store(Request $request)
     {
+        
+        
         // Get the packet and questions
         $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
         
         // Get jawaban
-        $hasil = $request->get('p');
+        if($request->path == 'assesment'){
+            $hasil = $request->get('p');
+        }
+        if($request->path == 'assesment-01'){
+            $hasil = $request->get('inputQ');
+        }
+        
         foreach($hasil as $key=>$value){
             $array[$key-1]['jawaban'] = $value;
         }
-
+        
         $test = array();
         for($i=0; $i<=13; $i++){
             array_push($test,$array[$i]['jawaban']);
@@ -108,7 +131,7 @@ class AssesmentController extends Controller
         // // Result
         $array = array(
             'result' => $result,
-            'answers' => $request->p
+            'answers' => $hasil
         );
 
         // Save the result

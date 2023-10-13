@@ -1,9 +1,10 @@
 @extends('template/main')
 
+
 @section('content')
 <div class="bg-theme-1 bg-header">
     <div class="container text-center text-white">
-        <h3>{{ $packet->name }}</h3>
+        <h3>{{ $questions->packet->name }}</h3>
     </div>
 </div>
 <div class="custom-shape-divider-top-1617767620">
@@ -30,11 +31,11 @@
 			<form id="form" method="post" action="/tes/{{ $path }}/store">
 			    @csrf
 			    <input type="hidden" name="path" value="{{ $path }}">
-			    <input type="hidden" name="packet_id" value="{{ $packet->id }}">
+			    <input type="hidden" name="packet_id" value="{{ $questions->packet->id }}">
 			    <input type="hidden" name="test_id" value="{{ $test->id }}">
 				<div class="">
 					<div class="row">
-					    @foreach($questions->description as $question)
+					    @foreach($quests_number as $question)
 					    <div class="col-12">
                             <div class="card soal rounded-1 mb-3">
                       			<div class="card-header bg-transparent">

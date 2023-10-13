@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Test;
 
 use App\Models\Packet;
 use App\Models\Result;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -20,10 +21,18 @@ class DISC40Controller extends Controller
     {
         // Get the packet and questions
         $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
-        $questions = $packet ? $packet->questions()->orderBy('number','asc')->get() : [];
+        // $questions = $packet ? $packet->questions()->orderBy('number','asc')->get() : [];
+
+        
+        $questions = Question::with('packet')
+                    ->whereHas('packet', function($query) use ($test){
+                        return $query->where('test_id','=',$test->id)->where('status','=',1);
+                    })->orderBy('number', 'asc')->get();
+
         foreach($questions as $question) {
             $question->description = json_decode($question->description, true);
         }
+        
 
         // View
         return view('test/'.$path, [
@@ -35,6 +44,25 @@ class DISC40Controller extends Controller
         ]);
     }
 
+    public function getData($num)
+    {
+        $questions = Question::with('packet')
+                    ->whereHas('packet', function($query){
+                        return $query->where('test_id','=',1)->where('status','=',1);
+                    })
+                    ->where('number','=',$num)
+                    ->orderBy('number', 'asc')
+                    ->get();
+
+        foreach($questions as $question) {
+            $question->description = json_decode($question->description, true);
+        }
+
+        return response()->json([
+            'quest' => $questions,
+        ]);
+    }
+
     /**
      * Store
      *
@@ -43,6 +71,8 @@ class DISC40Controller extends Controller
      */
     public static function store(Request $request)
     {
+        dd($request->all());
+
         // Get the packet and questions
         $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
         $questions = $packet ? $packet->questions()->orderBy('number','asc')->get() : [];

@@ -44,25 +44,25 @@ class TestController extends Controller
         if($path == 'disc-40-soal')
             return DISC40Controller::index($request, $path, $test, $selection);
         // Test DISC 24
-        elseif($path == 'disc-24-soal')
+        elseif($path == 'disc-24-soal' || $path == 'disc-24-soal-1')
             return DISC24Controller::index($request, $path, $test, $selection);
         // Test Papikostick
-        elseif($path == 'papikostick')
+        elseif($path == 'papikostick' || $path == 'papikostick-1')
             return PapikostickController::index($request, $path, $test, $selection);
         // Test SDI
         elseif($path == 'sdi')
             return SDIController::index($request, $path, $test, $selection);
         // Test MSDT
-        elseif($path == 'msdt')
+        elseif($path == 'msdt' || $path == 'msdt-1')
             return MSDTController::index($request, $path, $test, $selection);
         // Test Assesment
-        elseif($path == 'assesment')
+        elseif($path == 'assesment' || $path == 'assesment-01')
             return \App\Http\Controllers\Test\AssesmentController::index($request, $path, $test, $selection);
 		// Test Assesment 1.0
-        elseif($path == 'assesment-10')
+        elseif($path == 'assesment-10' || $path == 'assesment-11')
             return \App\Http\Controllers\Test\Assesment10Controller::index($request, $path, $test, $selection);
 		// Test Assesment 2.0
-        elseif($path == 'assesment-20')
+        elseif($path == 'assesment-20' || $path == 'assesment-21')
             return \App\Http\Controllers\Test\Assesment20Controller::index($request, $path, $test, $selection);
         // Test IST
         elseif($path == 'ist')
@@ -86,25 +86,25 @@ class TestController extends Controller
         if($request->path == 'disc-40-soal')
             return \App\Http\Controllers\Test\DISC40Controller::store($request);
         // Tes DISC 24
-        elseif($request->path == 'disc-24-soal')
+        elseif($request->path == 'disc-24-soal' || $request->path == 'disc-24-soal-1')
             return \App\Http\Controllers\Test\DISC24Controller::store($request);
         // Tes Papikostick
-        elseif($request->path == 'papikostick')
+        elseif($request->path == 'papikostick' || $request->path == 'papikostick-1')
             return \App\Http\Controllers\Test\PapikostickController::store($request);
         // Tes SDI
         elseif($request->path == 'sdi')
             return \App\Http\Controllers\Test\SDIController::store($request);
         // Tes MSDT
-        elseif($request->path == 'msdt')
+        elseif($request->path == 'msdt' || $request->path == 'msdt-1')
             return \App\Http\Controllers\Test\MSDTController::store($request);
         // Tes Assesment
-        elseif($request->path == 'assesment')
+        elseif($request->path == 'assesment' || $request->path == 'assesment-01')
             return \App\Http\Controllers\Test\AssesmentController::store($request);
         // Tes Assesment 1.0
-        elseif($request->path == 'assesment-10')
+        elseif($request->path == 'assesment-10' || $request->path == 'assesment-11')
             return \App\Http\Controllers\Test\Assesment10Controller::store($request);
         // Tes Assesment 2.0
-        elseif($request->path == 'assesment-20')
+        elseif($request->path == 'assesment-20' || $request->path == 'assesment-21')
             return \App\Http\Controllers\Test\Assesment20Controller::store($request);
         // Tes IST        
         elseif($request->path == 'ist')

@@ -6,6 +6,7 @@ use App\Models\Tes;
 use App\Models\Soal;
 use App\Models\Packet;
 use App\Models\Result;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -21,17 +22,35 @@ class MSDTController extends Controller
     public static function index(Request $request, $path, $test, $selection)
     {
         // Get the packet and questions
-        $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
-        $questions = $packet ? $packet->questions()->first() : [];
-        $questions->description = json_decode($questions->description, true);
-
+        $questions = Question::with('packet')
+                            ->whereHas('packet', function($query) use ($test){
+                                return $query->where('test_id','=',6)->where('status','=',1);
+                            })->first();
+        
+        $quests_number = json_decode($questions->description, true);
+        
+        $packet_id = $questions->packet_id;
         // View
         return view('test/'.$path, [
-            'packet' => $packet,
-            'path' => $path,
+            'quests_number' => $quests_number,
+            'packet_id' => $packet_id,
             'questions' => $questions,
+            'path' => $path,
             'selection' => $selection,
             'test' => $test,
+        ]);
+    }
+
+    public function getData($num){
+
+        $quest = Question::with('packet')
+                                ->whereHas('packet', function($query){
+                                    return $query->where('test_id','=',6)->where('status','=',1);
+                                })->first();
+        $quest->description = json_decode($quest->description, true);
+
+        return response()->json([
+            'quest' => $quest,
         ]);
     }
 
@@ -43,62 +62,51 @@ class MSDTController extends Controller
      */
     public static function store(Request $request)
     {
+        //save the result into array
+        if($request->path == 'msdt'){
+            $hasil = $request->get('p');
+        }
+        if($request->path == 'msdt-1'){
+            $hasil = $request->get('inputQ');
+        }
+        
+        $arrayResultRow = array();
+        $arrayResultColumn = array();
+        $countResultA = array();
+        $countResultB = array();
+        //save jumlah A dan B
+        $jumlah = [];
+        //change into 8x8 matrix
+        
+        $twoDArray = array_chunk($hasil, 8);
+
+        for($bk=0;$bk<=7;$bk++){
+            //cek jumlah jawaban A dan B by column
+            $arrayResultColumn[$bk] = array_column($twoDArray,$bk);
+            $arrayResultColumn[$bk] = array_count_values($arrayResultColumn[$bk]);
+
+            //cek jumlah jawaban A dan B by row
+            $arrayResultRow[$bk] = array_count_values($twoDArray[$bk]);
+        }
+
+        for($r=0;$r<=7;$r++){
+            //array of jumlah jawaban A tiap kolom ke kanan
+            $countResultA[$r] = $arrayResultRow[$r]['A'];
+
+            //array of jumlah jawaban B tiap baris ke bawah
+            $countResultB[$r] = $arrayResultColumn[$r]['B'];
+        }
+        
         // Get the packet and questions
         $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
-        // $questions = $packet ? $packet->questions()->first() : [];
-        // $questions->description = json_decode($questions->description, true);
-        
-        // Get tes
-        // $tes = Tes::where('path','=',$request->path)->first();
-        
-        // // Data soal
-        // $soal = Soal::join('paket_soal','soal.id_paket','=','paket_soal.id_paket')->where('paket_soal.id_paket','=',$paket->id_paket)->first();
-        // $array = json_decode($soal->soal, true);
-        
-        // Get jawaban
-        $hasil = $request->get('p');
-        foreach($hasil as $key=>$value){
-            $array[$key-1]['jawaban'] = $value;
-        }
-
-        // Jumlah A
-        $arrayA = array();
-        for($a=1; $a<=8; $a++){
-            $jawabanA = array();
-            for($i=(($a-1)*8); $i<($a*8); $i++){
-                array_push($jawabanA, $array[$i]['jawaban']);
-            }
-            $countA = array_count_values($jawabanA);
-            $h = array_key_exists('A', $countA) ? $countA['A'] : 0;
-            array_push($arrayA, $h);
-        }
-
-        // Jumlah B
-        $arrayB = array();
-        for($b=1; $b<=8; $b++){
-            $jawabanB = array();
-            for($i=$b; $i<=64; $i+=8){
-                array_push($jawabanB, $array[$i-1]['jawaban']);
-            }
-            $countB = array_count_values($jawabanB);
-            $h = array_key_exists('B', $countB) ? $countB['B'] : 0;
-            array_push($arrayB, $h);
-        }
-        
-        for($i=1; $i<=8; $i++){
-            for($j=(($i-1)*8); $j<($i*8); $j++){
-            }
-        }
-
+        //koreksi nilai sesuai aturan
         $koreksi = [
             1 , 2 , 1 , 0 , 3 , -1 , 0 , -4 
         ];
 
-        $jumlah = [];
-
         for ($i=0 ; $i<8 ; $i++)
         {
-            $x = $arrayA[$i] + $arrayB[$i] + $koreksi[$i] ;
+            $x = $countResultA[$i] + $countResultB[$i] + $koreksi[$i] ;
             array_push($jumlah,$x) ; 
         }
 
@@ -106,7 +114,6 @@ class MSDTController extends Controller
         $RO = $jumlah[1] + $jumlah[3] + $jumlah[5] + $jumlah[7] ; 
         $E = $jumlah[4] + $jumlah[5] + $jumlah[6] + $jumlah[7] ;
         $O = $jumlah[0] ; 
-        
 
         /// MEMBERIKAN NILAI TO , RO , E , O 
         if ($TO >=0 && $TO <=29 ){
@@ -273,7 +280,7 @@ class MSDTController extends Controller
             'E' => round($E, 2),
             'O' => round($O, 2),
             'tipe' => $final,
-            'answers' => $request->p
+            'answers' => $hasil
         );
 
         // Save the result

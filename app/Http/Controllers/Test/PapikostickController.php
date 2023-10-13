@@ -19,7 +19,7 @@ class PapikostickController extends Controller
     public static function index(Request $request, $path, $test, $selection)
     {
         // Get the packet
-        $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
+        $packet = Packet::where('test_id','=',4)->where('status','=',1)->first();
 
         // View
         return view('test/'.$path, [
@@ -31,6 +31,13 @@ class PapikostickController extends Controller
         ]);
     }
 
+    public function getData($num){
+
+        return response()->json([
+            'quest' => self::data(),
+        ]);
+    }
+
     /**
      * Store
      *
@@ -39,6 +46,7 @@ class PapikostickController extends Controller
      */
     public static function store(Request $request)
     {
+
         // Get the packet
         $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
         

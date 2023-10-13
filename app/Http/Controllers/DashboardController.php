@@ -14,7 +14,24 @@ class DashboardController extends Controller
     {
         // Default
         $selection = false;
-        $images = ['lightning-bolts.svg','arrows.svg','thoughts.svg','gears.svg','keys.svg','lightning-bolts.svg','arrows.svg','thoughts.svg','gears.svg','keys.svg','lightning-bolts.svg'];
+        $images = [
+        'lightning-bolts.svg',
+        'arrows.svg',
+        'thoughts.svg',
+        'gears.svg',
+        'keys.svg',
+        'lightning-bolts.svg',
+        'arrows.svg',
+        'thoughts.svg',
+        'gears.svg',
+        'keys.svg',
+        'lightning-bolts.svg',
+        'arrows.svg',
+        'thoughts.svg',
+        'keys.svg',
+        'gears.svg',
+        'keys.svg',
+        'lightning-bolts.svg'];
 
         // Get tests
         if(Auth::user()->role->is_global === 1) {
