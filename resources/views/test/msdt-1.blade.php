@@ -49,7 +49,6 @@
 		</div>
 	    <div class="col-12 col-md-8">
 			<form id="form2">
-			{{-- <form id="form" method="post" action="/tes/{{ $path }}/store"> --}}
 			    @csrf
 				<div class="">
 					<div class="row mb-5">
@@ -58,37 +57,8 @@
                       			<div class="soal_number card-header bg-transparent">
 					    			<i class="fa fa-edit"></i> <span class="num fw-bold"></span>
 					    		</div>
-                                <div class="card-body">
-                                    <table class="opsie table table-borderless table-responsive">
-                                        <tr>
-                                            <td width="50%">
-                                                <div class="custom-control custom-radio findR" id="findR">
-                                                    <input type="radio" class="radio"
-                                                        id="customRadioA"
-                                                        value="A">
-                                                    <label class="custom-control-label text-justify" for="customRadioa">
-                                                        <span class="textA">
-                                                        
-                                                        </span>
-                                                    </label>
-                                                </div>
-											</td>
-											<td width="50%">
-                                                <div class="custom-control custom-radio findR" id="findR">
-                                                    <input type="radio" class="radio"
-                                                        id="customRadioB"
-                                                        value="B" >
-                                                    <label class="custom-control-label text-justify" for="customRadiob">
-                                                        <span class="textB">
-                                                        
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                                
-                                            </td>
-											<input type="radio" class="radio1" id="customRadioC" value="C" style="display:none">
-                                        </tr>
-                                    </table>    
+                                <div class="card-body s">
+                                    
                                 </div>
                             </div>
                         </div>
@@ -117,7 +87,7 @@
 			</ul>
 		</div>
 	</nav>
-	<div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	{{-- <div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
@@ -145,7 +115,7 @@
 	      		</div>
 	    	</div>
 	  	</div>
-	</div>
+	</div> --}}
     @endif
 </div>
 @endsection
@@ -154,45 +124,24 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
-		
-		var initial = 1;
 		var items;
 		nextId(1);
 
 		for (let i = 1; i <= 64; i++) {
-
 			$('#button'+i).click(function(){
-				var currentRadio = 'radio'+(i);
-				$('input[type="radio"]').removeClass().addClass(currentRadio);
-				var optionText = $('#opt_answer'+i).text();
-				setRadioCheckedByValue(i,optionText);
-				
 				nextId(i);
-				
 			})
-			
 		}
 		
 		$('#prev').click(function () {
 			var prev = items-1;
-		    
-			//checked radio button
-			var optionText = $('#opt_answer'+prev).text();
-			setRadioCheckedByValue(prev,optionText);
-			// -----
 			nextId(prev);
         });
 
         $('#next').click(function () {
 			var next = items+1;
-			
-			//checked radio button
-			var optionText = $('#opt_answer'+next).text();		
-			setRadioCheckedByValue(next,optionText);
-			// -----
 			//next soal function ajax
 			nextId(next);
-			// -----
         });
 
 
@@ -205,26 +154,37 @@
 
 					//for index;					
 					items = response.quest.description[num-1]['id'];
+					data = response.quest.description[num-1];
 					//load option soal
 					$('.num').text('Soal '+num);
-					$('.textA').text(response.quest.description[num-1]['pilihan1']);
-					$('.textB').text(response.quest.description[num-1]['pilihan2']);
 
-					//change name
-					var nameradioA = 'nameRadio'+num;
-					//change id
-					var idradioA = 'idRadioA'+num;
-					var idradioB = 'idRadioB'+num;
+					//generate table
+					var table = $('<table class="table table-borderless table-responsive" width="100%" id="t'+num+'"></table>');
+					var value = ['A', 'B'];
+					for(var i=1;i<3;i++){
+						var tr = $('<tr></tr>');
+						var td = $('<td style="height:60px;vertical-align: middle;" width="30"></td>')
+						var td2 = $('<td style="height:60px;vertical-align: middle;"></td>');
 
-					//change name input radio
-					$('input[type="radio"]').attr('name', nameradioA);
-					//change id input radio
-					$('input[type="radio"]:first').attr('id', idradioA);
-					$('input[type="radio"]:eq(1)').attr('id', idradioB);
+						var div1 = $('<div class="custom-control custom-radio findR" id="findR"></div>');
+						var div2 = $('<div class="custom-control custom-radio findR" id="findR"></div>');
+						var radio1 = $('<input type="radio" name="p['+num+']" class="form-check-input radio'+num+'" id="customRadio'+num+value[i-1]+'" value="'+value[i-1]+'">');
+						var label = $('<label class="custom-control-label text-justify" for="customRadio'+value[i-1]+'"></label>');
+						var span = $('<span class="text'+value[i-1]+'">'+data['pilihan'+i]+'</span>');
 
-					//classname
-					var currentRadio = 'radio'+(num);	
-					$('input[type="radio"]').removeClass().addClass(currentRadio);
+						label.append(span);
+						div1.append(radio1);
+						td.append(div1);
+
+						div2.append(label);
+						td2.append(div2);
+						
+						tr.append(td);
+						tr.append(td2);
+						table.append(tr);
+					}
+					$('.s').empty().append(table);
+
 
 					//onclick change button jawaban
 					$('.radio'+num).on('click',function(){
@@ -237,10 +197,9 @@
 							inputChange.value = val;
 						}	
 					})
-
+					setRadioCheckedByValue(num);
 					//hide button previous
 					num > 1 ? $('#prev').show() : $('#prev').hide();
-
 					//hide next button
 					num >= 64 ? $('#next').hide() : $('#next').show();
 					
@@ -250,21 +209,16 @@
 
 		function setRadioCheckedByValue(num, value) {
 			// Check or uncheck the radio input based on the specified value
-			if(value == 'A' || value == 'B' ){
-				const radio = document.querySelector(`input[type="radio"][value="${value}"]`);
-				radio.checked = true;
-			}
-			else{
-				const radioHidden = document.querySelector(`input[type="radio"][value="C"]`);
-				radioHidden.checked = true;
-			}
-			
+			var radioVal = $('#inputQuest'+num).val();
+			if(radioVal){
+				const radioCek = document.querySelector(`input[name="p[`+num+`]"][value="${radioVal}"]`);
+				radioCek.checked = true;
+			}			
 		}
 
 	})
 
 	//onsubmit 
-
 	$(document).ready(function(){
 		$("#tutorialModal").modal("toggle");
 	    totalQuestion();
@@ -281,8 +235,7 @@
 	});
 
 	// Count answered question
-	function countAnswered(){
-		
+	function countAnswered(){	
 		var active = $('.active').length;
 		$("#answered").text(active);
 		return active;
@@ -290,7 +243,6 @@
 
 	// Total question
 	function totalQuestion(){
-		// var totalRadio = $("button[name='buttonNav']").length;
 		var totalRadio = 64;
 		$("#total").text(totalRadio);
 		return totalRadio;
