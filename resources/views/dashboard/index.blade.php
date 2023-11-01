@@ -110,16 +110,6 @@
     @endif
     {{-- 6:internship --}}
     @if(Auth::user()->role_id == 6)
-        @if($check != null)
-        <div class="row">
-            <!-- Alert -->
-            <div class="col-12 mb-2">
-                <div class="alert alert-danger fade show text-center" role="alert">
-                    Anda sudah melakukan tes.
-                </div>
-            </div>
-        </div>
-        @else
         <div class="content">
             @if(Session::get('message'))
             <div class="row">
@@ -153,7 +143,7 @@
                 @endif
             </div>
         </div>
-        @endif
+        
     @endif
 </section>
 <script>
