@@ -65,7 +65,7 @@
                             @for($i=1; $i<=3; $i++)
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text">({{ $i }})</span>
-                                <input type="text" name="occupations[]" class="form-control">
+                                <input id="occ{{ $i }}" type="text" name="occupations[]" class="form-control occ" required>
                             </div>
                             @endfor
                         </div>
@@ -144,7 +144,9 @@
 
 	// Total questions
 	function totalQuestion() {
-		var total = $(".num").length;
+		var selected = $(".num").length;
+        // var occ = $('.occ').length;
+        var total = selected;
 		$("#total").text(total);
 		return total;
 	}
@@ -167,12 +169,31 @@
                 // Count answered
                 var id = $(this).data("id");
                 countAnswered(id);
-                countAnswered(id) >= totalQuestion() ? $("#btn-submit").removeAttr("disabled") : $("#btn-submit").attr("disabled", "disabled");
+                // if(occ1 != '') {
+                //     countAnswered(id) >= totalQuestion() ? $("#btn-submit").removeAttr("disabled") : $("#btn-submit").attr("disabled", "disabled");
+                // }
             }
         });
         $(selector).disableSelection();
         return sortable;
     }
+
+    $(document).ready(function() {
+      function checkInputs() {
+        var valInput1 = $('#occ1').val();
+        var valInput2 = $('#occ2').val();
+        var valInput3 = $('#occ3').val();
+        var valText = parseInt($('#answered').text());
+
+        if (valInput1 != '' && valInput2 != '' && valInput3 != '' && valText === 9) {
+          $('#btn-submit').removeAttr('disabled');
+        }else{
+          $('#btn-submit').attr('disabled', 'disabled');
+        }
+      }
+
+      $('#occ1, #occ2, #occ3, #answered').on('change', checkInputs);
+    });
 </script>
 @endsection
 
