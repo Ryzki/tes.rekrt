@@ -130,7 +130,7 @@ class SDIController extends Controller
             array('id' => '2', 'header' => 'Hampir tiap waktu saya nampaknya seperti ....',
             'val1' => 'a2', 'soal1' => 'Seseorang yang peka yang cepat merespon kebutuhan orang lain',
             'val2' => 'b2', 'soal2' => 'Seseorang yang enerjik cepat melihat peluang dan keuntungan',
-            'val3' => 'c2', 'soal3' => 'Seseorang yang praktis yang tclassak tergesa-gesa terhadap sesuatu sebelum saya siap'),
+            'val3' => 'c2', 'soal3' => 'Seseorang yang praktis yang tidak tergesa-gesa terhadap sesuatu sebelum saya siap'),
 
             array('id' => '3', 'header' => 'Ketika saya bertemu seseorang untuk pertama kali, saya sering bersikap seperti ....',
             'val1' => 'a3', 'soal1' => 'Peduli dengan apakah mereka akap menganggap saya orang yang menyenangkan atau tidak',
@@ -159,7 +159,7 @@ class SDIController extends Controller
 
             array('id' => '8', 'header' => 'Saya akan menggambarkan diri saya sebagai seseorang yang setiap saat ....',
             'val1' => 'a8', 'soal1' => 'Ramah, terbuka dan seseorang yang melihat hal baik baik pada hampir setiap orang',
-            'val2' => 'b8', 'soal2' => 'Enerjik, percaya diri, dan melihat kesempatan yang orang lain tclassak lihat',
+            'val2' => 'b8', 'soal2' => 'Enerjik, percaya diri, dan melihat kesempatan yang orang lain tidak lihat',
             'val3' => 'c8', 'soal3' => 'Berhati-hati dan adil, dan orang yang berdiri pada apa yang dipercayainya'),
 
             array('id' => '9', 'header' => 'Saya menemukan banyak hubungan yang menyenangkan dimana saya dapat menjadi ....',
@@ -198,7 +198,7 @@ class SDIController extends Controller
             'val3' => 'f3', 'soal3' => 'Menghormati hak mereka dan meminta mereka juga
             menghormati hak dan kepentingan saya'),
 
-            array('id' => '4', 'header' => 'Ketika seseorang sangat tclassak setuju dengan saya, saya
+            array('id' => '4', 'header' => 'Ketika seseorang sangat tidak setuju dengan saya, saya
             cenderung ....',
             'val1' => 'd4' ,'soal1' => 'Menyerah dan mengikuti cara orang itu kecuali itu
             sangat penting bagi saya',
@@ -215,7 +215,7 @@ class SDIController extends Controller
             'val3' => 'f5', 'soal3' => 'Berusaha menarik diri dari pergaulan tersebut dan
             mencari yang sesuai dengan saya'),
 
-            array('id' => '6', 'header' => 'Jika saya tclassak mendapatkan apa yang saya inginkan dalam
+            array('id' => '6', 'header' => 'Jika saya tidak mendapatkan apa yang saya inginkan dalam
             sebuah hubungan, saya biasanya bersikap ....',
             'val1' => 'd6' ,'soal1' => 'Tetap berharap dan percaya sesuatu akan merubah mereka
             seiring berjalannya waktu',
@@ -240,7 +240,7 @@ class SDIController extends Controller
             'val2' => 'e8', 'soal2' => 'Membalas argumennya dan berusaha untuk merubah pikiran
             orang itu',
             'val3' => 'f8', 'soal3' => 'Menghormati hak orang itu untuk menentukan jalannya
-            sendiri, sepanjang tclassak berkaitan dengan saya'),
+            sendiri, sepanjang tidak berkaitan dengan saya'),
 
             array('id' => '9', 'header' => 'Ketika orang lain secara terbuka mengkritik saya, saya
             seringkali bersikap ....',
