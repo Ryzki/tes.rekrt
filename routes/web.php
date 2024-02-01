@@ -2,7 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\Test\TIUController;
+use App\Http\Controllers\Test\WPTController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Test\MBTIController;
 use App\Http\Controllers\Test\MSDTController;
 use App\Http\Controllers\UserLoginController;
 use App\Http\Controllers\Test\DISC24Controller;
@@ -57,6 +60,9 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/assesment10/{id}',[Assesment10Controller::class,'getData'])->name('admin.assesment10.next');
 	Route::get('/tes/assesment20/{id}',[Assesment20Controller::class,'getData'])->name('admin.assesment20.next');
 	Route::get('/tes/papikostick/{id}',[PapikostickController::class,'getData'])->name('admin.papikostick.next');
+	Route::get('/tes/tiu/{id}',[TIUController::class,'getData'])->name('admin.tiu.next');
+	Route::get('/tes/wpt/{id}',[WPTController::class,'getData'])->name('admin.wpt.next');
+	Route::get('/tes/mbti/{id}',[MBTIController::class,'getData'])->name('admin.mbti.next');
 
 });
 

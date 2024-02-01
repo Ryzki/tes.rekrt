@@ -1,0 +1,307 @@
+{
+    "tiu5" : [
+        {
+            "nomor" : 1,
+            "soal" :"1tiu5.png",
+            "jawaba" : "1tiu5a.png",
+            "jawabb" : "1tiu5b.png",
+            "jawabc" : "1tiu5c.png",
+            "jawabd" : "1tiu5d.png",
+            "jawabe" :"1tiu5e.png"
+        },
+        {
+            "nomor" : 2,
+            "soal" :"2tiu5.png",
+            "jawaba" : "2tiu5a.png",
+            "jawabb" : "2tiu5b.png",
+            "jawabc" : "2tiu5c.png",
+            "jawabd" : "2tiu5d.png",
+            "jawabe" :"2tiu5e.png"
+        },
+        {
+            "nomor" : 3,
+            "soal" :"3tiu5.png",
+            "jawaba" : "3tiu5a.png",
+            "jawabb" : "3tiu5b.png",
+            "jawabc" : "3tiu5c.png",
+            "jawabd" : "3tiu5d.png",
+            "jawabe" : "3tiu5e.png"
+        },
+        {
+            "nomor" : 4,
+            "soal" :"4tiu5.png",
+            "jawaba" : "4tiu5a.png",
+            "jawabb" : "4tiu5b.png",
+            "jawabc" : "4tiu5c.png",
+            "jawabd" : "4tiu5d.png",
+            "jawabe" :"4tiu5e.png"
+        },
+        {
+            "nomor" : 5,
+            "soal" :"5tiu5.png",
+            "jawaba" : "5tiu5a.png",
+            "jawabb" : "5tiu5b.png",
+            "jawabc" : "5tiu5c.png",
+            "jawabd" : "5tiu5d.png",
+            "jawabe" :"5tiu5e.png"
+        },
+        {
+            "nomor" : 6,
+            "soal" :"6tiu5.png",
+            "jawaba" : "6tiu5a.png",
+            "jawabb" : "6tiu5b.png",
+            "jawabc" : "6tiu5c.png",
+            "jawabd" : "6tiu5d.png",
+            "jawabe" :"6tiu5e.png"
+        },
+        {
+            "nomor" : 7,
+            "soal" :"7tiu5.png",
+            "jawaba" : "7tiu5a.png",
+            "jawabb" : "7tiu5b.png",
+            "jawabc" : "7tiu5c.png",
+            "jawabd" : "7tiu5d.png",
+            "jawabe" :"7tiu5e.png"
+        },
+        {
+            "nomor" : 8,
+            "soal" :"8tiu5.png",
+            "jawaba" : "8tiu5a.png",
+            "jawabb" : "8tiu5b.png",
+            "jawabc" : "8tiu5c.png",
+            "jawabd" : "8tiu5d.png",
+            "jawabe" :"8tiu5e.png"
+        },
+        {
+            "nomor" : 9,
+            "soal" :"9tiu5.png",
+            "jawaba" : "9tiu5a.png",
+            "jawabb" : "9tiu5b.png",
+            "jawabc" : "9tiu5c.png",
+            "jawabd" : "9tiu5d.png",
+            "jawabe" :"9tiu5e.png"
+        },
+        {
+            "nomor" : 10,
+            "soal" :"10tiu5.png",
+            "jawaba" : "10tiu5a.png",
+            "jawabb" : "10tiu5b.png",
+            "jawabc" : "10tiu5c.png",
+            "jawabd" : "10tiu5d.png",
+            "jawabe" :"10tiu5e.png"
+        },
+        {
+            "nomor" : 11,
+            "soal" :"11tiu5.png",
+            "jawaba" : "11tiu5a.png",
+            "jawabb" : "11tiu5b.png",
+            "jawabc" : "11tiu5c.png",
+            "jawabd" : "11tiu5d.png",
+            "jawabe" :"11tiu5e.png"
+        },
+        {
+            "nomor" : 12,
+            "soal" :"12tiu5.png",
+            "jawaba" : "12tiu5a.png",
+            "jawabb" : "12tiu5b.png",
+            "jawabc" : "12tiu5c.png",
+            "jawabd" : "12tiu5d.png",
+            "jawabe" :"12tiu5e.png"
+        },
+        {
+            "nomor" : 13,
+            "soal" :"13tiu5.png",
+            "jawaba" : "13tiu5a.png",
+            "jawabb" : "13tiu5b.png",
+            "jawabc" : "13tiu5c.png",
+            "jawabd" : "13tiu5d.png",
+            "jawabe" :"13tiu5e.png"
+        },
+        {
+            "nomor" : 14,
+            "soal" :"14tiu5.png",
+            "jawaba" : "14tiu5a.png",
+            "jawabb" : "14tiu5b.png",
+            "jawabc" : "14tiu5c.png",
+            "jawabd" : "14tiu5d.png",
+            "jawabe" :"14tiu5e.png"
+        },
+        {
+            "nomor" : 15,
+            "soal" :"15tiu5.png",
+            "jawaba" : "15tiu5a.png",
+            "jawabb" : "15tiu5b.png",
+            "jawabc" : "15tiu5c.png",
+            "jawabd" : "15tiu5d.png",
+            "jawabe" :"15tiu5e.png"
+        },
+        {
+            "nomor" : 16,
+            "soal" :"16tiu5.png",
+            "jawaba" : "16tiu5a.png",
+            "jawabb" : "16tiu5b.png",
+            "jawabc" : "16tiu5c.png",
+            "jawabd" : "16tiu5d.png",
+            "jawabe" :"16tiu5e.png"
+        },
+        {
+            "nomor" : 17,
+            "soal" :"17tiu5.png",
+            "jawaba" : "17tiu5a.png",
+            "jawabb" : "17tiu5b.png",
+            "jawabc" : "17tiu5c.png",
+            "jawabd" : "17tiu5d.png",
+            "jawabe" :"17tiu5e.png"
+        },
+        {
+            "nomor" : 18,
+            "soal" :"18tiu5.png",
+            "jawaba" : "18tiu5a.png",
+            "jawabb" : "18tiu5b.png",
+            "jawabc" : "18tiu5c.png",
+            "jawabd" : "18tiu5d.png",
+            "jawabe" :"18tiu5e.png"
+        },
+        {
+            "nomor" : 19,
+            "soal" :"19tiu5.png",
+            "jawaba" : "19tiu5a.png",
+            "jawabb" : "19tiu5b.png",
+            "jawabc" : "19tiu5c.png",
+            "jawabd" : "19tiu5d.png",
+            "jawabe" :"19tiu5e.png"
+        },
+        {
+            "nomor" : 20,
+            "soal" : "20tiu5.png",
+            "jawaba" : "20tiu5a.png",
+            "jawabb" : "20tiu5b.png",
+            "jawabc" : "20tiu5c.png",
+            "jawabd" : "20tiu5d.png",
+            "jawabe" :"20tiu5e.png"
+        },
+        {
+            "nomor" : 21,
+            "soal" : "21tiu5.png",
+            "jawaba" : "21tiu5a.png",
+            "jawabb" : "21tiu5b.png",
+            "jawabc" : "21tiu5c.png",
+            "jawabd" : "21tiu5d.png",
+            "jawabe" : "21tiu5e.png"
+        },
+        {
+            "nomor" : 22,
+            "soal" : "22tiu5.png",
+            "jawaba" : "22tiu5a.png",
+            "jawabb" : "22tiu5b.png",
+            "jawabc" : "22tiu5c.png",
+            "jawabd" : "22tiu5d.png",
+            "jawabe" : "22tiu5e.png"
+        },
+        {
+            "nomor" : 23,
+            "soal" : "23tiu5.png",
+            "jawaba" : "23tiu5a.png",
+            "jawabb" : "23tiu5b.png",
+            "jawabc" : "23tiu5c.png",
+            "jawabd" : "23tiu5d.png",
+            "jawabe" : "23tiu5e.png"
+        },
+        {
+            "nomor" : 24,
+            "soal" : "24tiu5.png",
+            "jawaba" : "24tiu5a.png",
+            "jawabb" : "24tiu5b.png",
+            "jawabc" : "24tiu5c.png",
+            "jawabd" : "24tiu5d.png",
+            "jawabe" : "24tiu5e.png"
+        },
+        {
+            "nomor" : 25,
+            "soal" : "25tiu5.png",
+            "jawaba" : "25tiu5a.png",
+            "jawabb" : "25tiu5b.png",
+            "jawabc" : "25tiu5c.png",
+            "jawabd" : "25tiu5d.png",
+            "jawabe" : "25tiu5e.png"
+        },
+        {
+            "nomor" : 26,
+            "soal" : "26tiu5.png",
+            "jawaba" : "26tiu5a.png",
+            "jawabb" : "26tiu5b.png",
+            "jawabc" : "26tiu5c.png",
+            "jawabd" : "26tiu5d.png",
+            "jawabe" : "26tiu5e.png"
+        },
+        {
+            "nomor" : 27,
+            "soal" : "27tiu5.png",
+            "jawaba" : "27tiu5a.png",
+            "jawabb" : "27tiu5b.png",
+            "jawabc" : "27tiu5c.png",
+            "jawabd" : "27tiu5d.png",
+            "jawabe" : "27tiu5e.png"
+        },
+        {
+            "nomor" : 28,
+            "soal" : "28tiu5.png",
+            "jawaba" : "28tiu5a.png",
+            "jawabb" : "28tiu5b.png",
+            "jawabc" : "28tiu5c.png",
+            "jawabd" : "28tiu5d.png",
+            "jawabe" : "28tiu5e.png"
+        },
+        {
+            "nomor" : 29,
+            "soal" : "29tiu5.png",
+            "jawaba" : "29tiu5a.png",
+            "jawabb" : "29tiu5b.png",
+            "jawabc" : "29tiu5c.png",
+            "jawabd" : "29tiu5d.png",
+            "jawabe" : "29tiu5e.png"
+        },
+        {
+            "nomor" : 30,
+            "soal" : "30tiu5.png",
+            "jawaba" : "30tiu5a.png",
+            "jawabb" : "30tiu5b.png",
+            "jawabc" : "30tiu5c.png",
+            "jawabd" : "30tiu5d.png",
+            "jawabe" : "30tiu5e.png"
+        }
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

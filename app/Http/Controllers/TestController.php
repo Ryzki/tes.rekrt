@@ -10,6 +10,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Test\ISTController;
 use App\Http\Controllers\Test\SDIController;
+use App\Http\Controllers\Test\TIUController;
+use App\Http\Controllers\Test\WPTController;
+use App\Http\Controllers\Test\MBTIController;
 use App\Http\Controllers\Test\MSDTController;
 use App\Http\Controllers\Test\RMIBController;
 use App\Http\Controllers\Test\DISC24Controller;
@@ -71,6 +74,12 @@ class TestController extends Controller
         // Test RMIB
         elseif($path == 'rmib' || $path == 'rmib-2')
             return RMIBController::index($request, $path, $test, $selection);
+        elseif($path == 'tiu')
+            return TIUController::index($request, $path, $test, $selection);
+        elseif($path == 'wpt')
+            return WPTController::index($request, $path, $test, $selection);
+        elseif($path == 'mbti')
+            return MBTIController::index($request, $path, $test, $selection);
         else
             abort(404);
     }
@@ -112,6 +121,13 @@ class TestController extends Controller
         // Tes RMIB
         elseif($request->path == 'rmib' || $request->path == 'rmib-2')
             return \App\Http\Controllers\Test\RMIBController::store($request);
+        // Tes TIU
+        elseif($request->path == 'tiu')
+            return \App\Http\Controllers\Test\TIUController::store($request);
+        elseif($request->path == 'wpt')
+            return \App\Http\Controllers\Test\WPTController::store($request);
+        elseif($request->path == 'mbti')
+            return \App\Http\Controllers\Test\MBTIController::store($request);
     }
 
     /**

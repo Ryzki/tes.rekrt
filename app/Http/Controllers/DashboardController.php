@@ -31,7 +31,11 @@ class DashboardController extends Controller
         'keys.svg',
         'gears.svg',
         'keys.svg',
-        'lightning-bolts.svg'];
+        'keys.svg',
+        'lightning-bolts.svg',
+        'lightning-bolts.svg',
+        'lightning-bolts.svg',
+    ];
 
         // Get tests
         if(Auth::user()->role->is_global === 1) {
