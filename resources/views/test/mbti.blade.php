@@ -93,7 +93,7 @@
 <script type="text/javascript">
 
 	function deleteItems() {
-		localStorage.clear();
+		sessionStorage.clear();
 	}
 	//onsubmit 
 	$(document).ready(function(){
@@ -114,13 +114,13 @@
     $(document).ready(function(){
         let items;
 		let number;
-		let getNumber = localStorage.getItem('page');	
-        let getActive = localStorage.getItem('active');
+		let getNumber = sessionStorage.getItem('page');	
+        let getActive = sessionStorage.getItem('active');
 		$("#answered").text(getActive);
 
 		
 		for(let i = 1; i <= 70; i++){
-			var name = localStorage.getItem('jawaban'+i);
+			var name = sessionStorage.getItem('jawaban'+i);
 			if(name != null){
 				$('#button'+i).addClass('active');
                 $('.jawaban'+i).val(name);
@@ -158,7 +158,7 @@
                 num = Number(num);
                 items = num;
                 number = num-1;
-                page = localStorage.setItem('page',num);
+                page = sessionStorage.setItem('page',num);
                 soal_mbti = data.quest;
                 opsiA = data.jawaba;
                 opsiB = data.jawabb;
@@ -182,8 +182,8 @@
                         $('#jawaban'+num).val(yname)
                         $('#button'+num).addClass('active');
                         activeLength = $('.active').length;
-                        localStorage.setItem('jawaban'+num,yname);
-                        localStorage.setItem('active',activeLength);       
+                        sessionStorage.setItem('jawaban'+num,yname);
+                        sessionStorage.setItem('active',activeLength);       
                         
                         nextId(num+1);
                     }       
@@ -192,8 +192,8 @@
                         $('#jawaban'+num).val(yname)
                         $('#button'+num).addClass('active');
                         activeLength = $('.active').length;
-                        localStorage.setItem('jawaban'+num,yname);
-                        localStorage.setItem('active',activeLength); 
+                        sessionStorage.setItem('jawaban'+num,yname);
+                        sessionStorage.setItem('active',activeLength); 
                     }
                 })
                 getCheckedValue(num);
@@ -206,7 +206,7 @@
         }	
 
         function getCheckedValue(num){
-			var radioVal = localStorage.getItem('jawaban'+num);
+			var radioVal = sessionStorage.getItem('jawaban'+num);
 			if(radioVal){
 				const radioCek = document.querySelector(`input[name="mbti[`+num+`]"][value="${radioVal}"]`);
 				radioCek.checked = true;
@@ -224,7 +224,7 @@
 	});
 	// Count answered question
 	function countAnswered(){	
-		var getActive = localStorage.getItem('active');
+		var getActive = sessionStorage.getItem('active');
 		$("#answered").text(getActive);
 		return getActive;
 	}

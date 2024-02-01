@@ -28,7 +28,6 @@ class MBTIController extends Controller
     {
         $packet = Packet::where('test_id','=',22)->where('status','=',1)->first();
        
-
         return view('test.mbti', [
             'path' => $path,
             'test' => $test,
