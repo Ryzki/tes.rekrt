@@ -79,7 +79,6 @@ class MSDTController extends Controller
         //change into 8x8 matrix
         
         $twoDArray = array_chunk($hasil, 8);
-        dd($twoDArray);
         for($bk=0;$bk<=7;$bk++){
             //cek jumlah jawaban A dan B by kolom
             $arrayResultColumn[$bk] = array_column($twoDArray,$bk);
