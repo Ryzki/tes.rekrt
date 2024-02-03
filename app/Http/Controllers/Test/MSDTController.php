@@ -79,13 +79,13 @@ class MSDTController extends Controller
         //change into 8x8 matrix
         
         $twoDArray = array_chunk($hasil, 8);
-
+        dd($twoDArray);
         for($bk=0;$bk<=7;$bk++){
-            //cek jumlah jawaban A dan B by column
+            //cek jumlah jawaban A dan B by kolom
             $arrayResultColumn[$bk] = array_column($twoDArray,$bk);
             $arrayResultColumn[$bk] = array_count_values($arrayResultColumn[$bk]);
 
-            //cek jumlah jawaban A dan B by row
+            //cek jumlah jawaban A dan B by baris
             $arrayResultRow[$bk] = array_count_values($twoDArray[$bk]);
         }
 
@@ -96,6 +96,7 @@ class MSDTController extends Controller
             //array of jumlah jawaban B tiap baris ke bawah
             $countResultB[$r] = $arrayResultColumn[$r]['B'];
         }
+
         
         // Get the packet and questions
         $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();

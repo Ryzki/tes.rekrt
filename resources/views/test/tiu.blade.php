@@ -83,6 +83,29 @@
 			</ul>
 		</div>
 	</nav>
+	<div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<h5 class="modal-title" id="exampleModalLabel">
+	        			<span class="bg-warning rounded-1 text-center px-3 py-2 me-2"><i class="fa fa-lightbulb-o text-dark" aria-hidden="true"></i></span> 
+	        			Tutorial Tes
+	        		</h5>
+	        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      		</div>
+		      	<div class="modal-body">
+		      	    <p>Pada tes ini, Anda akan diberikan soal berupa 3 gambar yang memiliki pola identik.
+		        	Selanjutnya, pilihlah jawaban yang memiliki pola gambar yang sama seperti soal.</p>
+		        	<p style="margin-bottom: .5rem;"><strong>Perhatikan contoh berikut:</strong></p>
+		        	<iframe style="width: 100%; height: 450px;" src='{{ asset('assets/petunjuk/petunjuk-tiu5.png') }}' >    </iframe>
+					
+				</div>
+	      		<div class="modal-footer">
+	        		<button type="button" class="btn btn-primary text-uppercase " data-bs-dismiss="modal">Mengerti</button>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
 
     @endif
 
