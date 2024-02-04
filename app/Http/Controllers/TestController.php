@@ -15,6 +15,7 @@ use App\Http\Controllers\Test\WPTController;
 use App\Http\Controllers\Test\MBTIController;
 use App\Http\Controllers\Test\MSDTController;
 use App\Http\Controllers\Test\RMIBController;
+use App\Http\Controllers\Test\TikiController;
 use App\Http\Controllers\Test\DISC24Controller;
 use App\Http\Controllers\Test\DISC40Controller;
 use App\Http\Controllers\Test\PapikostickController;
@@ -80,6 +81,8 @@ class TestController extends Controller
             return WPTController::index($request, $path, $test, $selection);
         elseif($path == 'mbti')
             return MBTIController::index($request, $path, $test, $selection);
+        elseif($path == 'tiki')
+            return TikiController::index($request, $path, $test, $selection);
         else
             abort(404);
     }
@@ -128,6 +131,8 @@ class TestController extends Controller
             return \App\Http\Controllers\Test\WPTController::store($request);
         elseif($request->path == 'mbti')
             return \App\Http\Controllers\Test\MBTIController::store($request);
+        elseif($request->path == 'tiki')
+            return \App\Http\Controllers\Test\TikiController::store($request);
     }
 
     /**

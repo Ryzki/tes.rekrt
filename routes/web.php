@@ -7,6 +7,7 @@ use App\Http\Controllers\Test\WPTController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Test\MBTIController;
 use App\Http\Controllers\Test\MSDTController;
+use App\Http\Controllers\Test\TikiController;
 use App\Http\Controllers\UserLoginController;
 use App\Http\Controllers\Test\DISC24Controller;
 use App\Http\Controllers\Test\DISC40Controller;
@@ -63,6 +64,7 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/tiu/{id}',[TIUController::class,'getData'])->name('admin.tiu.next');
 	Route::get('/tes/wpt/{id}',[WPTController::class,'getData'])->name('admin.wpt.next');
 	Route::get('/tes/mbti/{id}',[MBTIController::class,'getData'])->name('admin.mbti.next');
+	Route::get('/tes/tiki/{part}/{id}',[TikiController::class,'getData'])->name('admin.tiki.next');
 
 });
 
