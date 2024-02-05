@@ -34,14 +34,29 @@
 						@csrf
 						<input type="hidden" name="path" value="{{ $path }}">
 						<input type="hidden" name="packet_id" value="{{ $packet->id }}">
-						<input type="hidden" name="test_id" value="{{ $test->id }}">
+						<input type="hidden" name="test_id" value="{{ $test->id }}"> 
+						@if (request('part') == null)
+							<input type="hidden" name="part" class="part" id="part" value="1">
+						@else
+							<input type="hidden" name="part" class="part" id="part" value="{{ request('part') }}">
+						@endif
+						{{-- //add html button nav and input --}}
+						@for ($i = 1; $i <= $jumlah_soal; $i++)
+							<a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button{{ $i }}">{{ $i }}</a>
+							<input type="hidden" name="jawaban[{{ $i }}]" class="jawaban'+i+'" id="jawaban{{ $i }}" value="">
+							
+						@endfor
+						{{-- <a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button{{ $i }}">{{ $i }}</a>
+						<input type="hidden" name="jawaban[{{ $i }}]" class="jawaban'+i+'" id="jawaban{{ $i }}" value="">
+
 						<div class="form-group nav_button">
 
-						</div>
+						</div> --}}
 					</form>
 				</div>
 			</div>
 		</div>
+		
 	    <div class="col-12 col-md-8">
 			<form id="form2">
 			    @csrf
@@ -107,6 +122,8 @@
 	</div>
     @endif
 </div>
+
+
 @endsection
 
 @section('js-extra')

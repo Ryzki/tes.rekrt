@@ -7,14 +7,16 @@ $(document).ready(function(){
     $("#tutorialModal").modal("toggle");
     // location.reload();
     totalQuestion();
+
+    
 });
 
 $(document).ready(function(){
-    nextId(1,1);
     
-    var part;
-
-
+    var part = $('#part').val();
+    console.log(part);
+    nextId(1,part);
+   
     function nextId(num,part){
         $.ajax({
             url: '/tes/tiki/'+part+'/'+num,
@@ -62,6 +64,7 @@ $(document).ready(function(){
                 });
 
                 getCheckedValue(num);
+                
 
                 num > 1 ? $('#prev').show() : $('#prev').hide();
                 //hide next button
@@ -69,32 +72,24 @@ $(document).ready(function(){
             }
         })
     }
-    
 
     var total_soal = sessionStorage.getItem('total_soal');
     if(total_soal != null){
         for(let i=1;i<=total_soal;i++){
-            var getJawaban = sessionStorage.getItem('jawaban'+i);
-            
-            //add html button nav and input
-            var button = $('<a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button'+(i)+'">'+(i)+'</a>');
-            var input =	$('<input type="hidden" name="jawaban['+i+']" class="jawaban'+i+'" id="jawaban'+i+'" value="">');
-            $('.nav_button').append(button);
-            $('.nav_button').append(input);
-            
+            var getJawaban = sessionStorage.getItem('jawaban'+i);      
             
             $('#button'+i).click(function(){
-                nextId(i,1);
+                nextId(i,part);
             });
 
             if(getJawaban != null){
                 $('#button'+i).addClass('active');
-                $('.jawaban'+i).val(name);
+                // $('.jawaban'+i).val(name);
             }
         }
     }
     else{
-        location.reload();
+        total_soal;
     }
 
 
