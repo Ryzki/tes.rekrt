@@ -35,6 +35,7 @@
 						<input type="hidden" name="path" value="{{ $path }}">
 						<input type="hidden" name="packet_id" value="{{ $packet->id }}">
 						<input type="hidden" name="test_id" value="{{ $test->id }}"> 
+						<input type="hidden" name="jumlah_soal" class="jumlah_soal" value="{{ $jumlah_soal }}"> 
 						@if (request('part') == null)
 							<input type="hidden" name="part" class="part" id="part" value="1">
 						@else

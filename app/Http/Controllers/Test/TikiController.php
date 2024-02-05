@@ -13,11 +13,9 @@ class TikiController extends Controller
     public function getData($part,$id){
         $soal = Question::where('packet_id','=',38)->where('number','=',$part)->first();
         $decode_soal = json_decode($soal->description,true);
-        $jumlah_soal = count($decode_soal[0]['soal']);
 
         return response()->json([
             'quest' => $decode_soal,
-            'jumlah_soal'=>$jumlah_soal,
             'num' => $id,
             'part'=> $part
         ]);
