@@ -47,7 +47,8 @@ class TikiController extends Controller
             'test' => $test,
             'selection' => $selection,
             'packet' => $packet,
-            'jumlah_soal' => $jumlah_soal
+            'jumlah_soal' => $jumlah_soal,
+            'part'=>$part
         ]);
     }
 
@@ -58,7 +59,12 @@ class TikiController extends Controller
         $selection = $request->selection;
         $part = ($request->part) + 1;
 
-        return redirect('/tes/tiki?part='.$part);
+        if($part >= 12){
+            return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
+        }
+        else{
+            return redirect('/tes/tiki?part='.$part);
+        }
     }
 
     

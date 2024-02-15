@@ -44,7 +44,7 @@
 						{{-- //add html button nav and input --}}
 						@for ($i = 1; $i <= $jumlah_soal; $i++)
 							<a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button{{ $i }}">{{ $i }}</a>
-							<input type="hidden" name="jawaban[{{ $i }}]" class="jawaban'+i+'" id="jawaban{{ $i }}" value="">
+							<input type="hidden" name="jawaban{{ $i }}{{ $part }}" class="jawaban{{ $i }}{{ $part }}" id="jawaban{{ $i }}{{ $part }}" value="">
 							
 						@endfor
 						{{-- <a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button{{ $i }}">{{ $i }}</a>
@@ -57,7 +57,7 @@
 				</div>
 			</div>
 		</div>
-		
+		{{-- <img src="{{ asset('assets/images/gambar') }}/c-fa.png" alt=""> --}}
 	    <div class="col-12 col-md-8">
 			<form id="form2">
 			    @csrf
@@ -68,7 +68,7 @@
                       			<div class="soal_number card-header bg-transparent">
 					    			<i class="fa fa-edit"></i> <span class="num fw-bold"></span>
 					    		</div>
-                                <div class="card-body s">
+                                <div class="card-body s" >
                                     
                                 </div>
                             </div>
@@ -93,7 +93,11 @@
 				</li>
 				<li class="nav-item ms-3">
 					{{-- <button class="btn btn-md btn-primary text-uppercase " id="btn-submit" disabled>Submit</button> --}}
-					<button onclick="deleteItems()" class="btn btn-md btn-primary text-uppercase " id="btn-submit" disabled>Submit</button>
+					@if( request('part') != 11 )
+						<button onclick="deleteItems()" class="btn btn-md btn-primary text-uppercase " id="btn-next" disabled>Submit</button>
+					@else
+						<button onclick="deleteItems()" class="btn btn-md btn-primary text-uppercase " id="btn-submit" disabled>Submit</button>
+					@endif
 				</li>
 			</ul>
 		</div>
@@ -143,6 +147,7 @@
 	background-color: rgb(247, 160, 79);
 }
 
+
 #id_work_days input[type="radio"] {
   /* display: none; */
   opacity: 0;
@@ -156,7 +161,7 @@ pointer-events: none;
   border-radius: 3px;
   color: rgb(0, 0, 0);
   cursor: pointer;
-  width: 80px;
+  width: 150px;
 }
 
 #id_work_days input[type="radio"]:checked + span {
