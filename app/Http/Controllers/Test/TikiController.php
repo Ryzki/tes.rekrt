@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Test;
 use App\Models\Packet;
 use App\Models\TempTes;
 use App\Models\Question;
+use App\Models\TesTemporary;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class TikiController extends Controller
 {
@@ -58,14 +60,40 @@ class TikiController extends Controller
         $test_id = $request->test_id;
         $selection = $request->selection;
         $part = ($request->part) + 1;
+        $packet_id = $request->packet_id;
+        $jawaban = json_encode($request->jawaban);
+
+        dd($request->all());
+
+        $save_sementara = new TesTemporary;
+        $save_sementara->id_user = Auth::user()->id;
+        $save_sementara->test_id = $test_id;
+        $save_sementara->packet_id = $packet_id;
+        $save_sementara->json = $jawaban;
+        $save_sementara->part = $part;
+        $save_sementara->save();
+
+        $temporary_result = self::getTempt(Auth::user()->id,$test_id,$packet_id,$part);
+        // dd($temporary_result);
 
         if($part >= 12){
             return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
         }
         else{
+            
             return redirect('/tes/tiki?part='.$part);
         }
     }
+
+    public static function getTempt($id_user,$test_id,$packet_id,$part){
+
+        $data = TesTemporary::where('id_user',$id_user)->where('test_id',$test_id)
+                            ->where('packet_id',$packet_id)->where('part',$part)
+                            ->get();
+        return $data;
+    }
+
+
 
     
     

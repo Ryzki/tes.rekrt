@@ -44,7 +44,7 @@
 						{{-- //add html button nav and input --}}
 						@for ($i = 1; $i <= $jumlah_soal; $i++)
 							<a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button{{ $i }}">{{ $i }}</a>
-							<input type="hidden" name="jawaban{{ $i }}{{ $part }}" class="jawaban{{ $i }}{{ $part }}" id="jawaban{{ $i }}{{ $part }}" value="">
+							<input type="hidden" name="jawaban[{{ $i }}]" class="jawaban{{ $i }}" id="jawaban{{ $i }}{{ $part }}" value="">
 							
 						@endfor
 						{{-- <a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button{{ $i }}">{{ $i }}</a>
@@ -153,18 +153,32 @@
   opacity: 0;
 pointer-events: none;
 }
+#id_work_days input[type="checkbox"] {
+  /* display: none; */
+  opacity: 0;
+pointer-events: none;
+}
 
 #id_work_days span {
   display: inline-block;
-  padding: 10px;
+  padding: 5px;
+  text-align: center;
   border: 2px solid gold;
   border-radius: 3px;
   color: rgb(0, 0, 0);
   cursor: pointer;
-  width: 150px;
+  width: 200px;
+}
+
+#id_work_days span img{
+	width: 100%;
 }
 
 #id_work_days input[type="radio"]:checked + span {
+  background-color: rgb(255, 136, 0);
+  color: black;
+}
+#id_work_days input[type="checkbox"]:checked + span {
   background-color: rgb(255, 136, 0);
   color: black;
 }
