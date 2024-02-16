@@ -32,7 +32,6 @@ class TikiController extends Controller
             $part = $request->part;
         }
 
-
         $packet = Packet::where('test_id','=',23)->where('status','=',1)->first();
         $soal = Packet::select('amount')->where('test_id','=',23)->where('part','=',$part)->first();
         // $soal = Question::where('packet_id','=',38)->where('number','=',$part)->first();
@@ -63,8 +62,8 @@ class TikiController extends Controller
         $packet_id = $request->packet_id;
         $jawaban = json_encode($request->jawaban);
 
-        dd($request->all());
-
+        dd($request->jawaban);
+        
         $save_sementara = new TesTemporary;
         $save_sementara->id_user = Auth::user()->id;
         $save_sementara->test_id = $test_id;
@@ -73,8 +72,8 @@ class TikiController extends Controller
         $save_sementara->part = $part;
         $save_sementara->save();
 
-        $temporary_result = self::getTempt(Auth::user()->id,$test_id,$packet_id,$part);
-        // dd($temporary_result);
+        $temporary_result1 = self::getTempt1(Auth::user()->id,$test_id,$packet_id,$part);
+        // dd($temporary_result1);
 
         if($part >= 12){
             return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
@@ -85,12 +84,57 @@ class TikiController extends Controller
         }
     }
 
-    public static function getTempt($id_user,$test_id,$packet_id,$part){
-
+    public static function getTempt1($id_user,$test_id,$packet_id,$part){
+        $save_value_1 = 0;
         $data = TesTemporary::where('id_user',$id_user)->where('test_id',$test_id)
                             ->where('packet_id',$packet_id)->where('part',$part)
-                            ->get();
-        return $data;
+                            ->first();
+        //soal part 1
+        $kunci_1=strtoupper("bccabddadabcbdbccdaaacdaabbccabbbdababad");
+        $jawaban = json_decode($data->json,true);
+        for($i=1;$i<=strlen($kunci_1);$i++){
+            if($kunci_1[$i-1]==$jawaban[$i]){
+                $save_value_1++;
+            }
+        }
+           
+        return $save_value_1;
+    }
+
+    public static function kunci_2($id_user,$test_id,$packet_id,$part){
+        $save_value_1 = 0;
+        $data = TesTemporary::where('id_user',$id_user)->where('test_id',$test_id)
+                            ->where('packet_id',$packet_id)->where('part',$part)
+                            ->first();
+
+        $kunc[1]=5;
+        $kunc[2]=9;
+        $kunc[3]=40;
+        $kunc[4]=18;
+        $kunc[5]=34;
+        $kunc[6]=18;
+        $kunc[7]=18;
+        $kunc[8]=5;
+        $kunc[9]=10;
+        $kunc[10]=10;
+        $kunc[11]=17;
+        $kunc[12]=40;
+        $kunc[13]=10;
+        $kunc[14]=36;
+        $kunc[15]=36;
+        $kunc[16]=20;
+        $kunc[17]=34;
+        $kunc[18]=20;
+        $kunc[19]=36;
+        $kunc[20]=34;
+        $kunc[21]=10;
+        $kunc[22]=20;
+        $kunc[23]=17;
+        $kunc[24]=12;
+        $kunc[25]=33;
+        $kunc[26]=36;
+
+    return $kunc;
     }
 
 
