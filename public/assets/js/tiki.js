@@ -71,22 +71,35 @@ $(document).ready(function(){
                 }
 
                 $('.radioClass'+(num-1)).click(function(){
+                    let values = 0;
                     if(part==2 || part ==3 || part == 4 || part == 8){
                         array_checkbox = [];
                         var checkboxess = document.querySelectorAll('input[type=checkbox]:checked')
                         for (var i = 0; i < checkboxess.length; i++) {
-                            array_checkbox.push(checkboxess[i].value)
+                            if(part == 2){
+                                conv_value = Number(checkboxess[i].value)
+                                values += conv_value;
+                                array_checkbox.push(checkboxess[i].value);
+                            }
+                            else{
+                                array_checkbox.push(checkboxess[i].value);
+                            }
                         }
+
                         var yname = JSON.stringify(array_checkbox);
 
                     }
                     else{
                         var yname = $('input[type="radio"]:checked').attr('value');
                     }
+
+                    final_submit = part == 2 ? values : yname;
+
                     $('#button'+num).addClass('active');
-                    $('.jawaban'+num+'').val(yname);
+                    $('.jawaban'+num+'').val(final_submit);
                     activeLength = $('.active').length;
                     sessionStorage.setItem('active',activeLength); 
+                    sessionStorage.setItem('set',values); 
                     sessionStorage.setItem('jawaban'+num,yname);
 
                     if(num < total_soal && part != 2 && part != 3 && part != 4 && part != 8){
@@ -323,9 +336,9 @@ function opsiAll(soal,num,array,part){
     }
     if(array[5] != null){
         if(part==7 || part==2 ){
-            var labelF = $('<p class="'+class_row+'"><label id="id_work_days"><input type="radio" class="radioClass'+(num-1)+'" id="radioE'+(num-1)+'" name="tiki['+(num-1)+']" value="E"><span><img src="../assets/images/gambar/'+array[5][(num-1)]+'"/></span></label></p>');  
+            var labelF = $('<p class="'+class_row+'"><label id="id_work_days"><input type="radio" class="radioClass'+(num-1)+'" id="radioE'+(num-1)+'" name="tiki['+(num-1)+']" value="F"><span><img src="../assets/images/gambar/'+array[5][(num-1)]+'"/></span></label></p>');  
         }else if(part == 4 || part==8){
-            var labelF = $('<p class="'+class_row+'"><label id="id_work_days"><input type="checkbox" class="radioClass'+(num-1)+'" id="radioE'+(num-1)+'" name="tiki['+(num-1)+']" value="E"><span><img src="../assets/images/gambar/'+array[5][(num-1)]+'"/></span></label></p>');  
+            var labelF = $('<p class="'+class_row+'"><label id="id_work_days"><input type="checkbox" class="radioClass'+(num-1)+'" id="radioE'+(num-1)+'" name="tiki['+(num-1)+']" value="F"><span><img src="../assets/images/gambar/'+array[5][(num-1)]+'"/></span></label></p>');  
         }
         else{
             labelF = $('<p class="'+class_row+'"><label id="id_work_days"><input type="radio" class="radioClass'+(num-1)+'" id="radioF'+(num-1)+'" name="tiki['+(num-1)+']" value="F"><span class="text-center span-length">'+array[5][(num-1)]+'</span></label></p>');

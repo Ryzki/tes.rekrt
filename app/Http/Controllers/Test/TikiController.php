@@ -62,7 +62,7 @@ class TikiController extends Controller
         $packet_id = $request->packet_id;
         $jawaban = json_encode($request->jawaban);
 
-        dd($request->jawaban);
+
         
         $save_sementara = new TesTemporary;
         $save_sementara->id_user = Auth::user()->id;
@@ -71,6 +71,9 @@ class TikiController extends Controller
         $save_sementara->json = $jawaban;
         $save_sementara->part = $part;
         $save_sementara->save();
+
+        $cek = self::kunci_2(Auth::user()->id,$test_id,$packet_id,$part);
+        dd($cek);
 
         $temporary_result1 = self::getTempt1(Auth::user()->id,$test_id,$packet_id,$part);
         // dd($temporary_result1);
@@ -106,35 +109,14 @@ class TikiController extends Controller
         $data = TesTemporary::where('id_user',$id_user)->where('test_id',$test_id)
                             ->where('packet_id',$packet_id)->where('part',$part)
                             ->first();
-
-        $kunc[1]=5;
-        $kunc[2]=9;
-        $kunc[3]=40;
-        $kunc[4]=18;
-        $kunc[5]=34;
-        $kunc[6]=18;
-        $kunc[7]=18;
-        $kunc[8]=5;
-        $kunc[9]=10;
-        $kunc[10]=10;
-        $kunc[11]=17;
-        $kunc[12]=40;
-        $kunc[13]=10;
-        $kunc[14]=36;
-        $kunc[15]=36;
-        $kunc[16]=20;
-        $kunc[17]=34;
-        $kunc[18]=20;
-        $kunc[19]=36;
-        $kunc[20]=34;
-        $kunc[21]=10;
-        $kunc[22]=20;
-        $kunc[23]=17;
-        $kunc[24]=12;
-        $kunc[25]=33;
-        $kunc[26]=36;
-
-    return $kunc;
+        $kunci_1=[5,9,40,18,34,18,18,5,10,10,17,40,10,36,36,20,34,20,36,34,10,20,17,12,33,36];
+        $jawaban = json_decode($data->json,true);
+        for($i=1;$i <= count($jawaban);$i++){
+            if($kunci_1[$i-1] == $jawaban[$i]){
+                $save_value_1++;
+            }
+        }
+    return $save_value_1;
     }
 
 
