@@ -167,11 +167,11 @@ pointer-events: none;
   border-radius: 3px;
   color: rgb(0, 0, 0);
   cursor: pointer;
-  width: 200px;
+  width: 180px;
 }
 
 #id_work_days span img{
-	width: 100%;
+	width: 80%;
 }
 
 #id_work_days input[type="radio"]:checked + span {

@@ -17,7 +17,8 @@ class TesTemporary extends Model
         'test_id',
         'json',
         'packet_id',
-        'part'
+        'part',
+        'result_temp'
     ];
 
     public function tes(){
