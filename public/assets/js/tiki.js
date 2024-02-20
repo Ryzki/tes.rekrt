@@ -5,8 +5,7 @@ function deleteItems() {
 //onsubmit 
 $(document).ready(function(){
     // $("#tutorialModal").modal("toggle");
-    // location.reload();
-    totalQuestion();
+
 
     countAnswered();
     //enable next submit button
@@ -17,11 +16,24 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
+    var items;
     var part = $('#part').val();
     var total_soal = $('.jumlah_soal').val();
 
     nextId(1,part);
    
+    $('#prev').click(function(){
+        // let getPage = Number(items);
+        let prev = items-1;
+        nextId(prev,part);
+    })
+
+    $('#next').click(function () {
+        // let getPage = Number(items);
+        let next = items + 1;
+        nextId(next,part);
+    });
+
     function nextId(num,part){
         $.ajax({
             url: '/tes/tiki/'+part+'/'+num,
@@ -30,7 +42,7 @@ $(document).ready(function(){
             success: function(data){
                 //inisialisasi data
                 num = Number(num);
-                
+                items = num;
                 console.log(data);
                 
                 soal = data.quest[0] != null ? data.quest[0].soal : null;
@@ -152,7 +164,7 @@ $(document).ready(function(){
 // // Change value
 $(document).on("change", "input[type=radio]", function(){
     // Count answered question
-    countAnswered();
+
     //enable next submit button
     countAnswered() >= totalQuestion() ? $("#btn-next").removeAttr("disabled") : $("#btn-next").attr("disabled", "disabled");
     // Enable submit button
@@ -162,7 +174,7 @@ $(document).on("change", "input[type=radio]", function(){
 
 $(document).on("change", "input[type=checkbox]", function(){
     // Count answered question
-    countAnswered();
+
     //enable next submit button
     countAnswered() >= totalQuestion() ? $("#btn-next").removeAttr("disabled") : $("#btn-next").attr("disabled", "disabled");
     // Enable submit button
@@ -179,10 +191,9 @@ $(document).on("change", "input[type=checkbox]", function(){
 
     // Total question
     function totalQuestion(){
-        // var totalRadio = localStorage.getItem('total_soal');
-        var totalRadio = 1;
-        $("#total").text(totalRadio);
-        return totalRadio;
+        // var totalRadio = sessionStorage.getItem('total_soal');
+        var totalRadio = $("#totals").text();
+        return Number(totalRadio);
     }
 
 function opsiNomor3(num,data){
