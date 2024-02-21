@@ -47,12 +47,7 @@
 							<input type="hidden" name="jawaban[{{ $i }}]" class="jawaban{{ $i }}" id="jawaban{{ $i }}{{ $part }}" value="">
 							
 						@endfor
-						{{-- <a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button{{ $i }}">{{ $i }}</a>
-						<input type="hidden" name="jawaban[{{ $i }}]" class="jawaban'+i+'" id="jawaban{{ $i }}" value="">
 
-						<div class="form-group nav_button">
-
-						</div> --}}
 					</form>
 				</div>
 			</div>
@@ -103,8 +98,8 @@
 		</div>
 	</nav>
 	<div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-	    	<div class="modal-content">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+	    	<div class="modal-content" style="height: 60vh">
 	      		<div class="modal-header">
 	        		<h5 class="modal-title" id="exampleModalLabel">
 	        			<span class="bg-warning rounded-1 text-center px-3 py-2 me-2"><i class="fa fa-lightbulb-o text-dark" aria-hidden="true"></i></span> 
@@ -113,11 +108,7 @@
 	        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      		</div>
 		      	<div class="modal-body">
-		      	    <p>Terdapat pernyataan dengan beberapa pilihan jawaban.
-		        	Pilih jawaban yang anda anggap sesuai dengan keadaan diri anda.</p>
-		        	<p>Anda menjawab dengan menekan jawaban yang tersedia. tidak perlu terlalu lama mempertimbangkan jawaban tersebut.</p>
-                    <p>Persoalan ini tidak membutuhkan waktu namun bekerjalan dengan cepat dan teliti</p>
-		        	
+					<iframe style="width: 100%;height:100%" src="{{ asset('assets/petunjuk/tikit-6-tutor.html') }}" title="description"></iframe>
 		      	</div>
 	      		<div class="modal-footer">
 	        		<button type="button" class="btn btn-primary text-uppercase " data-bs-dismiss="modal">Mengerti</button>
