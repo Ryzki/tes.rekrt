@@ -36,11 +36,9 @@
 						<input type="hidden" name="packet_id" value="{{ $packet->id }}">
 						<input type="hidden" name="test_id" value="{{ $test->id }}"> 
 						<input type="hidden" name="jumlah_soal" class="jumlah_soal" value="{{ $jumlah_soal }}"> 
-						@if (request('part') == null)
-							<input type="hidden" name="part" class="part" id="part" value="1">
-						@else
-							<input type="hidden" name="part" class="part" id="part" value="{{ request('part') }}">
-						@endif
+
+						<input type="hidden" name="part" class="part" id="part" value="{{ $part }}">
+						
 						{{-- //add html button nav and input --}}
 						@for ($i = 1; $i <= $jumlah_soal; $i++)
 							<a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button{{ $i }}">{{ $i }}</a>
@@ -81,18 +79,14 @@
 		<div class="container">
 			<ul class="navbar nav ms-auto">
 				<li class="nav-item">
-					<span id="answered">0</span>/<span id="totals">1</span> Soal Terjawab
+					<span id="answered">0</span>/<span id="totals">{{ $jumlah_soal }}</span> Soal Terjawab
 				</li>
 				<li class="nav-item ms-3">
 					<a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#tutorialModal" title="Tutorial"><i class="fa fa-question-circle" style="font-size: 1.5rem"></i></a>
 				</li>
 				<li class="nav-item ms-3">
-					{{-- <button class="btn btn-md btn-primary text-uppercase " id="btn-submit" disabled>Submit</button> --}}
-					@if( request('part') != 11 )
-						<button onclick="deleteItems()" class="btn btn-md btn-primary text-uppercase " id="btn-next" disabled>Submit</button>
-					@else
-						<button onclick="deleteItems()" class="btn btn-md btn-primary text-uppercase " id="btn-submit" disabled>Submit</button>
-					@endif
+
+					<button onclick="deleteItems()" class="btn btn-md btn-primary text-uppercase " id="btn-submit" disabled>Submit</button>
 				</li>
 			</ul>
 		</div>

@@ -30,12 +30,15 @@ class TikiController extends Controller
     {
         if($request->part == null){
             $part = 1;
+            $idx = 24;
         }else{
             $part = $request->part;
+            $idx = $test->id + $part;
         }
 
-        $packet = Packet::where('test_id','=',23)->where('status','=',1)->first();
-        $soal = Packet::select('amount')->where('test_id','=',23)->where('part','=',$part)->first();
+        
+        $packet = Packet::where('test_id','=',$idx)->where('status','=',1)->first();
+        $soal = Packet::select('amount')->where('test_id','=',$idx)->where('part','=',$part)->first();
         // $soal = Question::where('packet_id','=',38)->where('number','=',$part)->first();
         // $decode_soal = json_decode($soal->description,true);
 
@@ -44,8 +47,32 @@ class TikiController extends Controller
         // $soal_c = self::soal();
         $jumlah_soal = $soal->amount;
         
-        
+       
         return view('test.tiki.tiki', [
+            'path' => $path,
+            'test' => $test,
+            'selection' => $selection,
+            'packet' => $packet,
+            'jumlah_soal' => $jumlah_soal,
+            'part'=>$part
+        ]);
+    }
+
+    public static function indexPart(Request $request, $path, $test, $selection)
+    {
+
+        $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
+        $part = $packet->part;
+        $soal = Packet::select('amount')->where('test_id','=',$test->id)->where('part','=',$part)->first();
+        // $soal = Question::where('packet_id','=',38)->where('number','=',$part)->first();
+        // $decode_soal = json_decode($soal->description,true);
+
+        // dd($decode_soal);
+        // $jumlah_soal = count($decode_soal[0]['soal']);
+        // $soal_c = self::soal();
+        // dd($part);
+        $jumlah_soal = $soal->amount;
+        return view('test.tiki.tikit-1', [
             'path' => $path,
             'test' => $test,
             'selection' => $selection,
@@ -64,6 +91,7 @@ class TikiController extends Controller
         $jawaban = json_encode($request->jawaban);
 
         
+        
         $save_sementara = new TesTemporary;
         $save_sementara->id_user = Auth::user()->id;
         $save_sementara->test_id = $test_id;
@@ -72,24 +100,27 @@ class TikiController extends Controller
         $save_sementara->part = $request->part;
         $save_sementara->save();
 
-        $cek = self::kunci_2(Auth::user()->id,$test_id,$packet_id,$request->part);
+        $cek = self::kunci_2(Auth::user()->id,$test_id,$packet_id,$request->part,$jawaban);
 
 
         $part_next = ($request->part) + 1;
         if($part_next >= 12){
             //get temp pindahkan ke table result
+            $last_save = array();
             $array = TesTemporary::select('result_temp')->where('id_user',Auth::user()->id)
                                 ->where('test_id',$test_id)
-                                ->where('packet_id',$packet_id)
                                 ->orderBy('id','desc')
                                 ->get();
+            for($ls=0;$ls < count($array);$ls++){
+                $last_save['tikit-'.($ls+1)] = $array[$ls]->result_temp;
+            }
 
             $result = new Result;
             $result->user_id = Auth::user()->id;
             $result->company_id = Auth::user()->attribute->company_id;
             $result->test_id = $request->test_id;
             $result->packet_id = $request->packet_id;
-            $result->result = json_encode($array);
+            $result->result = json_encode($last_save);
             $result->save();
 
             //hapus temp
@@ -97,12 +128,32 @@ class TikiController extends Controller
             return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
         }
         else{
-            
+
             return redirect('/tes/tiki?part='.$part_next);
         }
     }
 
-    public static function kunci_2($id_user,$test_id,$packet_id,$part){
+    public static function storePart(Request $request){
+        
+        $path = $request->path;
+        $test_id = $request->test_id;
+        $selection = $request->selection;
+        $packet_id = $request->packet_id;
+        $jawaban = json_encode($request->jawaban);
+        $cek_jawaban_all = self::kunci_2(Auth::user()->id,$test_id,$packet_id,$request->part, $jawaban);
+        
+
+        $result = new Result;
+        $result->user_id = Auth::user()->id;
+        $result->company_id = Auth::user()->attribute->company_id;
+        $result->test_id = $request->test_id;
+        $result->packet_id = $request->packet_id;
+        $result->result = json_encode($cek_jawaban_all);
+        $result->save();
+        return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
+    }
+
+    public static function kunci_2($id_user,$test_id,$packet_id,$part, $jawa){
         $save_value_1 = 0;
         $save_value_2 = 0;
         $save_value_3 = 0;
@@ -118,8 +169,9 @@ class TikiController extends Controller
                             ->where('packet_id',$packet_id)->where('part',$part)
                             ->orderBy('id', 'desc')
                             ->first();
-        $ids = $data->id;
-        $jawaban = json_decode($data->json,true);
+        // $ids = $data->id;
+        $ids = $data != null ? $data->id : null;
+        $jawaban = $data != null ? json_decode($data->json,true) : json_decode($jawa,true);
         
         if($part == 1){
             $kunci_1=strtoupper("bccabddadabcbdbccdaaacdaabbccabbbdababad");      
@@ -128,8 +180,8 @@ class TikiController extends Controller
             return $last_value1;
         }
         else if($part == 2){
-            $kunci_2=[5,9,40,18,34,18,18,5,10,10,17,40,10,36,36,20,34,20,36,34,10,20,17,12,33,36];
-            $last_value2 = self::forGet($ids,$jawaban,$kunci_2,$save_value_2,2);
+            $kunci_22=[5,9,40,18,34,18,18,5,10,10,17,40,10,36,36,20,34,20,36,34,10,20,17,12,33,36];
+            $last_value2 = self::forGet($ids,$jawaban,$kunci_22,$save_value_2,2);
 
             return $last_value2;
         }
@@ -190,14 +242,18 @@ class TikiController extends Controller
         }
         $array_save_koreksi = array();
         $koreksi_ws = self::koreksi($part,$save_value);
-        $array_save_koreksi[0] = $save_value;
-        $array_save_koreksi[1] = $koreksi_ws;
+        $array_save_koreksi['benar'] = $save_value;
+        $array_save_koreksi['score'] = $koreksi_ws;
+        $array_save_koreksi['opsi_jawaban'] = $jawaban;
 
-        $update_data = TesTemporary::find($id);
-        $update_data->result_temp = json_encode($array_save_koreksi);
-        $update_data->update();
 
-        return $save_value;
+        if($id != null){
+            $update_data = TesTemporary::find($id);
+            $update_data->result_temp = json_encode($array_save_koreksi);
+            $update_data->update();
+        }
+            
+        return $array_save_koreksi;
     }
 
     public static function koreksi($part,$result){

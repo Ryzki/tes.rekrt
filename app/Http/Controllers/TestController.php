@@ -81,8 +81,10 @@ class TestController extends Controller
             return WPTController::index($request, $path, $test, $selection);
         elseif($path == 'mbti')
             return MBTIController::index($request, $path, $test, $selection);
-        elseif($path == 'tiki')
+        elseif($path == 'tiki' )
             return TikiController::index($request, $path, $test, $selection);
+        elseif($path == 'tiki-1' || 'tiki-2'|| 'tiki-3'|| 'tiki-4'|| 'tiki-5'|| 'tiki-6'|| 'tiki-7'|| 'tiki-8'|| 'tiki-9'|| 'tiki-10'|| 'tiki-11')
+            return TikiController::indexPart($request, $path, $test, $selection);
         else
             abort(404);
     }
@@ -133,6 +135,8 @@ class TestController extends Controller
             return \App\Http\Controllers\Test\MBTIController::store($request);
         elseif($request->path == 'tiki')
             return \App\Http\Controllers\Test\TikiController::store($request);
+        elseif($request->path == 'tiki-1' ||$request->path == 'tiki-2'||$request->path == 'tiki-3'||$request->path == 'tiki-4'||$request->path == 'tiki-5'||$request->path == 'tiki-6'||$request->path == 'tiki-7'||$request->path == 'tiki-8'||$request->path == 'tiki-9'||$request->path == 'tiki-10'||$request->path == 'tiki-11')
+            return \App\Http\Controllers\Test\TikiController::storePart($request);
     }
 
     /**

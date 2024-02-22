@@ -55,11 +55,12 @@ $(document).ready(function(){
 
                 part = part;
                 array_of_jawab = [jawabA,jawabB,jawabC,jawabD,jawabE,jawabF];
-                
+                modal_link = '/assets/petunjuk/tiki/tikit-'+part+'-tutor.html';
+                modal_tutorial = $('<iframe style="width: 100%;height:100%" src="'+modal_link+'" title="description"></iframe>')
                 sessionStorage.setItem('total_soal',total_soal);
                 //------
                 $('.num').text('Soal '+num);
-                
+                $('.modal-body').append(modal_tutorial);
                 
                 if(part==6){
                     opsiSoalD = opsiNomor6(num,soal);
