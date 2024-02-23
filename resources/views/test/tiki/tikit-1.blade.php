@@ -1,3 +1,4 @@
+
 @extends('template/main')
 
 @section('content')
@@ -102,7 +103,6 @@
 	        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      		</div>
 		      	<div class="modal-body">
-					{{-- <iframe style="width: 100%;height:100%" src="{{ asset('assets/petunjuk/tikit-6-tutor.html') }}" title="description"></iframe> --}}
 		      	</div>
 	      		<div class="modal-footer">
 	        		<button type="button" class="btn btn-primary text-uppercase " data-bs-dismiss="modal">Mengerti</button>

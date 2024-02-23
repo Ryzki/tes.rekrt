@@ -36,6 +36,7 @@ class TikiController extends Controller
             $idx = $test->id + $part;
         }
 
+
         
         $packet = Packet::where('test_id','=',$idx)->where('status','=',1)->first();
         $soal = Packet::select('amount')->where('test_id','=',$idx)->where('part','=',$part)->first();
@@ -61,16 +62,12 @@ class TikiController extends Controller
     public static function indexPart(Request $request, $path, $test, $selection)
     {
 
+        
         $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
+   
         $part = $packet->part;
         $soal = Packet::select('amount')->where('test_id','=',$test->id)->where('part','=',$part)->first();
-        // $soal = Question::where('packet_id','=',38)->where('number','=',$part)->first();
-        // $decode_soal = json_decode($soal->description,true);
 
-        // dd($decode_soal);
-        // $jumlah_soal = count($decode_soal[0]['soal']);
-        // $soal_c = self::soal();
-        // dd($part);
         $jumlah_soal = $soal->amount;
         return view('test.tiki.tikit-1', [
             'path' => $path,

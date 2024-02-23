@@ -43,7 +43,7 @@ $(document).ready(function(){
                 //inisialisasi data
                 num = Number(num);
                 items = num;
-                // console.log(data);
+                
                 
                 soal = data.quest[0] != null ? data.quest[0].soal : null;
                 jawabA = data.quest[1] != null ? data.quest[1].jawabA : null;
