@@ -4,6 +4,7 @@ function deleteItems() {
 
 //onsubmit 
 $(document).ready(function(){
+    // $("#tutorialModal").modal("toggle");
     $("#tutorialModal").modal("toggle");
 
 
