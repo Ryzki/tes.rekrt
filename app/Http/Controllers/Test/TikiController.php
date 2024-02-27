@@ -37,7 +37,6 @@ class TikiController extends Controller
         }
 
 
-        
         $packet = Packet::where('test_id','=',$idx)->where('status','=',1)->first();
         $soal = Packet::select('amount')->where('test_id','=',$idx)->where('part','=',$part)->first();
         // $soal = Question::where('packet_id','=',38)->where('number','=',$part)->first();

@@ -8,6 +8,7 @@ use App\Models\Selection;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Cfit3aController;
 use App\Http\Controllers\Test\ISTController;
 use App\Http\Controllers\Test\SDIController;
 use App\Http\Controllers\Test\TIUController;
@@ -83,8 +84,12 @@ class TestController extends Controller
             return MBTIController::index($request, $path, $test, $selection);
         elseif($path == 'tiki' )
             return TikiController::index($request, $path, $test, $selection);
-        elseif($path == 'tiki-1' || 'tiki-2'|| 'tiki-3'|| 'tiki-4'|| 'tiki-5'|| 'tiki-6'|| 'tiki-7'|| 'tiki-8'|| 'tiki-9'|| 'tiki-10'|| 'tiki-11')
+        elseif($path == 'tiki-1' || $path =='tiki-2'|| $path =='tiki-3'|| $path =='tiki-4'|| $path =='tiki-5'|| $path =='tiki-6'|| $path =='tiki-7'|| $path =='tiki-8'|| $path =='tiki-9'|| $path =='tiki-10'|| $path =='tiki-11')
             return TikiController::indexPart($request, $path, $test, $selection);
+        elseif($path == 'cfit3A')
+            return Cfit3aController::index($request, $path, $test, $selection);
+        elseif($path == 'cfit3A-1' || $path == 'cfit3A-2' || $path == 'cfit3A-3' || $path == 'cfit3A-4')
+            return Cfit3aController::indexPart($request, $path, $test, $selection);
         else
             abort(404);
     }
@@ -137,6 +142,8 @@ class TestController extends Controller
             return \App\Http\Controllers\Test\TikiController::store($request);
         elseif($request->path == 'tiki-1' ||$request->path == 'tiki-2'||$request->path == 'tiki-3'||$request->path == 'tiki-4'||$request->path == 'tiki-5'||$request->path == 'tiki-6'||$request->path == 'tiki-7'||$request->path == 'tiki-8'||$request->path == 'tiki-9'||$request->path == 'tiki-10'||$request->path == 'tiki-11')
             return \App\Http\Controllers\Test\TikiController::storePart($request);
+        elseif($request->path == 'cfit3A')
+            return \App\Http\Controllers\Cfit3aController::store($request);
     }
 
     /**

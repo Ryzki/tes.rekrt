@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\Cfit3aController;
 use App\Http\Controllers\Test\TIUController;
 use App\Http\Controllers\Test\WPTController;
 use App\Http\Controllers\DashboardController;
@@ -65,6 +66,7 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/wpt/{id}',[WPTController::class,'getData'])->name('admin.wpt.next');
 	Route::get('/tes/mbti/{id}',[MBTIController::class,'getData'])->name('admin.mbti.next');
 	Route::get('/tes/tiki/{part}/{id}',[TikiController::class,'getData'])->name('admin.tiki.next');
+	Route::get('/tes/cifit3A/{part}/{id}',[Cfit3aController::class,'getData'])->name('admin.cfit3a.next');
 
 });
 
