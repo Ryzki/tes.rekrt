@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Packet;
+use App\Models\Result;
 use App\Models\Question;
 use App\Models\TesTemporary;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class Cfit3aController extends Controller
@@ -83,6 +85,39 @@ class Cfit3aController extends Controller
         
 
         if($part+1 > 4){
+            $last_save = array();
+            $array = TesTemporary::select('result_temp','part','json')->where('id_user',Auth::user()->id)
+            ->where('test_id',$test_id)
+            ->orderBy('id','asc')
+            ->get();
+
+            $iq_get_temp1 = json_decode($array[0]->result_temp, true);
+            $iq_get_temp2 = json_decode($array[1]->result_temp, true);
+            $iq_get_temp3 = json_decode($array[2]->result_temp, true);
+            $iq_get_temp4 = json_decode($array[3]->result_temp, true);
+
+            $total_iq = $iq_get_temp1["score"]["iq"] + $iq_get_temp2["score"]["iq"] + $iq_get_temp3["score"]["iq"] + $iq_get_temp4["score"]["iq"];
+            $total_bp = $iq_get_temp1["score"]["bp"] + $iq_get_temp2["score"]["bp"] + $iq_get_temp3["score"]["bp"] + $iq_get_temp4["score"]["bp"];
+            
+
+            for($ls=0;$ls < 4;$ls++){
+                $last_save['cfit3a-'.($ls+1)] = $array[$ls]->json;
+            }
+
+            $last_save['iq'] = $total_iq;
+            $last_save['bp'] = $total_bp;
+
+            // dd($last_save);
+            $result = new Result;
+            $result->user_id = Auth::user()->id;
+            $result->company_id = Auth::user()->attribute->company_id;
+            $result->test_id = $request->test_id;
+            $result->packet_id = $request->packet_id;
+            $result->result = json_encode($last_save);
+            $result->save();
+
+            DB::delete('delete from test_temporary where id_user ='.Auth::user()->id.' and test_id = '.$test_id);
+
             return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
         }
         else{
