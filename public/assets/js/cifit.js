@@ -4,8 +4,8 @@ function deleteItems() {
 
 //onsubmit 
 $(document).ready(function(){
-    // $("#tutorialModal").modal("toggle");
-    // $("#tutorialModal").modal("toggle");
+    $("#tutorialModal").modal("toggle");
+
 
 
     countAnswered();
@@ -73,6 +73,10 @@ $(document).ready(function(){
                 part = part;
                 array_of_jawab = [jawabA,jawabB,jawabC,jawabD,jawabE,jawabF];
                 array_of_2 = [data.quest[0].jawabA, data.quest[1].jawabB,data.quest[2].jawabC,data.quest[3].jawabD,data.quest[4].jawabE]
+                
+                modal_link = '/assets/petunjuk/cfit3a/petunjuk'+part+'.html';
+                modal_tutorial = $('<iframe style="width: 100%;height:100%" src="'+modal_link+'" title="description"></iframe>')
+                $('.modal-body').append(modal_tutorial);
 
                 if(part != 2){
                     opsiSoalD = opsiNomorRadio(num,soal,array_of_jawab,part);
