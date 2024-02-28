@@ -10,6 +10,33 @@ if(!function_exists('setFullDate')){
     }
 }
 
+//cek akses soal
+if(!function_exists('existTest')){
+    function existTest($id){
+
+        // Get tests
+        if(Auth::user()->role->is_global === 1) {
+            $tests = Test::all();
+        }
+        elseif(Auth::user()->role->is_global === 0 && Auth::user()->role->id === 2){
+            $tests = Auth::user()->attribute->company->tests;
+
+        }
+        elseif(Auth::user()->role->is_global === 0) {
+            $tests = Auth::user()->attribute->position->tests;
+            // $tests = Auth::user()->attribute->company->tests;
+        }
+
+        $cek_tests = array();
+        for($i=0;$i<count($tests);$i++){
+            $cek_tests[$i] = $tests[$i]->id;
+        }
+        $inArray = in_array($id, $cek_tests);
+
+        return $inArray;
+    }
+}
+
 // Scoring DISC MOST
 if(!function_exists('discScoringM')){
     function discScoringM($number){

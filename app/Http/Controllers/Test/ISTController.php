@@ -23,35 +23,42 @@ class ISTController extends Controller
      */
     public static function index(Request $request, $path, $test, $selection)
     {
-        // Vars
-        $first_question = '';
-        $last_question = '';
-
-        // Get the part, packet and questions
-        $part = $request->query('part') ?: 1;
-        $packet = Packet::where('test_id','=',$test->id)->where('part','=',$part)->where('status','=',1)->first();
-        $questions = $packet ? $packet->questions()->orderBy('number','asc')->get() : [];
-        if(count($questions) > 0) {
-            foreach($questions as $key=>$question) {
-                $question->description = json_decode($question->description, true);
-                if($key == 0) $first_question = $question->number;
-                if($key == count($questions)-1) $last_question = $question->number;
-            }
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
+            abort(404);
         }
-        $question_range = count($questions) > 1 ? $first_question.'-'.$last_question : $first_question; // Range soal
-        $last_part = Packet::where('test_id','=',$test->id)->where('status','=',1)->latest('part')->first(); // Part paket soal terakhir
+        else{
 
-        // View
-        return view('test/'.$path, [
-            'packet' => $packet,
-            'path' => $path,
-            'part' => $part,
-            'questions' => $questions,
-            'selection' => $selection,
-            'test' => $test,
-            'question_range' => $question_range,
-            'last_part' => $last_part,
-        ]);
+            // Vars
+            $first_question = '';
+            $last_question = '';
+    
+            // Get the part, packet and questions
+            $part = $request->query('part') ?: 1;
+            $packet = Packet::where('test_id','=',$test->id)->where('part','=',$part)->where('status','=',1)->first();
+            $questions = $packet ? $packet->questions()->orderBy('number','asc')->get() : [];
+            if(count($questions) > 0) {
+                foreach($questions as $key=>$question) {
+                    $question->description = json_decode($question->description, true);
+                    if($key == 0) $first_question = $question->number;
+                    if($key == count($questions)-1) $last_question = $question->number;
+                }
+            }
+            $question_range = count($questions) > 1 ? $first_question.'-'.$last_question : $first_question; // Range soal
+            $last_part = Packet::where('test_id','=',$test->id)->where('status','=',1)->latest('part')->first(); // Part paket soal terakhir
+    
+            // View
+            return view('test/'.$path, [
+                'packet' => $packet,
+                'path' => $path,
+                'part' => $part,
+                'questions' => $questions,
+                'selection' => $selection,
+                'test' => $test,
+                'question_range' => $question_range,
+                'last_part' => $last_part,
+            ]);
+        }
     }
 
     /**

@@ -19,21 +19,27 @@ class DISC24Controller extends Controller
      */
     public static function index(Request $request, $path, $test, $selection)
     {
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
+            abort(404);
+        }
+        else{
+            // Get the packet and questions
+            $packet = Packet::where('test_id','=',3)->where('status','=',1)->first();
+            $questions = $packet ? $packet->questions()->orderBy('number','asc')->get() : [];
     
-        // Get the packet and questions
-        $packet = Packet::where('test_id','=',3)->where('status','=',1)->first();
-        $questions = $packet ? $packet->questions()->orderBy('number','asc')->get() : [];
+            // dd($questions);
+    
+            // View
+            return view('test/'.$path, [
+                'packet' => $packet,
+                'path' => $path,
+                'questions' => $questions,
+                'selection' => $selection,
+                'test' => $test,
+            ]);
 
-        // dd($questions);
-
-        // View
-        return view('test/'.$path, [
-            'packet' => $packet,
-            'path' => $path,
-            'questions' => $questions,
-            'selection' => $selection,
-            'test' => $test,
-        ]);
+        }
     }
 
     public function getData($num){

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class WPTController extends Controller
 {
     public function getData($num){
+        
         $data = json_decode(file_get_contents(public_path() . "/assets/js/wpt.json"), true);
 
         return response()->json([
@@ -21,14 +22,22 @@ class WPTController extends Controller
 
     public static function index(Request $request, $path, $test, $selection)
     {
-        $packet = Packet::where('test_id','=',21)->where('status','=',1)->first();
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
+            abort(404);
+        }
+        else{
+            $packet = Packet::where('test_id','=',21)->where('status','=',1)->first();
 
-        return view('test.wpt', [
-            'path' => $path,
-            'test' => $test,
-            'selection' => $selection,
-            'packet' => $packet
-        ]);
+            return view('test.wpt', [
+                'path' => $path,
+                'test' => $test,
+                'selection' => $selection,
+                'packet' => $packet
+            ]);
+        }
+
+        
     }
 
     public static function store(Request $request){

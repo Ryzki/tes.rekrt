@@ -18,18 +18,25 @@ class RMIBController extends Controller
      */
     public static function index(Request $request, $path, $test, $selection)
     {
-        // Get the packet and questions
-        $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
-        $questions = $packet ? $packet->questions()->orderBy('number','asc')->get() : [];
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
+            abort(404);
+        }
+        else{
+            // Get the packet and questions
+            $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
+            $questions = $packet ? $packet->questions()->orderBy('number','asc')->get() : [];
 
-        // View
-        return view('test/'.$path, [
-            'packet' => $packet,
-            'path' => $path,
-            'questions' => $questions,
-            'selection' => $selection,
-            'test' => $test,
-        ]);
+            // View
+            return view('test/'.$path, [
+                'packet' => $packet,
+                'path' => $path,
+                'questions' => $questions,
+                'selection' => $selection,
+                'test' => $test,
+            ]);
+        }
+        
     }
 
     /**

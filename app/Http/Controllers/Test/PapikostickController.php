@@ -18,17 +18,24 @@ class PapikostickController extends Controller
      */
     public static function index(Request $request, $path, $test, $selection)
     {
-        // Get the packet
-        $packet = Packet::where('test_id','=',4)->where('status','=',1)->first();
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
+            abort(404);
+        }
+        else{
 
-        // View
-        return view('test/'.$path, [
-            'packet' => $packet,
-            'path' => $path,
-            'questions' => self::data(),
-            'selection' => $selection,
-            'test' => $test,
-        ]);
+            // Get the packet
+            $packet = Packet::where('test_id','=',4)->where('status','=',1)->first();
+            
+            // View
+            return view('test/'.$path, [
+                'packet' => $packet,
+                'path' => $path,
+                'questions' => self::data(),
+                'selection' => $selection,
+                'test' => $test,
+            ]);
+        }
     }
 
     public function getData($num){

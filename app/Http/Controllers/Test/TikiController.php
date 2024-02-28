@@ -28,54 +28,67 @@ class TikiController extends Controller
 
     public static function index(Request $request, $path, $test, $selection)
     {
-        if($request->part == null){
-            $part = 1;
-            $idx = 24;
-        }else{
-            $part = $request->part;
-            $idx = $test->id + $part;
+
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
+            abort(404);
         }
-
-
-        $packet = Packet::where('test_id','=',$idx)->where('status','=',1)->first();
-        $soal = Packet::select('amount')->where('test_id','=',$idx)->where('part','=',$part)->first();
-        // $soal = Question::where('packet_id','=',38)->where('number','=',$part)->first();
-        // $decode_soal = json_decode($soal->description,true);
-
-        // dd($decode_soal);
-        // $jumlah_soal = count($decode_soal[0]['soal']);
-        // $soal_c = self::soal();
-        $jumlah_soal = $soal->amount;
+        else{
+            if($request->part == null){
+                $part = 1;
+                $idx = 24;
+            }else{
+                $part = $request->part;
+                $idx = $test->id + $part;
+            }
+    
+    
+            $packet = Packet::where('test_id','=',$idx)->where('status','=',1)->first();
+            $soal = Packet::select('amount')->where('test_id','=',$idx)->where('part','=',$part)->first();
+            // $soal = Question::where('packet_id','=',38)->where('number','=',$part)->first();
+            // $decode_soal = json_decode($soal->description,true);
+    
+            // dd($decode_soal);
+            // $jumlah_soal = count($decode_soal[0]['soal']);
+            // $soal_c = self::soal();
+            $jumlah_soal = $soal->amount;
+            
+           
+            return view('test.tiki.tiki', [
+                'path' => $path,
+                'test' => $test,
+                'selection' => $selection,
+                'packet' => $packet,
+                'jumlah_soal' => $jumlah_soal,
+                'part'=>$part
+            ]);
+        }
         
-       
-        return view('test.tiki.tiki', [
-            'path' => $path,
-            'test' => $test,
-            'selection' => $selection,
-            'packet' => $packet,
-            'jumlah_soal' => $jumlah_soal,
-            'part'=>$part
-        ]);
     }
 
     public static function indexPart(Request $request, $path, $test, $selection)
     {
-
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
+            abort(404);
+        }
+        else{
+            $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
+       
+            $part = $packet->part;
+            $soal = Packet::select('amount')->where('test_id','=',$test->id)->where('part','=',$part)->first();
+    
+            $jumlah_soal = $soal->amount;
+            return view('test.tiki.tikit-1', [
+                'path' => $path,
+                'test' => $test,
+                'selection' => $selection,
+                'packet' => $packet,
+                'jumlah_soal' => $jumlah_soal,
+                'part'=>$part
+            ]);
+        }
         
-        $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
-   
-        $part = $packet->part;
-        $soal = Packet::select('amount')->where('test_id','=',$test->id)->where('part','=',$part)->first();
-
-        $jumlah_soal = $soal->amount;
-        return view('test.tiki.tikit-1', [
-            'path' => $path,
-            'test' => $test,
-            'selection' => $selection,
-            'packet' => $packet,
-            'jumlah_soal' => $jumlah_soal,
-            'part'=>$part
-        ]);
     }
 
     public static function store(Request $request){

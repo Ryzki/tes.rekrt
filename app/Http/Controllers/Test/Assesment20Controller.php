@@ -19,20 +19,25 @@ class Assesment20Controller extends Controller
      */
     public static function index(Request $request, $path, $test, $selection)
     {
-
-        // Get the packet and questions
-        $packet = Packet::where('test_id','=',13)->where('status','=',1)->first();
-        $questions = $packet ? $packet->questions()->first() : [];
-        $questions->description = json_decode($questions->description, true);
-
-        // View      
-        return view('test/'.$path, [
-            'packet' => $packet,
-            'path' => $path,
-            'questions' => $questions,
-            'selection' => $selection,
-            'test' => $test,
-        ]);
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
+            abort(404);
+        }
+        else{
+            // Get the packet and questions
+            $packet = Packet::where('test_id','=',13)->where('status','=',1)->first();
+            $questions = $packet ? $packet->questions()->first() : [];
+            $questions->description = json_decode($questions->description, true);
+    
+            // View      
+            return view('test/'.$path, [
+                'packet' => $packet,
+                'path' => $path,
+                'questions' => $questions,
+                'selection' => $selection,
+                'test' => $test,
+            ]);
+        }
     }
     public function getData($num){
         $quest = Question::with('packet')

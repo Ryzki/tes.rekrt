@@ -20,15 +20,23 @@ class TIUController extends Controller
     }
     public static function index(Request $request, $path, $test, $selection)
     {
-        $packet = Packet::where('test_id','=',20)->where('status','=',1)->first();
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
+            abort(404);
+        }
+        else{
+            $packet = Packet::where('test_id','=',20)->where('status','=',1)->first();
 
 
-        return view('test.tiu', [
-            'path' => $path,
-            'test' => $test,
-            'selection' => $selection,
-            'packet' => $packet
-        ]);
+            return view('test.tiu', [
+                'path' => $path,
+                'test' => $test,
+                'selection' => $selection,
+                'packet' => $packet
+            ]);
+        }
+
+
     }
 
     public static function store(Request $request)

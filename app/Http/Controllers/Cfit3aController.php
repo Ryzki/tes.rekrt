@@ -25,45 +25,58 @@ class Cfit3aController extends Controller
 
     public static function index(Request $request, $path, $test, $selection)
     {
-        
-        if($request->part == null){
-            $part = 1;
-            $idx = 38;
-        }else if($request->part > 4){
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
             abort(404);
         }
         else{
-            $part = $request->part;
-            $idx = $test->id + $part;
-        }
-        $soal = Packet::where('test_id','=',$idx)->where('part','=',$part)->where('status','=',1)->first();
-        
 
-        return view('test.cfit.cfit3A', [
-            'path' => $path,
-            'test' => $test,
-            'selection' => $selection,
-            'soal' => $soal,
-            'part' => $part
-        ]);
+            if($request->part == null){
+                $part = 1;
+                $idx = 38;
+            }else if($request->part > 4){
+                abort(404);
+            }
+            else{
+                $part = $request->part;
+                $idx = $test->id + $part;
+            }
+            $soal = Packet::where('test_id','=',$idx)->where('part','=',$part)->where('status','=',1)->first();
+            
+    
+            return view('test.cfit.cfit3A', [
+                'path' => $path,
+                'test' => $test,
+                'selection' => $selection,
+                'soal' => $soal,
+                'part' => $part
+            ]);
+        }
+        
     }
 
     public static function indexPart(Request $request, $path, $test, $selection)
     {
-        $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
-   
-        $part = $packet->part;
-        $soal = Packet::where('test_id','=',$test->id)->where('part','=',$part)->where('status','=',1)->first();
-        // $soal = Packet::select('amount')->where('test_id','=',$test->id)->where('part','=',$part)->first();
-        // dd($soal->amount);
-
-        return view('test.cfit.cfit3A-part', [
-            'path' => $path,
-            'test' => $test,
-            'selection' => $selection,
-            'soal' => $soal,
-            'part'=>$part
-        ]);
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
+            abort(404);
+        }
+        else{
+            $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
+       
+            $part = $packet->part;
+            $soal = Packet::where('test_id','=',$test->id)->where('part','=',$part)->where('status','=',1)->first();
+            // $soal = Packet::select('amount')->where('test_id','=',$test->id)->where('part','=',$part)->first();
+            // dd($soal->amount);
+    
+            return view('test.cfit.cfit3A-part', [
+                'path' => $path,
+                'test' => $test,
+                'selection' => $selection,
+                'soal' => $soal,
+                'part'=>$part
+            ]);
+        }
     }
 
     public static function store(Request $request)

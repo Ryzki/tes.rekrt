@@ -26,14 +26,20 @@ class MBTIController extends Controller
 
     public static function index(Request $request, $path, $test, $selection)
     {
-        $packet = Packet::where('test_id','=',22)->where('status','=',1)->first();
-       
-        return view('test.mbti', [
-            'path' => $path,
-            'test' => $test,
-            'selection' => $selection,
-            'packet' => $packet
-        ]);
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
+            abort(404);
+        }
+        else{
+            $packet = Packet::where('test_id','=',22)->where('status','=',1)->first();
+           
+            return view('test.mbti', [
+                'path' => $path,
+                'test' => $test,
+                'selection' => $selection,
+                'packet' => $packet
+            ]);
+        }
     }
 
     public static function store(Request $request)

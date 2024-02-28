@@ -18,18 +18,25 @@ class SDIController extends Controller
      */
     public static function index(Request $request, $path, $test, $selection)
     {
-        // Get the packet
-        $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
+            abort(404);
+        }
+        else{
+            // Get the packet
+            $packet = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
 
-        // View
-        return view('test/'.$path, [
-            'packet' => $packet,
-            'path' => $path,
-            'questions1' => self::data()['soal1'],
-            'questions2' => self::data()['soal2'],
-            'selection' => $selection,
-            'test' => $test,
-        ]);
+            // View
+            return view('test/'.$path, [
+                'packet' => $packet,
+                'path' => $path,
+                'questions1' => self::data()['soal1'],
+                'questions2' => self::data()['soal2'],
+                'selection' => $selection,
+                'test' => $test,
+            ]);
+        }
+        
     }
 
     /**

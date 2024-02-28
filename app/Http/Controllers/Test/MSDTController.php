@@ -21,24 +21,31 @@ class MSDTController extends Controller
      */
     public static function index(Request $request, $path, $test, $selection)
     {
-        // Get the packet and questions
-        $questions = Question::with('packet')
-                            ->whereHas('packet', function($query) use ($test){
-                                return $query->where('test_id','=',6)->where('status','=',1);
-                            })->first();
-        
-        $quests_number = json_decode($questions->description, true);
-        
-        $packet_id = $questions->packet_id;
-        // View
-        return view('test/'.$path, [
-            'quests_number' => $quests_number,
-            'packet_id' => $packet_id,
-            'questions' => $questions,
-            'path' => $path,
-            'selection' => $selection,
-            'test' => $test,
-        ]);
+        $cek_test = existTest($test->id);
+        if($cek_test == false){
+            abort(404);
+        }
+        else{
+
+            // Get the packet and questions
+            $questions = Question::with('packet')
+                                ->whereHas('packet', function($query) use ($test){
+                                    return $query->where('test_id','=',6)->where('status','=',1);
+                                })->first();
+            
+            $quests_number = json_decode($questions->description, true);
+            
+            $packet_id = $questions->packet_id;
+            // View
+            return view('test/'.$path, [
+                'quests_number' => $quests_number,
+                'packet_id' => $packet_id,
+                'questions' => $questions,
+                'path' => $path,
+                'selection' => $selection,
+                'test' => $test,
+            ]);
+        }
     }
 
     public function getData($num){
