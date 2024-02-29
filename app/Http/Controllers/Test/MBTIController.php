@@ -27,7 +27,7 @@ class MBTIController extends Controller
     public static function index(Request $request, $path, $test, $selection)
     {
         $cek_test = existTest($test->id);
-        if($cek_test == false){
+        if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
         }
         else{
@@ -44,26 +44,36 @@ class MBTIController extends Controller
 
     public static function store(Request $request)
     {
-        $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
 
+        $test_id = $request->test_id;
+        $cek_test = existTest($test_id);
+        if($cek_test == false && Auth::user()->role->is_global != 1){
+            abort(404);
+        }
 
-        $jawaban = $request->jawaban;
-        $koreksi_jawaban = self::cek($jawaban);
-        $request['koreksi'] = $koreksi_jawaban;
-        //save all jawaban
-        $save_result_array = array();
-        $save_result_array[0] = $request['jawaban'];
-        $save_result_array[1] = $request['koreksi'];
-        
-        $result = new Result;
-        $result->user_id = Auth::user()->id;
-        $result->company_id = Auth::user()->attribute->company_id;
-        $result->test_id = $request->test_id;
-        $result->packet_id = $request->packet_id;
-        $result->result = json_encode($save_result_array);
-        $result->save();
-        
-        return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes '.$packet->test->name]);
+        else{
+
+            $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
+    
+    
+            $jawaban = $request->jawaban;
+            $koreksi_jawaban = self::cek($jawaban);
+            $request['koreksi'] = $koreksi_jawaban;
+            //save all jawaban
+            $save_result_array = array();
+            $save_result_array[0] = $request['jawaban'];
+            $save_result_array[1] = $request['koreksi'];
+            
+            $result = new Result;
+            $result->user_id = Auth::user()->id;
+            $result->company_id = Auth::user()->attribute->company_id;
+            $result->test_id = $request->test_id;
+            $result->packet_id = $request->packet_id;
+            $result->result = json_encode($save_result_array);
+            $result->save();
+            
+            return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes '.$packet->test->name]);
+        }
 
     }
     

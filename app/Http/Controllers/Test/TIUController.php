@@ -21,7 +21,7 @@ class TIUController extends Controller
     public static function index(Request $request, $path, $test, $selection)
     {
         $cek_test = existTest($test->id);
-        if($cek_test == false){
+        if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
         }
         else{
@@ -41,32 +41,40 @@ class TIUController extends Controller
 
     public static function store(Request $request)
     {
-
-        $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
-
-        $kunci_jawab = ['b','e','d','d','e','d','e','a','e','c','e','d','e','c','e','c','b','c','d','d','a','e','d','d','e','a','b','e','c','b'];
-        $opsi_jawaban = $request->jawaban; 
-        $raw_score = 0;
-        for($i=0;$i<30;$i++){
-            if($opsi_jawaban[$i+1] == strtoupper($kunci_jawab[$i])){
-                $raw_score++;
-            }
+        $test_id = $request->test_id;
+        $cek_test = existTest($test_id);
+        if($cek_test == false && Auth::user()->role->is_global != 1){
+            abort(404);
         }
-        $array = array();
-        $standart_score = self::standart_score($raw_score);
-        $array['jawaban'] = $opsi_jawaban;
-        $array['rs'] = $raw_score;
-        $array['ws'] = $standart_score;
 
-        $result = new Result;
-        $result->user_id = Auth::user()->id;
-        $result->company_id = Auth::user()->attribute->company_id;
-        $result->test_id = $request->test_id;
-        $result->packet_id = $request->packet_id;
-        $result->result = json_encode($array);
-        $result->save();
+        else{
 
-        return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes '.$packet->test->name]);
+            $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
+    
+            $kunci_jawab = ['b','e','d','d','e','d','e','a','e','c','e','d','e','c','e','c','b','c','d','d','a','e','d','d','e','a','b','e','c','b'];
+            $opsi_jawaban = $request->jawaban; 
+            $raw_score = 0;
+            for($i=0;$i<30;$i++){
+                if($opsi_jawaban[$i+1] == strtoupper($kunci_jawab[$i])){
+                    $raw_score++;
+                }
+            }
+            $array = array();
+            $standart_score = self::standart_score($raw_score);
+            $array['jawaban'] = $opsi_jawaban;
+            $array['rs'] = $raw_score;
+            $array['ws'] = $standart_score;
+    
+            $result = new Result;
+            $result->user_id = Auth::user()->id;
+            $result->company_id = Auth::user()->attribute->company_id;
+            $result->test_id = $request->test_id;
+            $result->packet_id = $request->packet_id;
+            $result->result = json_encode($array);
+            $result->save();
+    
+            return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes '.$packet->test->name]);
+        }
     }
 
     public static function standart_score($value){

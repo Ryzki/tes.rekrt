@@ -30,7 +30,7 @@ class TikiController extends Controller
     {
 
         $cek_test = existTest($test->id);
-        if($cek_test == false){
+        if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
         }
         else{
@@ -69,7 +69,7 @@ class TikiController extends Controller
     public static function indexPart(Request $request, $path, $test, $selection)
     {
         $cek_test = existTest($test->id);
-        if($cek_test == false){
+        if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
         }
         else{
@@ -92,53 +92,61 @@ class TikiController extends Controller
     }
 
     public static function store(Request $request){
-        
-        $path = $request->path;
         $test_id = $request->test_id;
-        $selection = $request->selection;
-        $packet_id = $request->packet_id;
-        $jawaban = json_encode($request->jawaban);
-
-        
-        
-        $save_sementara = new TesTemporary;
-        $save_sementara->id_user = Auth::user()->id;
-        $save_sementara->test_id = $test_id;
-        $save_sementara->packet_id = $packet_id;
-        $save_sementara->json = $jawaban;
-        $save_sementara->part = $request->part;
-        $save_sementara->save();
-
-        $cek = self::kunci_2(Auth::user()->id,$test_id,$packet_id,$request->part,$jawaban);
-
-
-        $part_next = ($request->part) + 1;
-        if($part_next >= 12){
-            //get temp pindahkan ke table result
-            $last_save = array();
-            $array = TesTemporary::select('result_temp')->where('id_user',Auth::user()->id)
-                                ->where('test_id',$test_id)
-                                ->orderBy('id','desc')
-                                ->get();
-            for($ls=0;$ls < count($array);$ls++){
-                $last_save['tikit-'.($ls+1)] = $array[$ls]->result_temp;
-            }
-
-            $result = new Result;
-            $result->user_id = Auth::user()->id;
-            $result->company_id = Auth::user()->attribute->company_id;
-            $result->test_id = $request->test_id;
-            $result->packet_id = $request->packet_id;
-            $result->result = json_encode($last_save);
-            $result->save();
-
-            //hapus temp
-            DB::delete('delete from test_temporary where id_user ='.Auth::user()->id);
-            return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
+        $cek_test = existTest($test_id);
+        if($cek_test == false && Auth::user()->role->is_global != 1){
+            abort(404);
         }
+
         else{
 
-            return redirect('/tes/tiki?part='.$part_next);
+            $path = $request->path;
+            $test_id = $request->test_id;
+            $selection = $request->selection;
+            $packet_id = $request->packet_id;
+            $jawaban = json_encode($request->jawaban);
+    
+            
+            
+            $save_sementara = new TesTemporary;
+            $save_sementara->id_user = Auth::user()->id;
+            $save_sementara->test_id = $test_id;
+            $save_sementara->packet_id = $packet_id;
+            $save_sementara->json = $jawaban;
+            $save_sementara->part = $request->part;
+            $save_sementara->save();
+    
+            $cek = self::kunci_2(Auth::user()->id,$test_id,$packet_id,$request->part,$jawaban);
+    
+    
+            $part_next = ($request->part) + 1;
+            if($part_next >= 12){
+                //get temp pindahkan ke table result
+                $last_save = array();
+                $array = TesTemporary::select('result_temp')->where('id_user',Auth::user()->id)
+                                    ->where('test_id',$test_id)
+                                    ->orderBy('id','desc')
+                                    ->get();
+                for($ls=0;$ls < count($array);$ls++){
+                    $last_save['tikit-'.($ls+1)] = $array[$ls]->result_temp;
+                }
+    
+                $result = new Result;
+                $result->user_id = Auth::user()->id;
+                $result->company_id = Auth::user()->attribute->company_id;
+                $result->test_id = $request->test_id;
+                $result->packet_id = $request->packet_id;
+                $result->result = json_encode($last_save);
+                $result->save();
+    
+                //hapus temp
+                DB::delete('delete from test_temporary where id_user ='.Auth::user()->id);
+                return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
+            }
+            else{
+    
+                return redirect('/tes/tiki?part='.$part_next);
+            }
         }
     }
 

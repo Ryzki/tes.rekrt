@@ -19,7 +19,7 @@ class PapikostickController extends Controller
     public static function index(Request $request, $path, $test, $selection)
     {
         $cek_test = existTest($test->id);
-        if($cek_test == false){
+        if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
         }
         else{
@@ -53,36 +53,44 @@ class PapikostickController extends Controller
      */
     public static function store(Request $request)
     {
-
-        // Get the packet
-        $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
-        
-        // Declare variables
-        $soal = self::data();
-        $jawaban = $request->get('jawaban');
-        $konversi_jawaban = array();
-        foreach($soal as $key=>$data) {
-            $konversi_jawaban[$key+1] = $data['jawaban'.$jawaban[$key+1]];
-        }        
-        $count_jawaban = array_count_values($konversi_jawaban);
-        $huruf = ["N","G","A","L","P","I","T","V","X","S","B","O","R","D","C","Z","E","K","F","W"];
-        $array = array();
-        foreach($huruf as $h){
-            $array[$h] = array_key_exists($h, $count_jawaban) ? $count_jawaban[$h] : 0;
+        $test_id = $request->test_id;
+        $cek_test = existTest($test_id);
+        if($cek_test == false && Auth::user()->role->is_global != 1){
+            abort(404);
         }
-        $array['answers'] = $jawaban;
 
-        // Save the result
-        $result = new Result;
-        $result->user_id = Auth::user()->id;
-        $result->company_id = Auth::user()->attribute->company_id;
-        $result->test_id = $request->test_id;
-        $result->packet_id = $request->packet_id;
-        $result->result = json_encode($array);
-        $result->save();
+        else{
 
-        // Return
-        return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes '.$packet->test->name]);
+            // Get the packet
+            $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
+            
+            // Declare variables
+            $soal = self::data();
+            $jawaban = $request->get('jawaban');
+            $konversi_jawaban = array();
+            foreach($soal as $key=>$data) {
+                $konversi_jawaban[$key+1] = $data['jawaban'.$jawaban[$key+1]];
+            }        
+            $count_jawaban = array_count_values($konversi_jawaban);
+            $huruf = ["N","G","A","L","P","I","T","V","X","S","B","O","R","D","C","Z","E","K","F","W"];
+            $array = array();
+            foreach($huruf as $h){
+                $array[$h] = array_key_exists($h, $count_jawaban) ? $count_jawaban[$h] : 0;
+            }
+            $array['answers'] = $jawaban;
+    
+            // Save the result
+            $result = new Result;
+            $result->user_id = Auth::user()->id;
+            $result->company_id = Auth::user()->attribute->company_id;
+            $result->test_id = $request->test_id;
+            $result->packet_id = $request->packet_id;
+            $result->result = json_encode($array);
+            $result->save();
+    
+            // Return
+            return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes '.$packet->test->name]);
+        }
     }
     
     /**

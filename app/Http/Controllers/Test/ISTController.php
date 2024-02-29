@@ -24,7 +24,7 @@ class ISTController extends Controller
     public static function index(Request $request, $path, $test, $selection)
     {
         $cek_test = existTest($test->id);
-        if($cek_test == false){
+        if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
         }
         else{
@@ -69,132 +69,141 @@ class ISTController extends Controller
      */
     public static function store(Request $request)
     {
-        $age = generate_age(Auth::user()->tanggal_lahir); // Age
-
-        // Check temp tes
-        $check_temp = TempTes::where('id_user','=',Auth::user()->id)->first();
-
-        if($check_temp){
-            $array = json_decode($check_temp->json, true); // Get array
-            $array[$request->part] = !empty($request->get('c')) ? array_filter($request->get('c')) : [];
-            $json = json_encode($array);
-
-            // Update temp tes
-            $check_temp->json = $json;
-            $check_temp->save();
+        $test_id = $request->test_id;
+        $cek_test = existTest($test_id);
+        if($cek_test == false && Auth::user()->role->is_global != 1){
+            abort(404);
         }
+
         else{
-            $array = [];
-            $array[$request->part] = !empty($request->get('c')) ? array_filter($request->get('c')) : [];
-            $json = json_encode($array);
 
-            // Save to temp tes
-            $temp = new TempTes;
-            $temp->id_user = Auth::user()->id;
-            $temp->json = $json;
-            $temp->temp_at = date('Y-m-d H:i:s');
-            $temp->save();
-        }
-
-        // If it's submitted, then process
-        if($request->is_submitted == 1){
-            $score = []; // Score
-            // Check answers
-            if(count($array)>0){
-                foreach($array as $part=>$answers){
-                    $score_by_part = 0; // Score by part
-                    foreach($answers as $num=>$answer){
-                        $soal = Soal::join('paket_soal','soal.id_paket','=','paket_soal.id_paket')->where('part','=',$part)->where('id_tes','=',$request->id_tes)->where('status','=',1)->where('nomor','=',$num)->first(); // Get soal
-                        if($soal){
-                            // Convert detail soal from JSON to array
-                            $detail_soal = json_decode($soal->soal, true);
-                            $detail_soal = is_array($detail_soal) ? $detail_soal[0] : [];
-
-                            // Check answer
-                            if($soal->tipe_soal == 'choice' || $soal->tipe_soal == 'image'){
-                                if($answer == $detail_soal['jawaban']) $score_by_part++; // If the answer is true, so the score increments
-                            }
-                            elseif($soal->tipe_soal == 'essay'){
-                                // Explode possibly answers
-                                $jawaban_essay = $detail_soal['jawaban'];
-                                foreach($jawaban_essay as $num_essay=>$string_essay){
-                                    $jawaban_essay[$num_essay] = explode(",", $string_essay);
+            $age = generate_age(Auth::user()->tanggal_lahir); // Age
+    
+            // Check temp tes
+            $check_temp = TempTes::where('id_user','=',Auth::user()->id)->first();
+    
+            if($check_temp){
+                $array = json_decode($check_temp->json, true); // Get array
+                $array[$request->part] = !empty($request->get('c')) ? array_filter($request->get('c')) : [];
+                $json = json_encode($array);
+    
+                // Update temp tes
+                $check_temp->json = $json;
+                $check_temp->save();
+            }
+            else{
+                $array = [];
+                $array[$request->part] = !empty($request->get('c')) ? array_filter($request->get('c')) : [];
+                $json = json_encode($array);
+    
+                // Save to temp tes
+                $temp = new TempTes;
+                $temp->id_user = Auth::user()->id;
+                $temp->json = $json;
+                $temp->temp_at = date('Y-m-d H:i:s');
+                $temp->save();
+            }
+    
+            // If it's submitted, then process
+            if($request->is_submitted == 1){
+                $score = []; // Score
+                // Check answers
+                if(count($array)>0){
+                    foreach($array as $part=>$answers){
+                        $score_by_part = 0; // Score by part
+                        foreach($answers as $num=>$answer){
+                            $soal = Soal::join('paket_soal','soal.id_paket','=','paket_soal.id_paket')->where('part','=',$part)->where('id_tes','=',$request->id_tes)->where('status','=',1)->where('nomor','=',$num)->first(); // Get soal
+                            if($soal){
+                                // Convert detail soal from JSON to array
+                                $detail_soal = json_decode($soal->soal, true);
+                                $detail_soal = is_array($detail_soal) ? $detail_soal[0] : [];
+    
+                                // Check answer
+                                if($soal->tipe_soal == 'choice' || $soal->tipe_soal == 'image'){
+                                    if($answer == $detail_soal['jawaban']) $score_by_part++; // If the answer is true, so the score increments
                                 }
-
-                                // If the answer is true, so the score increments
-                                if(in_array(strtolower(trim($answer)), $jawaban_essay[2])) $score_by_part+=2;
-                                elseif(in_array(strtolower(trim($answer)), $jawaban_essay[1])) $score_by_part++;
-                            }
-                            elseif($soal->tipe_soal == 'number'){
-                                // Explode possibly answers
-                                $jawaban_number = str_split($detail_soal['jawaban']);
-
-                                // Sort answers before checking
-                                sort($answer);
-                                sort($jawaban_number);
-
-                                if($answer === $jawaban_number) $score_by_part++; // If the answer is true, so the score increments
+                                elseif($soal->tipe_soal == 'essay'){
+                                    // Explode possibly answers
+                                    $jawaban_essay = $detail_soal['jawaban'];
+                                    foreach($jawaban_essay as $num_essay=>$string_essay){
+                                        $jawaban_essay[$num_essay] = explode(",", $string_essay);
+                                    }
+    
+                                    // If the answer is true, so the score increments
+                                    if(in_array(strtolower(trim($answer)), $jawaban_essay[2])) $score_by_part+=2;
+                                    elseif(in_array(strtolower(trim($answer)), $jawaban_essay[1])) $score_by_part++;
+                                }
+                                elseif($soal->tipe_soal == 'number'){
+                                    // Explode possibly answers
+                                    $jawaban_number = str_split($detail_soal['jawaban']);
+    
+                                    // Sort answers before checking
+                                    sort($answer);
+                                    sort($jawaban_number);
+    
+                                    if($answer === $jawaban_number) $score_by_part++; // If the answer is true, so the score increments
+                                }
                             }
                         }
+                        $score[$part] = $score_by_part;
                     }
-                    $score[$part] = $score_by_part;
                 }
-            }
-
-            $result = []; // Array result
-            $array_IST = ['SE','WA','AN','GE','ME','RA','ZR','FA','WU']; // Array IST
-            $array_SW = self::data_SW($age); // Array SW
-            $array_IQ = self::data_IQ(); // Array IQ
-            foreach($score as $key=>$score_by_part){
-                // If GE
-                if($key == 4){
-                    $result['RW'][$array_IST[$key-1]] = convert_GE($score_by_part);
-                    $result['SW'][$array_IST[$key-1]] = $array_SW[$array_IST[$key-1]][$result['RW'][$array_IST[$key-1]]];
+    
+                $result = []; // Array result
+                $array_IST = ['SE','WA','AN','GE','ME','RA','ZR','FA','WU']; // Array IST
+                $array_SW = self::data_SW($age); // Array SW
+                $array_IQ = self::data_IQ(); // Array IQ
+                foreach($score as $key=>$score_by_part){
+                    // If GE
+                    if($key == 4){
+                        $result['RW'][$array_IST[$key-1]] = convert_GE($score_by_part);
+                        $result['SW'][$array_IST[$key-1]] = $array_SW[$array_IST[$key-1]][$result['RW'][$array_IST[$key-1]]];
+                    }
+                    // If not GE
+                    else{
+                        $result['RW'][$array_IST[$key-1]] = $score_by_part;
+                        $result['SW'][$array_IST[$key-1]] = $array_SW[$array_IST[$key-1]][$result['RW'][$array_IST[$key-1]]];
+                    }
                 }
-                // If not GE
-                else{
-                    $result['RW'][$array_IST[$key-1]] = $score_by_part;
-                    $result['SW'][$array_IST[$key-1]] = $array_SW[$array_IST[$key-1]][$result['RW'][$array_IST[$key-1]]];
+                $result['TRW'] = array_sum($result['RW']);
+                $result['TSW'] = self::data_TSW($age, $result['TRW']);
+                $result['IQ'] = array_key_exists($result['TSW'], $array_IQ) ? $array_IQ[$result['TSW']] : 0;
+                $result['age'] = $age;
+    
+                // Get data HRD
+                if(Auth::user()->role_id == role('hrd')){
+                    $hrd = HRD::where('id_user','=',Auth::user()->id)->first();
                 }
+                elseif(Auth::user()->role_id == role('employee')){
+                    $karyawan = Karyawan::where('id_user','=',Auth::user()->id)->first();
+                    $hrd = HRD::find($karyawan->id_hrd);
+                }
+                elseif(Auth::user()->role_id == role('applicant')){
+                    $pelamar = Pelamar::where('id_user','=',Auth::user()->id)->first();
+                    $hrd = HRD::find($pelamar->id_hrd);
+                }
+    
+                // Save result
+                $hasil = new Hasil;
+                $hasil->id_hrd = isset($hrd) ? $hrd->id_hrd : 0;
+                $hasil->id_user = Auth::user()->id;
+                $hasil->id_tes = $request->id_tes;
+                $hasil->id_paket = $request->id_paket;
+                $hasil->hasil = json_encode($result);
+                $hasil->test_at = date("Y-m-d H:i:s");
+                $hasil->save();
+    
+                // Delete temp
+                $temp = TempTes::where('id_user','=',Auth::user()->id)->first();
+                $temp->delete();
             }
-            $result['TRW'] = array_sum($result['RW']);
-            $result['TSW'] = self::data_TSW($age, $result['TRW']);
-            $result['IQ'] = array_key_exists($result['TSW'], $array_IQ) ? $array_IQ[$result['TSW']] : 0;
-            $result['age'] = $age;
-
-            // Get data HRD
-            if(Auth::user()->role_id == role('hrd')){
-                $hrd = HRD::where('id_user','=',Auth::user()->id)->first();
-            }
-            elseif(Auth::user()->role_id == role('employee')){
-                $karyawan = Karyawan::where('id_user','=',Auth::user()->id)->first();
-                $hrd = HRD::find($karyawan->id_hrd);
-            }
-            elseif(Auth::user()->role_id == role('applicant')){
-                $pelamar = Pelamar::where('id_user','=',Auth::user()->id)->first();
-                $hrd = HRD::find($pelamar->id_hrd);
-            }
-
-            // Save result
-            $hasil = new Hasil;
-            $hasil->id_hrd = isset($hrd) ? $hrd->id_hrd : 0;
-            $hasil->id_user = Auth::user()->id;
-            $hasil->id_tes = $request->id_tes;
-            $hasil->id_paket = $request->id_paket;
-            $hasil->hasil = json_encode($result);
-            $hasil->test_at = date("Y-m-d H:i:s");
-            $hasil->save();
-
-            // Delete temp
-            $temp = TempTes::where('id_user','=',Auth::user()->id)->first();
-            $temp->delete();
+    
+            // Redirect
+            if($request->is_submitted == 1)
+                return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes IST']);
+            elseif($request->is_submitted == 0)
+                return redirect('/tes/ist?part='.($request->part+1));
         }
-
-        // Redirect
-        if($request->is_submitted == 1)
-            return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes IST']);
-        elseif($request->is_submitted == 0)
-            return redirect('/tes/ist?part='.($request->part+1));
     }
 
     /**

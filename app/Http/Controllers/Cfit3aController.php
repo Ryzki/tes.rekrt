@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Packet;
 use App\Models\Result;
+use App\Models\Test;
 use App\Models\Question;
 use App\Models\TesTemporary;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ class Cfit3aController extends Controller
         $soal = Question::where('packet_id','=',51)->where('number','=',$part)->first();
         $decode_soal = json_decode($soal->description,true);
 
+
         return response()->json([
             'quest' => $decode_soal,
             'num' => $id,
@@ -26,11 +28,10 @@ class Cfit3aController extends Controller
     public static function index(Request $request, $path, $test, $selection)
     {
         $cek_test = existTest($test->id);
-        if($cek_test == false){
+        if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
         }
         else{
-
             if($request->part == null){
                 $part = 1;
                 $idx = 38;
@@ -58,7 +59,7 @@ class Cfit3aController extends Controller
     public static function indexPart(Request $request, $path, $test, $selection)
     {
         $cek_test = existTest($test->id);
-        if($cek_test == false){
+        if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
         }
         else{
@@ -81,60 +82,69 @@ class Cfit3aController extends Controller
 
     public static function store(Request $request)
     {
-        $test_id = $request->test_id;
-        $part = $request->part;
-        $nilai1 = self::koreksi($request,$part);
-        
-        $jawaban = json_encode($request->jawaban);
-
-        $save_sementara = new TesTemporary;
-        $save_sementara->id_user = Auth::user()->id;
-        $save_sementara->test_id = $test_id;
-        $save_sementara->packet_id = $request->packet_id;
-        $save_sementara->json = $jawaban;
-        $save_sementara->part = $request->part;
-        $save_sementara->result_temp = json_encode($nilai1);
-        $save_sementara->save();
-        
-
-        if($part+1 > 4){
-            $last_save = array();
-            $array = TesTemporary::select('result_temp','part','json')->where('id_user',Auth::user()->id)
-            ->where('test_id',$test_id)
-            ->orderBy('id','asc')
-            ->get();
-
-            $iq_get_temp1 = json_decode($array[0]->result_temp, true);
-            $iq_get_temp2 = json_decode($array[1]->result_temp, true);
-            $iq_get_temp3 = json_decode($array[2]->result_temp, true);
-            $iq_get_temp4 = json_decode($array[3]->result_temp, true);
-
-            $total_iq = $iq_get_temp1["score"]["iq"] + $iq_get_temp2["score"]["iq"] + $iq_get_temp3["score"]["iq"] + $iq_get_temp4["score"]["iq"];
-            $total_bp = $iq_get_temp1["score"]["bp"] + $iq_get_temp2["score"]["bp"] + $iq_get_temp3["score"]["bp"] + $iq_get_temp4["score"]["bp"];
-            
-
-            for($ls=0;$ls < 4;$ls++){
-                $last_save['cfit3a-'.($ls+1)] = $array[$ls]->json;
-            }
-
-            $last_save['iq'] = $total_iq;
-            $last_save['bp'] = $total_bp;
-
-            // dd($last_save);
-            $result = new Result;
-            $result->user_id = Auth::user()->id;
-            $result->company_id = Auth::user()->attribute->company_id;
-            $result->test_id = $request->test_id;
-            $result->packet_id = $request->packet_id;
-            $result->result = json_encode($last_save);
-            $result->save();
-
-            DB::delete('delete from test_temporary where id_user ='.Auth::user()->id.' and test_id = '.$test_id);
-
-            return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
+        $test_idd = $request->test_id;
+        $cek_test = existTest($test_idd);
+        if($cek_test == false && Auth::user()->role->is_global != 1){
+            abort(404);
         }
+
         else{
-            return redirect('/tes/cfit3A?part='.$part+1);
+
+            $test_id = $request->test_id;
+            $part = $request->part;
+            $nilai1 = self::koreksi($request,$part);
+            
+            $jawaban = json_encode($request->jawaban);
+    
+            $save_sementara = new TesTemporary;
+            $save_sementara->id_user = Auth::user()->id;
+            $save_sementara->test_id = $test_id;
+            $save_sementara->packet_id = $request->packet_id;
+            $save_sementara->json = $jawaban;
+            $save_sementara->part = $request->part;
+            $save_sementara->result_temp = json_encode($nilai1);
+            $save_sementara->save();
+            
+    
+            if($part+1 > 4){
+                $last_save = array();
+                $array = TesTemporary::select('result_temp','part','json')->where('id_user',Auth::user()->id)
+                ->where('test_id',$test_id)
+                ->orderBy('id','asc')
+                ->get();
+    
+                $iq_get_temp1 = json_decode($array[0]->result_temp, true);
+                $iq_get_temp2 = json_decode($array[1]->result_temp, true);
+                $iq_get_temp3 = json_decode($array[2]->result_temp, true);
+                $iq_get_temp4 = json_decode($array[3]->result_temp, true);
+    
+                $total_iq = $iq_get_temp1["score"]["iq"] + $iq_get_temp2["score"]["iq"] + $iq_get_temp3["score"]["iq"] + $iq_get_temp4["score"]["iq"];
+                $total_bp = $iq_get_temp1["score"]["bp"] + $iq_get_temp2["score"]["bp"] + $iq_get_temp3["score"]["bp"] + $iq_get_temp4["score"]["bp"];
+                
+    
+                for($ls=0;$ls < 4;$ls++){
+                    $last_save['cfit3a-'.($ls+1)] = $array[$ls]->json;
+                }
+    
+                $last_save['iq'] = $total_iq;
+                $last_save['bp'] = $total_bp;
+    
+                // dd($last_save);
+                $result = new Result;
+                $result->user_id = Auth::user()->id;
+                $result->company_id = Auth::user()->attribute->company_id;
+                $result->test_id = $request->test_id;
+                $result->packet_id = $request->packet_id;
+                $result->result = json_encode($last_save);
+                $result->save();
+    
+                DB::delete('delete from test_temporary where id_user ='.Auth::user()->id.' and test_id = '.$test_id);
+    
+                return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
+            }
+            else{
+                return redirect('/tes/cfit3A?part='.$part+1);
+            }
         }
     }
 

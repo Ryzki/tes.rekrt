@@ -12,6 +12,7 @@ class WPTController extends Controller
 {
     public function getData($num){
         
+        
         $data = json_decode(file_get_contents(public_path() . "/assets/js/wpt.json"), true);
 
         return response()->json([
@@ -23,7 +24,7 @@ class WPTController extends Controller
     public static function index(Request $request, $path, $test, $selection)
     {
         $cek_test = existTest($test->id);
-        if($cek_test == false){
+        if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
         }
         else{
@@ -41,46 +42,55 @@ class WPTController extends Controller
     }
 
     public static function store(Request $request){
-        $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
-        $wpt_kunci = self::data();
-        $raw_score = 0;
-        $usia = $request->jawaban[51];
-
-        for($id=1;$id<=50;$id++){
-            if(in_array($request->jawaban[$id],$wpt_kunci[$id]) == true){
-                $raw_score++;
-            }
+        $test_id = $request->test_id;
+        $cek_test = existTest($test_id);
+        if($cek_test == false && Auth::user()->role->is_global != 1){
+            abort(404);
         }
-        $array = array();
-        $rs = 0;
 
-        if($usia>60){$rs+=5;}
-        else if ($usia>54){$rs+=4;}
-        else if ($usia>49){$rs+=4;}
-        else if ($usia>39){$rs+=2;}
-        else if ($usia>29){$rs+=1;}
+        else{
+            $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
+            $wpt_kunci = self::data();
+            $raw_score = 0;
+            $usia = $request->jawaban[51];
+    
+            for($id=1;$id<=50;$id++){
+                if(in_array($request->jawaban[$id],$wpt_kunci[$id]) == true){
+                    $raw_score++;
+                }
+            }
+            $array = array();
+            $rs = 0;
+    
+            if($usia>60){$rs+=5;}
+            else if ($usia>54){$rs+=4;}
+            else if ($usia>49){$rs+=4;}
+            else if ($usia>39){$rs+=2;}
+            else if ($usia>29){$rs+=1;}
+    
+            if($rs>29){$ws=5;}
+            else if ($rs>24){$ws=4;}
+            else if ($rs>14){$ws=3;}
+            else if ($rs>14){$ws=2;}
+            else $ws=1;
+          
+            $array['RS'] = $raw_score;
+            $array['jawaban'] = $request->jawaban;
+            $array['ws'] = $ws;
+            $array['usia'] = $usia;
+    
+            $result = new Result;
+            $result->user_id = Auth::user()->id;
+            $result->company_id = Auth::user()->attribute->company_id;
+            $result->test_id = $request->test_id;
+            $result->packet_id = $request->packet_id;
+            $result->result = json_encode($array);
+    
+            $result->save();
+    
+            return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes '.$packet->test->name]);
 
-        if($rs>29){$ws=5;}
-        else if ($rs>24){$ws=4;}
-        else if ($rs>14){$ws=3;}
-        else if ($rs>14){$ws=2;}
-        else $ws=1;
-      
-        $array['RS'] = $raw_score;
-        $array['jawaban'] = $request->jawaban;
-        $array['ws'] = $ws;
-        $array['usia'] = $usia;
-
-        $result = new Result;
-        $result->user_id = Auth::user()->id;
-        $result->company_id = Auth::user()->attribute->company_id;
-        $result->test_id = $request->test_id;
-        $result->packet_id = $request->packet_id;
-        $result->result = json_encode($array);
-
-        $result->save();
-
-        return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes '.$packet->test->name]);
+        }
     }
 
     public static function data()

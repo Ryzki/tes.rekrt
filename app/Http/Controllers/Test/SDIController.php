@@ -19,7 +19,7 @@ class SDIController extends Controller
     public static function index(Request $request, $path, $test, $selection)
     {
         $cek_test = existTest($test->id);
-        if($cek_test == false){
+        if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
         }
         else{
@@ -47,78 +47,87 @@ class SDIController extends Controller
      */
     public static function store(Request $request)
     {
-        // Get the packet
-        $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
-        
-        // Declare variables
-        $data = [
-            ['Col1a' => $request->a1, 'Col2a' => $request->b1, 'Col3a' => $request->c1],
-            ['Col1a' => $request->a2, 'Col2a' => $request->b2, 'Col3a' => $request->c2],
-            ['Col1a' => $request->a3, 'Col2a' => $request->b3, 'Col3a' => $request->c3],
-            ['Col1a' => $request->a4, 'Col2a' => $request->b4, 'Col3a' => $request->c4],
-            ['Col1a' => $request->a5, 'Col2a' => $request->b5, 'Col3a' => $request->c5],
-            ['Col1a' => $request->a6, 'Col2a' => $request->b6, 'Col3a' => $request->c6],
-            ['Col1a' => $request->a7, 'Col2a' => $request->b7, 'Col3a' => $request->c7],
-            ['Col1a' => $request->a8, 'Col2a' => $request->b8, 'Col3a' => $request->c8],
-            ['Col1a' => $request->a9, 'Col2a' => $request->b9, 'Col3a' => $request->c9],
-            ['Col1a' => $request->a10, 'Col2a' => $request->b10, 'Col3a' => $request->c10],
-        ];
-
-        $data2 = [
-            ['Col1b' => $request->d1, 'Col2b' => $request->e1, 'Col3b' => $request->f1],
-            ['Col1b' => $request->d2, 'Col2b' => $request->e2, 'Col3b' => $request->f2],
-            ['Col1b' => $request->d3, 'Col2b' => $request->e3, 'Col3b' => $request->f3],
-            ['Col1b' => $request->d4, 'Col2b' => $request->e4, 'Col3b' => $request->f4],
-            ['Col1b' => $request->d5, 'Col2b' => $request->e5, 'Col3b' => $request->f5],
-            ['Col1b' => $request->d6, 'Col2b' => $request->e6, 'Col3b' => $request->f6],
-            ['Col1b' => $request->d7, 'Col2b' => $request->e7, 'Col3b' => $request->f7],
-            ['Col1b' => $request->d8, 'Col2b' => $request->e8, 'Col3b' => $request->f8],
-            ['Col1b' => $request->d9, 'Col2b' => $request->e9, 'Col3b' => $request->f9],
-            ['Col1b' => $request->d10, 'Col2b' => $request->e10, 'Col3b' => $request->f10],
-        ];
-        
-        // Soal 1-10
-        $A = 0;
-        $B = 0;
-        $C = 0;
-        foreach($data as $value){
-            $A = $A+$value['Col1a'];
-            $B = $B+$value['Col2a'];
-            $C = $C+$value['Col3a'];
+        $test_id = $request->test_id;
+        $cek_test = existTest($test_id);
+        if($cek_test == false && Auth::user()->role->is_global != 1){
+            abort(404);
         }
 
-        // Soal 11-20
-        $D = 0;
-        $E = 0;
-        $F = 0;
-        foreach($data2 as $value){
-            $D = $D+$value['Col1b'];
-            $E = $E+$value['Col2b'];
-            $F = $F+$value['Col3b'];
+        else{
+
+            // Get the packet
+            $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
+            
+            // Declare variables
+            $data = [
+                ['Col1a' => $request->a1, 'Col2a' => $request->b1, 'Col3a' => $request->c1],
+                ['Col1a' => $request->a2, 'Col2a' => $request->b2, 'Col3a' => $request->c2],
+                ['Col1a' => $request->a3, 'Col2a' => $request->b3, 'Col3a' => $request->c3],
+                ['Col1a' => $request->a4, 'Col2a' => $request->b4, 'Col3a' => $request->c4],
+                ['Col1a' => $request->a5, 'Col2a' => $request->b5, 'Col3a' => $request->c5],
+                ['Col1a' => $request->a6, 'Col2a' => $request->b6, 'Col3a' => $request->c6],
+                ['Col1a' => $request->a7, 'Col2a' => $request->b7, 'Col3a' => $request->c7],
+                ['Col1a' => $request->a8, 'Col2a' => $request->b8, 'Col3a' => $request->c8],
+                ['Col1a' => $request->a9, 'Col2a' => $request->b9, 'Col3a' => $request->c9],
+                ['Col1a' => $request->a10, 'Col2a' => $request->b10, 'Col3a' => $request->c10],
+            ];
+    
+            $data2 = [
+                ['Col1b' => $request->d1, 'Col2b' => $request->e1, 'Col3b' => $request->f1],
+                ['Col1b' => $request->d2, 'Col2b' => $request->e2, 'Col3b' => $request->f2],
+                ['Col1b' => $request->d3, 'Col2b' => $request->e3, 'Col3b' => $request->f3],
+                ['Col1b' => $request->d4, 'Col2b' => $request->e4, 'Col3b' => $request->f4],
+                ['Col1b' => $request->d5, 'Col2b' => $request->e5, 'Col3b' => $request->f5],
+                ['Col1b' => $request->d6, 'Col2b' => $request->e6, 'Col3b' => $request->f6],
+                ['Col1b' => $request->d7, 'Col2b' => $request->e7, 'Col3b' => $request->f7],
+                ['Col1b' => $request->d8, 'Col2b' => $request->e8, 'Col3b' => $request->f8],
+                ['Col1b' => $request->d9, 'Col2b' => $request->e9, 'Col3b' => $request->f9],
+                ['Col1b' => $request->d10, 'Col2b' => $request->e10, 'Col3b' => $request->f10],
+            ];
+            
+            // Soal 1-10
+            $A = 0;
+            $B = 0;
+            $C = 0;
+            foreach($data as $value){
+                $A = $A+$value['Col1a'];
+                $B = $B+$value['Col2a'];
+                $C = $C+$value['Col3a'];
+            }
+    
+            // Soal 11-20
+            $D = 0;
+            $E = 0;
+            $F = 0;
+            foreach($data2 as $value){
+                $D = $D+$value['Col1b'];
+                $E = $E+$value['Col2b'];
+                $F = $F+$value['Col3b'];
+            }
+            
+            // Data to array
+            $array = array(
+                'A' => $A,
+                'B' => $B,
+                'C' => $C,
+                'D' => $D,
+                'E' => $E,
+                'F' => $F,
+            );
+            $array['answers'] = array_merge($data, $data2);
+    
+            // Save the result
+            $result = new Result;
+            $result->user_id = Auth::user()->id;
+            $result->company_id = Auth::user()->attribute->company_id;
+            $result->test_id = $request->test_id;
+            $result->packet_id = $request->packet_id;
+            $result->result = json_encode($array);
+            $result->save();
+    
+            // Return
+            return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes '.$packet->test->name]);
         }
-        
-        // Data to array
-        $array = array(
-            'A' => $A,
-            'B' => $B,
-            'C' => $C,
-            'D' => $D,
-            'E' => $E,
-            'F' => $F,
-        );
-        $array['answers'] = array_merge($data, $data2);
-
-        // Save the result
-        $result = new Result;
-        $result->user_id = Auth::user()->id;
-        $result->company_id = Auth::user()->attribute->company_id;
-        $result->test_id = $request->test_id;
-        $result->packet_id = $request->packet_id;
-        $result->result = json_encode($array);
-        $result->save();
-
-        // Return
-        return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes '.$packet->test->name]);
     }
     
     /**
