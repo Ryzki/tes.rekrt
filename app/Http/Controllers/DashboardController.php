@@ -52,6 +52,8 @@ class DashboardController extends Controller
         'keys.svg',
         'lightning-bolts.svg',
         'lightning-bolts.svg',
+        'keys.svg',
+
     ];
 
         // Get tests

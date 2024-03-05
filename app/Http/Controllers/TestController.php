@@ -13,6 +13,7 @@ use App\Http\Controllers\Test\ISTController;
 use App\Http\Controllers\Test\SDIController;
 use App\Http\Controllers\Test\TIUController;
 use App\Http\Controllers\Test\WPTController;
+use App\Http\Controllers\Test\EPPSController;
 use App\Http\Controllers\Test\MBTIController;
 use App\Http\Controllers\Test\MSDTController;
 use App\Http\Controllers\Test\RMIBController;
@@ -90,6 +91,8 @@ class TestController extends Controller
             return Cfit3aController::index($request, $path, $test, $selection);
         elseif($path == 'cfit3A-1' || $path == 'cfit3A-2' || $path == 'cfit3A-3' || $path == 'cfit3A-4')
             return Cfit3aController::indexPart($request, $path, $test, $selection);
+        elseif($path == 'epps')
+            return EPPSController::index($request, $path, $test, $selection);
         else
             abort(404);
     }
@@ -144,6 +147,8 @@ class TestController extends Controller
             return \App\Http\Controllers\Test\TikiController::storePart($request);
         elseif($request->path == 'cfit3A')
             return \App\Http\Controllers\Cfit3aController::store($request);
+        elseif($request->path == 'epps')
+            return \App\Http\Controllers\Test\EPPSController::store($request);
     }
 
     /**

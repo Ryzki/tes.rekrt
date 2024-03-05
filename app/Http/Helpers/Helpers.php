@@ -1,5 +1,26 @@
 <?php
 
+if(!function_exists('isA')){
+    function isA($angkanya)
+    {
+        if(($angkanya=="a")||($angkanya=="A")){
+            $hasil=1;
+        }else $hasil=0;
+
+        return $hasil;
+    }
+}
+if(!function_exists('isB')){
+    function isB($angkanya)
+    {
+        if(($angkanya=="b")||($angkanya=="B"))
+        {
+            $hasil=1;
+        }else $hasil=0;
+
+        return $hasil;
+    }
+}
 // Set tanggal lengkap
 if(!function_exists('setFullDate')){
     function setFullDate($date){
