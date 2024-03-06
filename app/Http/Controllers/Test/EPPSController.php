@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Test;
 
 use App\Models\Packet;
+use App\Models\Result;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -40,9 +41,28 @@ class EPPSController extends Controller
 
     public static function store(Request $request)
     {
-        $gender = Auth::user()->attribute->gender;
-        $cek = self::koreksi($request->jawaban, $gender);
-        dd($cek);
+     $test_id = $request->test_id;
+        $cek_test = existTest($test_id);
+        if($cek_test == false && Auth::user()->role->is_global != 1){
+            abort(404);
+        }
+
+        else{
+            $gender = Auth::user()->attribute->gender;
+            $koreksi_jawaban = self::koreksi($request->jawaban, $gender);
+
+            $packet = Packet::where('test_id','=',$request->test_id)->where('status','=',1)->first();
+
+            $result = new Result;
+            $result->user_id = Auth::user()->id;
+            $result->company_id = Auth::user()->attribute->company_id;
+            $result->test_id = $request->test_id;
+            $result->packet_id = $request->packet_id;
+            $result->result = json_encode($koreksi_jawaban);
+            $result->save();
+
+            return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes '.$packet->test->name]);
+        }
     }
     public static function jawaba(){
         $jawaba[0]='Saya suka menolong teman-teman, apabila mereka sedang dalam kesulitan.';
@@ -611,9 +631,7 @@ class EPPSController extends Controller
 
     public static function koreksi($jawaban, $gender){
         for ($i=1;$i<=225;$i++){
-
             $T[$i]=$jawaban[$i];
-    
         }
             $ach=isA($T[1])+isA($T[6])+isA($T[11])+isA($T[16])+isA($T[21])+isA($T[26])+isA($T[31])+isA($T[36])+isA($T[41])+isA($T[46])+isA($T[51])+isA($T[56])+isA($T[61])+isA($T[66])+isA($T[71]);
             $def=isA($T[2])+isA($T[7])+isA($T[12])+isA($T[17])+isA($T[22])+isA($T[27])+isA($T[32])+isA($T[37])+isA($T[42])+isA($T[47])+isA($T[52])+isA($T[57])+isA($T[62])+isA($T[67])+isA($T[72]);
@@ -949,21 +967,21 @@ class EPPSController extends Controller
 
             }
 
-            $cekst['acht'] = self::cekCode($acht) ;
-            $cekst['deft'] = self::cekCode($deft) ;
-            $cekst['ordt'] = self::cekCode($ordt) ;
-            $cekst['exht'] = self::cekCode($exht) ;
-            $cekst['autt'] = self::cekCode($autt) ;
-            $cekst['afft'] = self::cekCode($afft) ;
-            $cekst['intt'] = self::cekCode($intt) ;
-            $cekst['suct'] = self::cekCode($suct) ;
-            $cekst['domt'] = self::cekCode($domt) ;
-            $cekst['abat'] = self::cekCode($abat) ;
-            $cekst['nurt'] = self::cekCode($nurt) ;
-            $cekst['chgt'] = self::cekCode($chgt) ;
-            $cekst['endt'] = self::cekCode($endt) ;
-            $cekst['hett'] = self::cekCode($hett) ;
-            $cekst['aggt'] = self::cekCode($aggt) ;
+            $cekst['acht'] = cektKodeEPPS($acht) ;
+            $cekst['deft'] = cektKodeEPPS($deft) ;
+            $cekst['ordt'] = cektKodeEPPS($ordt) ;
+            $cekst['exht'] = cektKodeEPPS($exht) ;
+            $cekst['autt'] = cektKodeEPPS($autt) ;
+            $cekst['afft'] = cektKodeEPPS($afft) ;
+            $cekst['intt'] = cektKodeEPPS($intt) ;
+            $cekst['suct'] = cektKodeEPPS($suct) ;
+            $cekst['domt'] = cektKodeEPPS($domt) ;
+            $cekst['abat'] = cektKodeEPPS($abat) ;
+            $cekst['nurt'] = cektKodeEPPS($nurt) ;
+            $cekst['chgt'] = cektKodeEPPS($chgt) ;
+            $cekst['endt'] = cektKodeEPPS($endt) ;
+            $cekst['hett'] = cektKodeEPPS($hett) ;
+            $cekst['aggt'] = cektKodeEPPS($aggt) ;
 
             $jenisl = $gender == 'L' ? 'l' : 'p';
             // $jenisp = $gender == 'P' ? 'p' : 'Perempuan';
@@ -1000,10 +1018,12 @@ class EPPSController extends Controller
             $ceksw['hetw'] = $hetw ;
             $ceksw['aggw'] = $aggw ;
 
-        $all_array[0] = $con;
-        $all_array[1] = $ceks;
-        $all_array[2] = $ceksw;
-        $all_array[3] = $cekst;
+
+
+        $all_array['konsistensi'] = $con;
+        $all_array['raw'] = $ceks;
+        $all_array['T'] = $ceksw;
+        $all_array['code'] = $cekst;
         return $all_array;
     }
 
@@ -1014,17 +1034,6 @@ class EPPSController extends Controller
         return $norma[0]->$kolom;
     }
 
-    public static function cekCode($value)
-    {
-        if($value == 0){ $code = "----";}
-		else if($value == 1){ $code = "---";}
-		else if($value == 2){ $code = "--";}
-		else if($value == 3){ $code = "-";}
-		else if($value == 4){ $code = "0";}
-		else if($value == 5){ $code = "+";}
-		else if($value == 6){ $code = "++";}
-		else if($value == 7){ $code = "+++";}
 
-        return $code;
-    }
+
 }
