@@ -67,8 +67,6 @@ class Cfit3aController extends Controller
        
             $part = $packet->part;
             $soal = Packet::where('test_id','=',$test->id)->where('part','=',$part)->where('status','=',1)->first();
-            // $soal = Packet::select('amount')->where('test_id','=',$test->id)->where('part','=',$part)->first();
-            // dd($soal->amount);
     
             return view('test.cfit.cfit3A-part', [
                 'path' => $path,

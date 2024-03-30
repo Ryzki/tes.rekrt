@@ -130,6 +130,7 @@ class TikiController extends Controller
                 for($ls=0;$ls < count($array);$ls++){
                     $last_save['tikit-'.($ls+1)] = $array[$ls]->result_temp;
                 }
+
     
                 $result = new Result;
                 $result->user_id = Auth::user()->id;
@@ -191,58 +192,69 @@ class TikiController extends Controller
         $jawaban = $data != null ? json_decode($data->json,true) : json_decode($jawa,true);
         
         if($part == 1){
+            //40
             $kunci_1=strtoupper("bccabddadabcbdbccdaaacdaabbccabbbdababad");      
             $last_value1 = self::forGet($ids,$jawaban,$kunci_1,$save_value_1,1);
 
             return $last_value1;
         }
         else if($part == 2){
+            //26
             $kunci_22=[5,9,40,18,34,18,18,5,10,10,17,40,10,36,36,20,34,20,36,34,10,20,17,12,33,36];
             $last_value2 = self::forGet($ids,$jawaban,$kunci_22,$save_value_2,2);
 
             return $last_value2;
         }
         else if($part == 3){
+            //40
             $kunci_3=[9,5,5,5,3,9,5,3,5,12,3,5,9,12,10,10,5,10,9,6,9,3,5,5,10,12,5,9,6,5,10,12,6,6,9,12,10,5,6,6];
             $last_value3 = self::forGet($ids,$jawaban,$kunci_3,$save_value_3,3);
             return $last_value3;
         }
         else if($part == 4){
+            //30
             $kunci_4=[6,40,9,18,12,17,9,18,24,34,6,24,9,48,20,5,12,36,5,6,40,5,33,6,3,6,9,18,48,17];
             $last_value4 = self::forGet($ids,$jawaban,$kunci_4,$save_value_4,4);
             return $last_value4;
         }
         else if($part == 5){
+            //20
             $kunci_5=strtoupper("cbeeadeaddbcdbdaaebe");
             $last_value5 = self::forGet($ids,$jawaban,$kunci_5,$save_value_5,5);
             return $last_value5;
         }
         else if($part == 6){
+            //100
             $kunci_6=strtoupper("SSBBSBSSSBSSBSSSSBBBSBSBBBBSSBBSSBBSSSBSBBBBBSSSBBSBBBBBBBBBBBBBBBBBBBBBBBBSSBBBSSSSBSSBBSBBSBSSSBBB");
             $last_value6 = self::forGet($ids,$jawaban,$kunci_6,$save_value_6,6);
             return $last_value6;
         }
         else if($part == 7){
+            //30
             $kunci_7=strtoupper("baaaadbadacadddcacbabddcaccbda");
             $last_value7 = self::forGet($ids,$jawaban,$kunci_7,$save_value_7,7);
             return $last_value7;
         }
         else if($part == 8){
+            //40
             $kunci_8=[34,17,6,5,40,20,5,10,20,6,12,12,33,40,20,40,24,10,12,9,20,17,36,9,36,17,34,18,33,20,18,18,24,20,10,36,40,24,18,3];
             $last_value8 = self::forGet($ids,$jawaban,$kunci_8,$save_value_8,8);
             return $last_value8;
         }
         else if($part == 9){
+            //18
             $kunci_9=strtoupper("cabcedbecbacccedcb");
             $last_value9 = self::forGet($ids,$jawaban,$kunci_9,$save_value_9,9);
             return $last_value9;
         }
         else if($part == 10){
+            //20
             $kunci_10=strtoupper("cbdeaecbccadbebeaadd");
             $last_value10 = self::forGet($ids,$jawaban,$kunci_10,$save_value_10,10);
             return $last_value10;
         }
         else if($part == 11){
+            //60
             $kunci_11=strtoupper("CBCDBADCABDABAABDBDBAAACDDCACDBCBCDDCBBBBABBDAABDBABADCCACCC");
             $last_value11 = self::forGet($ids,$jawaban,$kunci_11,$save_value_11,11);
             return $last_value11;

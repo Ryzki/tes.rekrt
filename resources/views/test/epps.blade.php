@@ -83,7 +83,7 @@
 			</ul>
 		</div>
 	</nav>
-    {{-- <div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
@@ -94,18 +94,20 @@
 	        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      		</div>
 		      	<div class="modal-body">
-		      	    <p>Terdapat pernyataan dengan beberapa pilihan jawaban.
-		        	Pilih jawaban yang anda anggap sesuai dengan keadaan diri anda.</p>
-		        	<p>Anda menjawab dengan menekan jawaban yang tersedia. tidak perlu terlalu lama mempertimbangkan jawaban tersebut.</p>
-                    <p>Persoalan ini tidak membutuhkan waktu namun bekerjalan dengan cepat dan teliti</p>
-		        	
+					<p>Terdapat masing-masing dua pernyataan</p>
+					<p>Pilihlah <b>satu pernyataan yang paling mendekati gambaran diri anda</b></p>
+					<p style="text-align: justify">Jika kedua pernyataan tersebut tidak mencerminkan keadaan diri, anda
+						diminta untuk tetap memilih salah satu pernyataan yang paling mendekati
+						anda. Jika kedua pernyataan tersebut sama-sama mencerminkan diri anda, 
+						tetap pilih satu diantara dua pernyataan tersebut.
+					</p>
 		      	</div>
 	      		<div class="modal-footer">
 	        		<button type="button" class="btn btn-primary text-uppercase " data-bs-dismiss="modal">Mengerti</button>
 	      		</div>
 	    	</div>
 	  	</div>
-	</div> --}}
+	</div>
     @endif
 
 </div>
@@ -119,7 +121,7 @@
 	}
 	//onsubmit 
 	$(document).ready(function(){
-		// $("#tutorialModal").modal("toggle");
+		$("#tutorialModal").modal("toggle");
 		
 
 	    totalQuestion();
