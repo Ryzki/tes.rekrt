@@ -18,6 +18,7 @@ use App\Http\Controllers\Test\MBTIController;
 use App\Http\Controllers\Test\MSDTController;
 use App\Http\Controllers\Test\RMIBController;
 use App\Http\Controllers\Test\TikiController;
+use App\Http\Controllers\Test\TikiDController;
 use App\Http\Controllers\Test\DISC24Controller;
 use App\Http\Controllers\Test\DISC40Controller;
 use App\Http\Controllers\Test\PapikostickController;
@@ -93,6 +94,8 @@ class TestController extends Controller
             return Cfit3aController::indexPart($request, $path, $test, $selection);
         elseif($path == 'epps')
             return EPPSController::index($request, $path, $test, $selection);
+        elseif($path == 'tikid')
+            return TikiDController::index($request, $path, $test, $selection);
         else
             abort(404);
     }

@@ -105,9 +105,7 @@ class TikiController extends Controller
             $selection = $request->selection;
             $packet_id = $request->packet_id;
             $jawaban = json_encode($request->jawaban);
-    
-            
-            
+      
             $save_sementara = new TesTemporary;
             $save_sementara->id_user = Auth::user()->id;
             $save_sementara->test_id = $test_id;
@@ -117,7 +115,6 @@ class TikiController extends Controller
             $save_sementara->save();
     
             $cek = self::kunci_2(Auth::user()->id,$test_id,$packet_id,$request->part,$jawaban);
-    
     
             $part_next = ($request->part) + 1;
             if($part_next >= 12){

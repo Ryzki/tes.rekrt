@@ -11,6 +11,7 @@ use App\Http\Controllers\Test\MBTIController;
 use App\Http\Controllers\Test\MSDTController;
 use App\Http\Controllers\Test\TikiController;
 use App\Http\Controllers\UserLoginController;
+use App\Http\Controllers\Test\TikiDController;
 use App\Http\Controllers\Test\DISC24Controller;
 use App\Http\Controllers\Test\DISC40Controller;
 use App\Http\Controllers\Test\AssesmentController;
@@ -67,6 +68,7 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/wpt/{id}',[WPTController::class,'getData'])->name('admin.wpt.next');
 	Route::get('/tes/mbti/{id}',[MBTIController::class,'getData'])->name('admin.mbti.next');
 	Route::get('/tes/tiki/{part}/{id}',[TikiController::class,'getData'])->name('admin.tiki.next');
+	Route::get('/tes/tikid/{part}/{id}',[TikiDController::class,'getData'])->name('admin.tikid.next');
 	Route::get('/tes/cifit3A/{part}/{id}',[Cfit3aController::class,'getData'])->name('admin.cfit3a.next');
 	Route::get('/tes/epps/{id}',[EPPSController::class,'getData'])->name('admin.epps.next');
 
