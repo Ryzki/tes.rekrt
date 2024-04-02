@@ -35,9 +35,16 @@
 						<input type="hidden" name="path" value="{{ $path }}">
 						<input type="hidden" name="packet_id" value="{{ $packet->id }}">
 						<input type="hidden" name="test_id" value="{{ $test->id }}"> 
-	
-
-
+						@if (request('part') == null)				
+							<input type="hidden" name="part" class="part" id="part" value="1">
+						@else
+							<input type="hidden" name="part" class="part" id="part" value="{{ request('part') }}">
+						@endif
+						@for ($i = 1; $i <= $jumlah_soal; $i++)
+							<a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button{{ $i }}">{{ $i }}</a>
+							<input type="hidden" name="jawaban[{{ $i }}]" class="jawaban{{ $i }}" id="jawaban{{ $i }}{{ $part }}" value="">
+							
+						@endfor
 					</form>
 				</div>
 			</div>
@@ -70,18 +77,18 @@
 		<div class="container">
 			<ul class="navbar nav ms-auto">
 				<li class="nav-item">
-					<span id="answered">0</span>/<span id="totals">0</span> Soal Terjawab
+					<span id="answered">0</span>/<span id="totals">{{ $jumlah_soal }}</span> Soal Terjawab
 				</li>
 				<li class="nav-item ms-3">
 					<a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#tutorialModal" title="Tutorial"><i class="fa fa-question-circle" style="font-size: 1.5rem"></i></a>
 				</li>
-				{{-- <li class="nav-item ms-3">
-					@if( request('part') != 11 )
+				<li class="nav-item ms-3">
+					@if( request('part') != 10 )
 						<button onclick="deleteItems()" class="btn btn-md btn-primary text-uppercase " id="btn-next" disabled>Submit</button>
 					@else
 						<button onclick="deleteItems()" class="btn btn-md btn-primary text-uppercase " id="btn-submit" disabled>Submit</button>
 					@endif
-				</li> --}}
+				</li>
 			</ul>
 		</div>
 	</nav>
@@ -110,7 +117,8 @@
 @endsection
 
 @section('js-extra')
-{{-- <script type="text/javascript" src="{{ asset('assets/js/tiki.js') }}"></script> --}}
+<script type="text/javascript" src="{{ asset('assets/js/soalGenerate.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/tikid.js') }}"></script>
 <script type="text/javascript">
 		
 </script>
@@ -118,6 +126,47 @@
 
 @section('css-extra')
 <style type="text/css">
+	.modal .modal-body {font-size: 14px;}
+	.table {margin-bottom: 0;}
 
+	.active{
+		background-color: rgb(247, 160, 79);
+	}
+
+
+	#id_work_days input[type="radio"] {
+	/* display: none; */
+	opacity: 0;
+	pointer-events: none;
+	}
+	#id_work_days input[type="checkbox"] {
+	/* display: none; */
+	opacity: 0;
+	pointer-events: none;
+	}
+
+	#id_work_days span {
+	display: inline-block;
+	padding: 5px;
+	text-align: center;
+	border: 2px solid gold;
+	border-radius: 3px;
+	color: rgb(0, 0, 0);
+	cursor: pointer;
+	width: 180px;
+	}
+
+	#id_work_days span img{
+		width: 80%;
+	}
+
+	#id_work_days input[type="radio"]:checked + span {
+	background-color: rgb(255, 136, 0);
+	color: black;
+	}
+	#id_work_days input[type="checkbox"]:checked + span {
+	background-color: rgb(255, 136, 0);
+	color: black;
+	}
 </style>
 @endsection
