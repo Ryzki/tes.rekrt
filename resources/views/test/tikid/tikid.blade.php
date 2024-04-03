@@ -35,6 +35,7 @@
 						<input type="hidden" name="path" value="{{ $path }}">
 						<input type="hidden" name="packet_id" value="{{ $packet->id }}">
 						<input type="hidden" name="test_id" value="{{ $test->id }}"> 
+						<input type="hidden" name="jumlah_soal" class="jumlah_soal" value="{{ $jumlah_soal }}"> 
 						@if (request('part') == null)				
 							<input type="hidden" name="part" class="part" id="part" value="1">
 						@else
@@ -77,7 +78,7 @@
 		<div class="container">
 			<ul class="navbar nav ms-auto">
 				<li class="nav-item">
-					<span id="answered">0</span>/<span id="totals">1</span> Soal Terjawab
+					<span id="answered">0</span>/<span id="totals">{{ $jumlah_soal }}</span> Soal Terjawab
 				</li>
 				<li class="nav-item ms-3">
 					<a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#tutorialModal" title="Tutorial"><i class="fa fa-question-circle" style="font-size: 1.5rem"></i></a>
