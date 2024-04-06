@@ -106,13 +106,16 @@ class TikiController extends Controller
             $packet_id = $request->packet_id;
             $jawaban = json_encode($request->jawaban);
       
-            $save_sementara = new TesTemporary;
-            $save_sementara->id_user = Auth::user()->id;
-            $save_sementara->test_id = $test_id;
-            $save_sementara->packet_id = $packet_id;
-            $save_sementara->json = $jawaban;
-            $save_sementara->part = $request->part;
-            $save_sementara->save();
+            $cek_dulicate = TesTemporary::select('part')->where('part',$request->part)->first();
+            if($cek_dulicate == null){
+                $save_sementara = new TesTemporary;
+                $save_sementara->id_user = Auth::user()->id;
+                $save_sementara->test_id = $test_id;
+                $save_sementara->packet_id = $packet_id;
+                $save_sementara->json = $jawaban;
+                $save_sementara->part = $request->part;
+                $save_sementara->save();
+            }
     
             $cek = self::kunci_2(Auth::user()->id,$test_id,$packet_id,$request->part,$jawaban);
     

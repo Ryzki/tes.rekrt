@@ -25,8 +25,8 @@
 	    @endif
     @endif
     @if($selection == null || ($selection != null && strtotime('now') >= strtotime($selection->test_time)))
-	<div id="questmsdt" class="row" style="margin-bottom:100px">
-		<div class="col-12 col-md-4 co mb-md-0">
+	<div id="questtikid" class="row" style="margin-bottom:100px">
+		<div class="col-12 col-md-4 mb-md-0">
 			<div class="card">
 				<div class="card-header fw-bold text-center">Navigasi Soal</div>
 				<div class="card-body">
@@ -78,7 +78,7 @@
 		<div class="container">
 			<ul class="navbar nav ms-auto">
 				<li class="nav-item">
-					<span id="answered">0</span>/<span id="totals">{{ $jumlah_soal }}</span> Soal Terjawab
+					<span id="answered">0</span>/<span id="totals">1</span> Soal Terjawab
 				</li>
 				<li class="nav-item ms-3">
 					<a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#tutorialModal" title="Tutorial"><i class="fa fa-question-circle" style="font-size: 1.5rem"></i></a>

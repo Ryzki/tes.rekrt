@@ -152,6 +152,8 @@ class TestController extends Controller
             return \App\Http\Controllers\Cfit3aController::store($request);
         elseif($request->path == 'epps')
             return \App\Http\Controllers\Test\EPPSController::store($request);
+        elseif($request->path == 'tikid')
+            return \App\Http\Controllers\Test\TikiDController::store($request);
     }
 
     /**
