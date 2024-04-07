@@ -78,22 +78,18 @@
 		<div class="container">
 			<ul class="navbar nav ms-auto">
 				<li class="nav-item">
-					<span id="answered">0</span>/<span id="totals">{{ $jumlah_soal }}</span> Soal Terjawab
+					<span id="answered">0</span>/<span id="totals">1</span> Soal Terjawab
 				</li>
 				<li class="nav-item ms-3">
 					<a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#tutorialModal" title="Tutorial"><i class="fa fa-question-circle" style="font-size: 1.5rem"></i></a>
 				</li>
 				<li class="nav-item ms-3">
-					@if( request('part') != 10 )
-						<button onclick="deleteItems()" class="btn btn-md btn-primary text-uppercase " id="btn-next" disabled>Submit</button>
-					@else
-						<button onclick="deleteItems()" class="btn btn-md btn-primary text-uppercase " id="btn-submit" disabled>Submit</button>
-					@endif
+					<button onclick="deleteItems()" class="btn btn-md btn-primary text-uppercase " id="btn-submit" disabled>Submit</button>
 				</li>
 			</ul>
 		</div>
 	</nav>
-	{{-- <div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 	    	<div class="modal-content" style="height: 60vh">
 	      		<div class="modal-header">
@@ -104,14 +100,15 @@
 	        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      		</div>
 		      	<div class="modal-body">
+					<iframe id="tutorialModal" style="width: 100%;height:100%" src="{{ asset('assets/petunjuk/tikid/'.$packet->description) }}" title="description"></iframe>
 		      	</div>
 	      		<div class="modal-footer">
 	        		<button type="button" class="btn btn-primary text-uppercase " data-bs-dismiss="modal">Mengerti</button>
 	      		</div>
 	    	</div>
 	  	</div>
-	</div> --}}
-	<iframe style="width: 100%;height:100%" src="{{ asset('assets/petunjuk/tikid/'.$packet->description) }}" title="description"></iframe>
+	</div>
+
     @endif
 </div>
 

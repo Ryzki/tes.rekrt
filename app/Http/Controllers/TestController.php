@@ -25,6 +25,12 @@ use App\Http\Controllers\Test\PapikostickController;
 
 class TestController extends Controller
 {    
+    public function __construct()
+    {
+        //inisialisasi parameter
+        $test_tikid = ['tikid','tikid-1','tikid-2','tikid-3','tikid-4','tikid-5','tikid-6','tikid-7','tikid-8','tikid-9'];
+        $this->test_tikid = $test_tikid;
+    }
     /**
      * Display test page
      * 
@@ -94,7 +100,7 @@ class TestController extends Controller
             return Cfit3aController::indexPart($request, $path, $test, $selection);
         elseif($path == 'epps')
             return EPPSController::index($request, $path, $test, $selection);
-        elseif($path == 'tikid')
+        elseif(in_array($path, $this->test_tikid))
             return TikiDController::index($request, $path, $test, $selection);
         else
             abort(404);
@@ -152,7 +158,7 @@ class TestController extends Controller
             return \App\Http\Controllers\Cfit3aController::store($request);
         elseif($request->path == 'epps')
             return \App\Http\Controllers\Test\EPPSController::store($request);
-        elseif($request->path == 'tikid')
+        elseif(in_array($request->path,$this->test_tikid))
             return \App\Http\Controllers\Test\TikiDController::store($request);
     }
 
