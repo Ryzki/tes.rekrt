@@ -93,7 +93,7 @@
 			</ul>
 		</div>
 	</nav>
-	{{-- <div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 	    	<div class="modal-content" style="height: 60vh">
 	      		<div class="modal-header">
@@ -104,14 +104,14 @@
 	        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      		</div>
 		      	<div class="modal-body">
+					<iframe id="tutorialModal" style="width: 100%;height:100%" src="{{ asset('assets/petunjuk/tikid/'.$packet->description) }}" title="description"></iframe>
 		      	</div>
 	      		<div class="modal-footer">
 	        		<button type="button" class="btn btn-primary text-uppercase " data-bs-dismiss="modal">Mengerti</button>
 	      		</div>
 	    	</div>
 	  	</div>
-	</div> --}}
-	<iframe style="width: 100%;height:100%" src="{{ asset('assets/petunjuk/tikid/'.$packet->description) }}" title="description"></iframe>
+	</div>
     @endif
 </div>
 
