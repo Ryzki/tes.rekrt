@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Cfit3aController;
+use App\Http\Controllers\Test\NVAController;
 use App\Http\Controllers\Test\TIUController;
 use App\Http\Controllers\Test\WPTController;
 use App\Http\Controllers\DashboardController;
@@ -71,6 +72,8 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/tikid/{part}/{id}',[TikiDController::class,'getData'])->name('admin.tikid.next');
 	Route::get('/tes/cifit3A/{part}/{id}',[Cfit3aController::class,'getData'])->name('admin.cfit3a.next');
 	Route::get('/tes/epps/{id}',[EPPSController::class,'getData'])->name('admin.epps.next');
+	Route::get('/tes/numerik-40/{part}/{id}',[NVAController::class,'getData'])->name('admin.numerik.next');
+	Route::get('/tes/verbal60/{part}/{id}',[NVAController::class,'getVerbal'])->name('admin.verbal60.next');
 
 });
 

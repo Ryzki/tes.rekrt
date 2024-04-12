@@ -62,6 +62,7 @@ class DashboardController extends Controller
         'lightning-bolts.svg',
         'keys.svg',
         'lightning-bolts.svg',
+        'lightning-bolts.svg',
         'keys.svg',
         'keys.svg',
         

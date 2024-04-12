@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Cfit3aController;
 use App\Http\Controllers\Test\ISTController;
+use App\Http\Controllers\Test\NVAController;
 use App\Http\Controllers\Test\SDIController;
 use App\Http\Controllers\Test\TIUController;
 use App\Http\Controllers\Test\WPTController;
@@ -29,7 +30,9 @@ class TestController extends Controller
     {
         //inisialisasi parameter
         $test_tikid = ['tikid','tikid-1','tikid-2','tikid-3','tikid-4','tikid-5','tikid-6','tikid-7','tikid-8','tikid-9'];
+        $test_nva = ['numerik-40','verbal60'];
         $this->test_tikid = $test_tikid;
+        $this->test_nva = $test_nva;
     }
     /**
      * Display test page
@@ -102,6 +105,8 @@ class TestController extends Controller
             return EPPSController::index($request, $path, $test, $selection);
         elseif(in_array($path, $this->test_tikid))
             return TikiDController::index($request, $path, $test, $selection);
+        elseif(in_array($path, $this->test_nva))
+            return NVAController::index($request, $path, $test, $selection);
         else
             abort(404);
     }
@@ -158,6 +163,8 @@ class TestController extends Controller
             return \App\Http\Controllers\Cfit3aController::store($request);
         elseif($request->path == 'epps')
             return \App\Http\Controllers\Test\EPPSController::store($request);
+        elseif(in_array($request->path,$this->test_nva))
+            return \App\Http\Controllers\Test\NVAController::store($request);
         elseif(in_array($request->path,$this->test_tikid))
             return \App\Http\Controllers\Test\TikiDController::store($request);
     }
