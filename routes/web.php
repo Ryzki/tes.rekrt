@@ -74,6 +74,7 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/epps/{id}',[EPPSController::class,'getData'])->name('admin.epps.next');
 	Route::get('/tes/numerik-40/{part}/{id}',[NVAController::class,'getData'])->name('admin.numerik.next');
 	Route::get('/tes/verbal60/{part}/{id}',[NVAController::class,'getVerbal'])->name('admin.verbal60.next');
+	Route::get('/tes/abstraksi24/{part}/{id}',[NVAController::class,'getAbstrak'])->name('admin.abstraksi24.next');
 
 });
 

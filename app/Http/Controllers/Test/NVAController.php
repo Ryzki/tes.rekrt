@@ -38,8 +38,20 @@ class NVAController extends Controller
         ]);
     }
 
+    public function getAbstrak($part,$id){
+        $soal = Question::where('packet_id','=',69)->where('number','=',$part)->first();
+        $decode_soal = json_decode($soal->description,true);
+
+        return response()->json([
+            'quest' => $decode_soal,
+            'num' => $id,
+            'part'=> $part
+        ]);
+    }
+
     public static function index(Request $request, $path, $test, $selection)
     {
+
         $cek_test = existTest($test->id);
         if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
@@ -71,13 +83,35 @@ class NVAController extends Controller
                     'jumlah_soal' => $soal->amount,
                 ]);
             }
+            else if($path == 'abstraksi24'){
+
+                return view('test.abstraksi24',[
+                    'part' => $part,
+                    'path' => $path,
+                    'test' => $test,
+                    'selection' => $selection,
+                    'packet' => $packet,
+                    'jumlah_soal' => $soal->amount,
+                ]);
+            }
         }
     }
 
     public static function store(Request $request)
     {
-        $kunci=strtoupper("bebebcebacbaacbbbacaecedcacdabaecdbbccab");
         $jawaban = $request->jawaban;
+        if($request->packet_id == 67){
+            $kunci=strtoupper("bebebcebacbaacbbbacaecedcacdabaecdbbccab");
+            $table = 'numerik40';
+        }
+        if($request->packet_id == 68){
+            $kunci=strtoupper("ccabbcacabcbbcccbcabcbbcaacaccaababcaccbaccbcbcbbcccaabbacac");
+            $table = 'verbal60';
+        }
+        if($request->packet_id == 69){
+            $kunci=strtoupper("ebdacabecaadaebbbeedbcbc");
+            $table = 'abstraksi24';
+        }
 
         $save_value = 0;
         for($i=1;$i <= count($jawaban);$i++){
@@ -86,14 +120,10 @@ class NVAController extends Controller
             }
         }
 
-        $select = DB::table('norma_aptitude')->select('numerik40')->where('nilai', $save_value)->first();
-
-        // dd($select);
-        // dd($request->all());
-
+        $select = DB::table('norma_aptitude')->select($table)->where('nilai', $save_value)->first();
         $last_save['jawaban'] = $request->jawaban;
         $last_save['benar'] = $save_value;
-        $last_save['iq'] = $select->numerik40;
+        $last_save['iq'] = $select->$table;
 
         $result = new Result;
         $result->user_id = Auth::user()->id;
@@ -104,7 +134,6 @@ class NVAController extends Controller
         $result->save();
 
         return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
-
     }
 
     public static function gambar()
