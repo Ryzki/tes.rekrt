@@ -32,11 +32,15 @@
 				<div class="card-body">
 					<form id="form" method="post" action="/tes/{{ $path }}/store">
 						@csrf
-						<input type="hidden" name="path" value="{{ $path }}">
+						<input type="hidden" name="path" id="path" value="{{ $path }}">
 						<input type="hidden" name="packet_id" value="{{ $packet->id }}">
 						<input type="hidden" name="test_id" value="{{ $test->id }}"> 
 						<input type="hidden" name="jumlah_soal" class="jumlah_soal" value="{{ $jumlah_soal }}"> 
-						<input type="hidden" name="part" class="part" id="part" value="{{ $part }}">
+						@if (request('part') == null)				
+							<input type="hidden" name="part" class="part" id="part" value="1">
+						@else
+							<input type="hidden" name="part" class="part" id="part" value="{{ request('part') }}">
+						@endif
 						@for ($i = 1; $i <= $jumlah_soal; $i++)
 							<a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button{{ $i }}">{{ $i }}</a>
 							<input type="hidden" name="jawaban[{{ $i }}]" class="jawaban{{ $i }}" id="jawaban{{ $i }}{{ $part }}" value="">
@@ -85,7 +89,7 @@
 			</ul>
 		</div>
 	</nav>
-	<div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	{{-- <div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 	    	<div class="modal-content" style="height: 60vh">
 	      		<div class="modal-header">
@@ -96,15 +100,14 @@
 	        		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      		</div>
 		      	<div class="modal-body">
-					<iframe id="tutorialModal" style="width: 100%;height:100%" src="{{ asset('assets/petunjuk/tikid/'.$packet->description) }}" title="description"></iframe>
+					<iframe id="tutorialModal" style="width: 100%;height:100%" src="{{ asset('assets/petunjuk/tikid/tutorial'.$part.'.html') }}" title="description"></iframe>
 		      	</div>
 	      		<div class="modal-footer">
 	        		<button type="button" class="btn btn-primary text-uppercase " data-bs-dismiss="modal">Mengerti</button>
 	      		</div>
 	    	</div>
 	  	</div>
-	</div>
-
+	</div> --}}
     @endif
 </div>
 
@@ -113,7 +116,7 @@
 
 @section('js-extra')
 <script type="text/javascript" src="{{ asset('assets/js/soalGenerate.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/js/tikid.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/nva.js') }}"></script>
 <script type="text/javascript">
 		
 </script>

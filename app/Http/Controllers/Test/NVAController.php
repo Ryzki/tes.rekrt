@@ -49,9 +49,19 @@ class NVAController extends Controller
         ]);
     }
 
+    public function getDataP($part,$id){
+        $soal = Question::where('packet_id','=',70)->where('number','=',$part)->first();
+        $decode_soal = json_decode($soal->description,true);
+
+        return response()->json([
+            'quest' => $decode_soal,
+            'num' => $id,
+            'part'=> $part
+        ]);
+    }
+
     public static function index(Request $request, $path, $test, $selection)
     {
-
         $cek_test = existTest($test->id);
         if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
@@ -86,6 +96,17 @@ class NVAController extends Controller
             else if($path == 'abstraksi24'){
 
                 return view('test.abstraksi24',[
+                    'part' => $part,
+                    'path' => $path,
+                    'test' => $test,
+                    'selection' => $selection,
+                    'packet' => $packet,
+                    'jumlah_soal' => $soal->amount,
+                ]);
+            }
+
+            else if($path == '16p'){
+                return view('test.16p',[
                     'part' => $part,
                     'path' => $path,
                     'test' => $test,
