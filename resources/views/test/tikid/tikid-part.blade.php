@@ -36,11 +36,7 @@
 						<input type="hidden" name="packet_id" value="{{ $packet->id }}">
 						<input type="hidden" name="test_id" value="{{ $test->id }}"> 
 						<input type="hidden" name="jumlah_soal" class="jumlah_soal" value="{{ $jumlah_soal }}"> 
-						@if (request('part') == null)				
-							<input type="hidden" name="part" class="part" id="part" value="1">
-						@else
-							<input type="hidden" name="part" class="part" id="part" value="{{ request('part') }}">
-						@endif
+						<input type="hidden" name="part" class="part" id="part" value="{{ $part }}">
 						@for ($i = 1; $i <= $jumlah_soal; $i++)
 							<a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button{{ $i }}">{{ $i }}</a>
 							<input type="hidden" name="jawaban[{{ $i }}]" class="jawaban{{ $i }}" id="jawaban{{ $i }}{{ $part }}" value="">
