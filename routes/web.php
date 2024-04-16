@@ -8,6 +8,7 @@ use App\Http\Controllers\Test\TIUController;
 use App\Http\Controllers\Test\WPTController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Test\EPPSController;
+use App\Http\Controllers\Test\LAFFController;
 use App\Http\Controllers\Test\MBTIController;
 use App\Http\Controllers\Test\MSDTController;
 use App\Http\Controllers\Test\TikiController;
@@ -76,6 +77,7 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/verbal60/{part}/{id}',[NVAController::class,'getVerbal'])->name('admin.verbal60.next');
 	Route::get('/tes/abstraksi24/{part}/{id}',[NVAController::class,'getAbstrak'])->name('admin.abstraksi24.next');
 	Route::get('/tes/16p/{part}/{id}',[NVAController::class,'getDataP'])->name('admin.16p.next');
+	Route::get('/tes/{test}/{part}/{id}',[LAFFController::class,'getData']);
 
 });
 

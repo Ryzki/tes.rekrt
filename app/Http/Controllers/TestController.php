@@ -15,6 +15,7 @@ use App\Http\Controllers\Test\SDIController;
 use App\Http\Controllers\Test\TIUController;
 use App\Http\Controllers\Test\WPTController;
 use App\Http\Controllers\Test\EPPSController;
+use App\Http\Controllers\Test\LAFFController;
 use App\Http\Controllers\Test\MBTIController;
 use App\Http\Controllers\Test\MSDTController;
 use App\Http\Controllers\Test\RMIBController;
@@ -31,8 +32,11 @@ class TestController extends Controller
         //inisialisasi parameter
         $test_tikid = ['tikid','tikid-1','tikid-2','tikid-3','tikid-4','tikid-5','tikid-6','tikid-7','tikid-8','tikid-9'];
         $test_nva = ['numerik-40','verbal60','abstraksi24','16p'];
+        $test_laff = ['logika_verbal','apm'];
+
         $this->test_tikid = $test_tikid;
         $this->test_nva = $test_nva;
+        $this->test_laff = $test_laff;
     }
     /**
      * Display test page
@@ -107,6 +111,8 @@ class TestController extends Controller
             return TikiDController::index($request, $path, $test, $selection);
         elseif(in_array($path, $this->test_nva))
             return NVAController::index($request, $path, $test, $selection);
+        elseif(in_array($path, $this->test_laff))
+            return LAFFController::index($request, $path, $test, $selection);
         else
             abort(404);
     }
@@ -167,6 +173,8 @@ class TestController extends Controller
             return \App\Http\Controllers\Test\NVAController::store($request);
         elseif(in_array($request->path,$this->test_tikid))
             return \App\Http\Controllers\Test\TikiDController::store($request);
+        elseif(in_array($request->path,$this->test_laff))
+            return LAFFController::store($request);
     }
 
     /**

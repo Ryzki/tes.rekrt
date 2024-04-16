@@ -25,7 +25,7 @@
 	    @endif
     @endif
     @if($selection == null || ($selection != null && strtotime('now') >= strtotime($selection->test_time)))
-	<div id="numerik40" class="row" style="margin-bottom:100px">
+	<div id="logikaverbal" class="row" style="margin-bottom:100px">
 		<div class="col-12 col-md-4 mb-md-0">
 			<div class="card">
 				<div class="card-header fw-bold text-center">Navigasi Soal</div>
@@ -36,11 +36,7 @@
 						<input type="hidden" name="packet_id" value="{{ $packet->id }}">
 						<input type="hidden" name="test_id" value="{{ $test->id }}"> 
 						<input type="hidden" name="jumlah_soal" class="jumlah_soal" value="{{ $jumlah_soal }}"> 
-						@if (request('part') == null)				
-							<input type="hidden" name="part" class="part" id="part" value="1">
-						@else
-							<input type="hidden" name="part" class="part" id="part" value="{{ request('part') }}">
-						@endif
+						<input type="hidden" name="part" class="part" id="part" value="1">
 						@for ($i = 1; $i <= $jumlah_soal; $i++)
 							<a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button{{ $i }}">{{ $i }}</a>
 							<input type="hidden" name="jawaban[{{ $i }}]" class="jawaban{{ $i }}" id="jawaban{{ $i }}{{ $part }}" value="">
@@ -116,55 +112,17 @@
 
 @section('js-extra')
 <script type="text/javascript" src="{{ asset('assets/js/soalGenerate.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/js/nva.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/laff.js') }}"></script>
 <script type="text/javascript">
 		
 </script>
 @endsection
 
 @section('css-extra')
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/option.css') }}">
 <style type="text/css">
-	.modal .modal-body {font-size: 14px;}
-	.table {margin-bottom: 0;}
-
-	.active{
-		background-color: rgb(247, 160, 79);
-	}
-
-
-	#id_work_days input[type="radio"] {
-	/* display: none; */
-	opacity: 0;
-	pointer-events: none;
-	}
-	#id_work_days input[type="checkbox"] {
-	/* display: none; */
-	opacity: 0;
-	pointer-events: none;
-	}
-
-	#id_work_days span {
-	display: inline-block;
-	padding: 5px;
-	text-align: center;
-	border: 2px solid gold;
-	border-radius: 3px;
-	color: rgb(0, 0, 0);
-	cursor: pointer;
-	width: 180px;
-	}
-
-	#id_work_days span img{
-		width: 80%;
-	}
-
-	#id_work_days input[type="radio"]:checked + span {
-	background-color: rgb(255, 136, 0);
-	color: black;
-	}
-	#id_work_days input[type="checkbox"]:checked + span {
-	background-color: rgb(255, 136, 0);
-	color: black;
-	}
+    .gambar-soal{
+        width: 80%;
+    }
 </style>
 @endsection
