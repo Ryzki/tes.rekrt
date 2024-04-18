@@ -21,6 +21,7 @@ use App\Http\Controllers\Test\MSDTController;
 use App\Http\Controllers\Test\RMIBController;
 use App\Http\Controllers\Test\TikiController;
 use App\Http\Controllers\Test\TikiDController;
+use App\Http\Controllers\Test\CFIT3BController;
 use App\Http\Controllers\Test\DISC24Controller;
 use App\Http\Controllers\Test\DISC40Controller;
 use App\Http\Controllers\Test\PapikostickController;
@@ -31,12 +32,14 @@ class TestController extends Controller
     {
         //inisialisasi parameter
         $test_tikid = ['tikid','tikid-1','tikid-2','tikid-3','tikid-4','tikid-5','tikid-6','tikid-7','tikid-8','tikid-9'];
+        $test_cfit3b = ['cfit3b','cfit3b-1','cfit3b-2','cfit3b-3','cfit3b-4'];
         $test_nva = ['numerik-40','verbal60','abstraksi24','16p'];
         $test_laff = ['logika_verbal','apm','a1'];
 
         $this->test_tikid = $test_tikid;
         $this->test_nva = $test_nva;
         $this->test_laff = $test_laff;
+        $this->test_cfit3b = $test_cfit3b;
     }
     /**
      * Display test page
@@ -113,6 +116,8 @@ class TestController extends Controller
             return NVAController::index($request, $path, $test, $selection);
         elseif(in_array($path, $this->test_laff))
             return LAFFController::index($request, $path, $test, $selection);
+        elseif(in_array($path, $this->test_cfit3b))
+            return CFIT3BController::index($request, $path, $test, $selection);
         else
             abort(404);
     }
@@ -175,6 +180,8 @@ class TestController extends Controller
             return \App\Http\Controllers\Test\TikiDController::store($request);
         elseif(in_array($request->path,$this->test_laff))
             return LAFFController::store($request);
+        elseif(in_array($request->path,$this->test_cfit3b))
+            return CFIT3BController::store($request);
     }
 
     /**

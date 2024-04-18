@@ -19,7 +19,22 @@ class LAFFController extends Controller
 
         $soal = Question::where('packet_id','=',$test_id)->where('number','=',$part)->first();
         $decode_soal = json_decode($soal->description,true);
-        
+        if($test_id == 73){
+            $soal = $decode_soal[0]['soal'];
+            $naskah = self::naskahA1();
+    
+            for($i=0;$i<count($soal);$i++){
+                if($i <= 1){$soal[$i] = $naskah[0].''.$soal[$i];}
+                else if( 1< $i && $i <= 5){$soal[$i] = $naskah[1].''.$soal[$i];}
+                else if( 5< $i && $i <= 9){$soal[$i] = $naskah[2].''.$soal[$i];}
+                else if( 9< $i && $i <= 13){$soal[$i] = $naskah[3].''.$soal[$i];}
+                else if( 13< $i && $i <= 17){$soal[$i] = $naskah[4].''.$soal[$i];}
+                else if( 17< $i && $i <= 21){$soal[$i] = $naskah[5].''.$soal[$i];}
+                else if( 21< $i && $i <= 25){$soal[$i] = $naskah[6].''.$soal[$i];}
+            }
+
+            $decode_soal[0]['soal'] = $soal;
+        }
 
         return response()->json([
             'quest' => $decode_soal,
@@ -30,21 +45,6 @@ class LAFFController extends Controller
 
     public static function index(Request $request, $path, $test, $selection)
     {
-        $soal = Question::where('packet_id','=',73)->where('number','=',1)->first();
-        $decode_soal = json_decode($soal->description,true);   
-        $soal = $decode_soal[0]['soal'];
-        $naskah = self::naskahA1();
-
-        for($i=0;$i<count($soal);$i++){
-            if($i <= 1){$soal[$i] = $naskah[0].''.$soal[$i];}
-            else if( 1< $i && $i <= 5){$soal[$i] = $naskah[1].''.$soal[$i];}
-            else if( 5< $i && $i <= 9){$soal[$i] = $naskah[2].''.$soal[$i];}
-            else if( 9< $i && $i <= 13){$soal[$i] = $naskah[3].''.$soal[$i];}
-            else if( 13< $i && $i <= 17){$soal[$i] = $naskah[4].''.$soal[$i];}
-            else if( 17< $i && $i <= 21){$soal[$i] = $naskah[5].''.$soal[$i];}
-            else if( 21< $i && $i <= 25){$soal[$i] = $naskah[6].''.$soal[$i];}
-        }
-
         $cek_test = existTest($test->id);
         if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
@@ -76,6 +76,10 @@ class LAFFController extends Controller
             $kunci=strtoupper("EAGDCAFAHDEFBABDFGCHHGFCGBGEFEDHEACB");
             $table='apm';
         }
+        if($request->packet_id == 73){
+            $kunci=strtoupper("dcbcdbbccdbcccadbdabcccacc");
+            $table='a1';
+        }
 
         $save_value = 0;
         for($i=1;$i <= count($jawaban);$i++){
@@ -87,9 +91,25 @@ class LAFFController extends Controller
         $last_save['jawaban'] = $request->jawaban;
         $last_save['benar'] = $save_value;
 
-        if($request->packet_id != 72){
+        if($request->packet_id == 71){
             $select = DB::table('norma_aptitude')->select($table)->where('nilai', $save_value)->first();
             $last_save['iq'] = $select->$table;
+        }
+        else if($request->packet_id == 73){
+            if($save_value<4)$ws=0;
+            else if($save_value<6){$ws=1;}
+            else if($save_value<7){$ws=2;}
+            else if($save_value<9){$ws=3;}
+            else if($save_value<11){$ws=4;}
+            else if($save_value<13){$ws=5;}
+            else if($save_value<15){$ws=6;}
+            else if($save_value<17){$ws=7;}
+            else if($save_value<19){$ws=8;}
+            else if($save_value<21){$ws=9;}
+            else {$ws=10;}
+
+            $last_save['iq'] = $ws;
+        
         }
         else{
             if($save_value<5)$ws=0;
