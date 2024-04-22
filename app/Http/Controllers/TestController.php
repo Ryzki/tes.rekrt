@@ -34,7 +34,7 @@ class TestController extends Controller
         //inisialisasi parameter
         $test_tikid = ['tikid','tikid-1','tikid-2','tikid-3','tikid-4','tikid-5','tikid-6','tikid-7','tikid-8','tikid-9'];
         $test_cfit3b = ['cfit3b','cfit3b-1','cfit3b-2','cfit3b-3','cfit3b-4'];
-        $test_cfit2A = ['cfit2a','cfit2a-1','cfit2a-2','cfit2a-3','cfit2a-4'];
+        $test_cfit2A = ['cfit2a','cfit2a-1','cfit2a-2','cfit2a-3','cfit2a-4','cfit2b','cfit2b-1','cfit2b-2','cfit2b-3','cfit2b-4'];
         $test_nva = ['numerik-40','verbal60','abstraksi24','16p'];
         $test_laff = ['logika_verbal','apm','a1'];
 

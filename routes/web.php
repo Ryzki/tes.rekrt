@@ -76,6 +76,7 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/cifit3A/{part}/{id}',[Cfit3aController::class,'getData'])->name('admin.cfit3a.next');
 	Route::get('/tes/cifit3B/{part}/{id}',[CFIT3BController::class,'getData'])->name('admin.cfit3b.next');
 	Route::get('/tes/cifit2A/{part}/{id}',[CFIT2AController::class,'getData'])->name('admin.cfit2a.next');
+	Route::get('/tes/cifit2B/{part}/{id}',[CFIT2AController::class,'getDataB'])->name('admin.cfit2b.next');
 	Route::get('/tes/epps/{id}',[EPPSController::class,'getData'])->name('admin.epps.next');
 	Route::get('/tes/numerik-40/{part}/{id}',[NVAController::class,'getData'])->name('admin.numerik.next');
 	Route::get('/tes/verbal60/{part}/{id}',[NVAController::class,'getVerbal'])->name('admin.verbal60.next');

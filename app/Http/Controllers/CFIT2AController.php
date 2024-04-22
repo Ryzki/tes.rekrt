@@ -23,10 +23,19 @@ class CFIT2AController extends Controller
             'part'=> $part
         ]);
     }
+    public function getDataB($part,$id){
+        $soal = Question::where('packet_id','=',73)->where('number','=',$part)->first();
+        $decode_soal = json_decode($soal->description,true);
+
+
+        return response()->json([
+            'quest' => $decode_soal,
+            'num' => $id,
+            'part'=> $part
+        ]);
+    }
     public static function index(Request $request, $path, $test, $selection)
     {
-        $cek = cekUmur();
-        dd($cek);
 
         $cek_test = existTest($test->id);
         if($cek_test == false && Auth::user()->role->is_global != 1){
@@ -35,7 +44,9 @@ class CFIT2AController extends Controller
         else{
             if($request->part == null){
                 $part = 1;
-                $idx = 66;
+                if($path == 'cfit3a'){ $idx = 66;}
+                else {$idx = 60;}
+               
             }else if($request->part > 4){
                 abort(404);
             }
@@ -59,10 +70,10 @@ class CFIT2AController extends Controller
     public static function store(Request $request)
     {
         $jawaban = $request->jawaban;
-        if($request->packet_id == 80){
+        if($request->packet_id == 80 || $request->packet_id == 74){
             $kunci = strtoupper('CDACBEBCCCDA');
         }
-        else if($request->packet_id == 81){
+        else if($request->packet_id == 81 || $request->packet_id == 75){
             $all_jumlah = array();
             for($i=1;$i <= count($jawaban);$i++){
                 $jawaban_dcode[$i] = json_decode($jawaban[$i],true);
@@ -76,10 +87,10 @@ class CFIT2AController extends Controller
             $kunci = [2,4,8,1,4,4,1,16,8,4,4,4,1,8];
             $jawaban = $all_jumlah;
         }
-        else if($request->packet_id == 82){
+        else if($request->packet_id == 82 || $request->packet_id == 76){
             $kunci = strtoupper('ACBECABDEABB');
         }
-        else if($request->packet_id == 83){
+        else if($request->packet_id == 83 || $request->packet_id == 77){
             $kunci = strtoupper('CABDCCAB');
         }
 
@@ -90,7 +101,7 @@ class CFIT2AController extends Controller
             }
         }
         
-        if($request->path == 'cfit3b'){
+        if($request->path == 'cfit2a'){
             $packet_id = 74;
             $cek_duplicate = TesTemporary::select('part')->where('part',$request->part)->first();
             if($cek_duplicate == null){
