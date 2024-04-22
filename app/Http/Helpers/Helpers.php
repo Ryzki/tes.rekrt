@@ -1,5 +1,14 @@
 <?php
 
+if(!function_exists('cekUmur')){
+    function cekUmur(){
+        $birthday = Auth::user()->attribute->birthdate;
+        $now = date('Y-m-d');
+        $umur = date_diff(date_create($birthday), date_create($now));
+        return $umur->format("%y");
+    }
+}
+
 if(!function_exists('cektKodeEPPS')){
     function cektKodeEPPS($value){    
         if($value == 0){ $code = "----";}

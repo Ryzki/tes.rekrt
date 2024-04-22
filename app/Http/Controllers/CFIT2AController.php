@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Test;
+namespace App\Http\Controllers;
 
 use App\Models\Packet;
 use App\Models\Result;
@@ -8,13 +8,12 @@ use App\Models\Question;
 use App\Models\TesTemporary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-class CFIT3BController extends Controller
+class CFIT2AController extends Controller
 {
     public function getData($part,$id){
-        $soal = Question::where('packet_id','=',74)->where('number','=',$part)->first();
+        $soal = Question::where('packet_id','=',79)->where('number','=',$part)->first();
         $decode_soal = json_decode($soal->description,true);
 
 
@@ -26,6 +25,9 @@ class CFIT3BController extends Controller
     }
     public static function index(Request $request, $path, $test, $selection)
     {
+        $cek = cekUmur();
+        dd($cek);
+
         $cek_test = existTest($test->id);
         if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
@@ -33,7 +35,7 @@ class CFIT3BController extends Controller
         else{
             if($request->part == null){
                 $part = 1;
-                $idx = 61;
+                $idx = 66;
             }else if($request->part > 4){
                 abort(404);
             }
@@ -44,7 +46,7 @@ class CFIT3BController extends Controller
             $soal = Packet::where('test_id','=',$idx)->where('part','=',$part)->where('status','=',1)->first();
             
           
-            return view('test.cfit3b.cfit3b', [
+            return view('test.cfit2a.cfit2a', [
                 'path' => $path,
                 'test' => $test,
                 'selection' => $selection,
@@ -57,10 +59,10 @@ class CFIT3BController extends Controller
     public static function store(Request $request)
     {
         $jawaban = $request->jawaban;
-        if($request->packet_id == 75){
-            $kunci = strtoupper('BCBDEBDBFCBBE');
+        if($request->packet_id == 80){
+            $kunci = strtoupper('CDACBEBCCCDA');
         }
-        else if($request->packet_id == 76){
+        else if($request->packet_id == 81){
             $all_jumlah = array();
             for($i=1;$i <= count($jawaban);$i++){
                 $jawaban_dcode[$i] = json_decode($jawaban[$i],true);
@@ -71,14 +73,14 @@ class CFIT3BController extends Controller
                 $all_jumlah[$i] = $jumlah[$i];
                 
             }
-            $kunci = [18,17,9,20,18,9,18,18,9,10,17,12,6,3];
+            $kunci = [2,4,8,1,4,4,1,16,8,4,4,4,1,8];
             $jawaban = $all_jumlah;
         }
-        else if($request->packet_id == 77){
-            $kunci = strtoupper('EEEBCDEEAAFCC');
+        else if($request->packet_id == 82){
+            $kunci = strtoupper('ACBECABDEABB');
         }
-        else if($request->packet_id == 78){
-            $kunci = strtoupper('BADDABCDAD');
+        else if($request->packet_id == 83){
+            $kunci = strtoupper('CABDCCAB');
         }
 
         $save_value = 0;
@@ -161,6 +163,13 @@ class CFIT3BController extends Controller
         $result->result = json_encode($last_save);
         $result->save();
     }
+
+    // public static function cekUmur(){
+    //     $birthday = Auth::user()->attribute->birthdate;
+    //     $now = date('Y-m-d');
+    //     $umur = date_diff(date_create($birthday), date_create($now));
+    //     return $umur->format("%y");
+    // }
 
     public static function norma($data,$table)
     {
