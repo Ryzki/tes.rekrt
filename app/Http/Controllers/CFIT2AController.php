@@ -7,11 +7,13 @@ use App\Models\Result;
 use App\Models\Question;
 use App\Models\TesTemporary;
 use Illuminate\Http\Request;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class CFIT2AController extends Controller
 {
+
     public function getData($part,$id){
         $soal = Question::where('packet_id','=',79)->where('number','=',$part)->first();
         $decode_soal = json_decode($soal->description,true);
@@ -24,7 +26,7 @@ class CFIT2AController extends Controller
         ]);
     }
     public function getDataB($part,$id){
-        $soal = Question::where('packet_id','=',73)->where('number','=',$part)->first();
+        $soal = Question::where('packet_id','=',84)->where('number','=',$part)->first();
         $decode_soal = json_decode($soal->description,true);
 
 
@@ -37,26 +39,32 @@ class CFIT2AController extends Controller
     public static function index(Request $request, $path, $test, $selection)
     {
 
+        
         $cek_test = existTest($test->id);
         if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
         }
         else{
-            if($request->part == null){
-                $part = 1;
-                if($path == 'cfit3a'){ $idx = 66;}
-                else {$idx = 60;}
-               
-            }else if($request->part > 4){
-                abort(404);
+
+            if($test->id == 65 || $test->id == 70){
+                if($request->part == null){
+                    $part = 1;
+                    $idx = $test->id + 1;
+                }else if($request->part > 4){
+                    abort(404);
+                }
+                else{
+                    $part = $request->part;
+                    $idx = $test->id + $part;
+                }
+                $soal = Packet::where('test_id','=',$idx)->where('part','=',$part)->where('status','=',1)->first();
+                
             }
             else{
-                $part = $request->part;
-                $idx = $test->id + $part;
+                $soal = Packet::where('test_id','=',$test->id)->where('status','=',1)->first();
+                $part = $soal->part;
             }
-            $soal = Packet::where('test_id','=',$idx)->where('part','=',$part)->where('status','=',1)->first();
             
-          
             return view('test.cfit2a.cfit2a', [
                 'path' => $path,
                 'test' => $test,
@@ -70,10 +78,10 @@ class CFIT2AController extends Controller
     public static function store(Request $request)
     {
         $jawaban = $request->jawaban;
-        if($request->packet_id == 80 || $request->packet_id == 74){
+        if($request->packet_id == 80 || $request->packet_id == 85){
             $kunci = strtoupper('CDACBEBCCCDA');
         }
-        else if($request->packet_id == 81 || $request->packet_id == 75){
+        else if($request->packet_id == 81 || $request->packet_id == 86){
             $all_jumlah = array();
             for($i=1;$i <= count($jawaban);$i++){
                 $jawaban_dcode[$i] = json_decode($jawaban[$i],true);
@@ -87,10 +95,10 @@ class CFIT2AController extends Controller
             $kunci = [2,4,8,1,4,4,1,16,8,4,4,4,1,8];
             $jawaban = $all_jumlah;
         }
-        else if($request->packet_id == 82 || $request->packet_id == 76){
+        else if($request->packet_id == 82 || $request->packet_id == 87){
             $kunci = strtoupper('ACBECABDEABB');
         }
-        else if($request->packet_id == 83 || $request->packet_id == 77){
+        else if($request->packet_id == 83 || $request->packet_id == 88){
             $kunci = strtoupper('CABDCCAB');
         }
 
@@ -101,8 +109,9 @@ class CFIT2AController extends Controller
             }
         }
         
-        if($request->path == 'cfit2a'){
-            $packet_id = 74;
+        if($request->path == 'cfit2a' || $request->path == 'cfit2b'){
+            $packet_id = $request->path == 'cfit2a' ? 79 : 84;
+            $namess = $request->path == 'cfit2a' ? 'cfit2a' : 'cfit2b';
             $cek_duplicate = TesTemporary::select('part')->where('part',$request->part)->first();
             if($cek_duplicate == null){
 
@@ -128,35 +137,35 @@ class CFIT2AController extends Controller
                                     ->get();
                                     
                 for($ls=0;$ls < count($array);$ls++){
-                    $last_save['cfit3b-'.($ls+1)]['score'] = $array[$ls]->result_temp;
-                    $last_save['cfit3b-'.($ls+1)]['jawaban'] = $array[$ls]->json;
+                    $last_save[$namess.'-'.($ls+1)]['score'] = $array[$ls]->result_temp;
+                    $last_save[$namess.'-'.($ls+1)]['jawaban'] = $array[$ls]->json;
                 }   
                 
-                $benar_1 = json_decode($last_save['cfit3b-1']['score'],true);
-                $benar_2 = json_decode($last_save['cfit3b-2']['score'],true);
-                $benar_3 = json_decode($last_save['cfit3b-3']['score'],true);
-                $benar_4 = json_decode($last_save['cfit3b-4']['score'],true);
+                $benar_1 = json_decode($last_save[$namess.'-1']['score'],true);
+                $benar_2 = json_decode($last_save[$namess.'-2']['score'],true);
+                $benar_3 = json_decode($last_save[$namess.'-3']['score'],true);
+                $benar_4 = json_decode($last_save[$namess.'-4']['score'],true);
                 $jumlah_benar = $benar_1['benar'] + $benar_2['benar'] + $benar_3['benar'] + $benar_4['benar'];
                 
+                $table = self::cekIQ();
+ 
                 $last_save['total_benar'] = $jumlah_benar;
-                $last_save['iq'] = self::norma($jumlah_benar,'cfit3biq');
-                $last_save['persentil'] = self::norma($jumlah_benar,'cfit3bp');
+                $last_save['iq'] = self::norma($jumlah_benar,$table);
 
                 $save = self::resultStore($request,$last_save,$packet_id);
                 DB::delete('delete from test_temporary where id_user ='.Auth::user()->id);
                 return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
 
-
             }
             else{
-                return redirect('/tes/cfit3b?part='.$part_next);
+                return redirect('/tes/'.$namess.'?part='.$part_next);
             }
         }
         else{
+            $table = self::cekIQ();
             $last_save['benar'] = $save_value;
             $last_save['jawaban'] = $request->jawaban;
-            $last_save['iq'] = self::norma($save_value,'cfit3biq');
-            $last_save['persentil'] = self::norma($save_value,'cfit3bp');
+            $last_save['iq'] = self::norma($save_value,$table);
 
             $save = self::resultStore($request,$last_save,$request->packet_id);
             return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
@@ -175,12 +184,26 @@ class CFIT2AController extends Controller
         $result->save();
     }
 
-    // public static function cekUmur(){
-    //     $birthday = Auth::user()->attribute->birthdate;
-    //     $now = date('Y-m-d');
-    //     $umur = date_diff(date_create($birthday), date_create($now));
-    //     return $umur->format("%y");
-    // }
+
+    public static function cekIQ(){
+        $cu = cek_umur_koma();
+        if($cu>'1' && $cu<'7.9'){$tabel_tes='cfit2iqa';} 
+        if($cu>'7.8' && $cu<'8.3'){$tabel_tes='cfit2iqb';} 
+        if($cu>'8.2' && $cu<'9.3'){$tabel_tes='cfit2iqc';} 
+        if($cu>'8.8' && $cu<'9.3'){$tabel_tes='cfit2iqd';} 
+        if($cu>'9.2' && $cu<'9.9'){$tabel_tes='cfit2iqe';} 
+        if($cu>'9.8' && $cu<'10.3'){$tabel_tes='cfit2iqf';} 
+        if($cu>'10.2' && $cu<'10.9'){$tabel_tes='cfit2iqg';} 
+        if($cu>'10.8' && $cu<'11.3'){$tabel_tes='cfit2iqh';} 
+        if($cu>'11.2' && $cu<'11.9'){$tabel_tes='cfit2iqi';} 
+        if($cu>'11.8' && $cu<'12.3'){$tabel_tes='cfit2iqj';} 
+        if($cu>'12.2' && $cu<'12.9'){$tabel_tes='cfit2iqk';} 
+        if($cu>'12.8' && $cu<'13.3'){$tabel_tes='cfit2iql';} 
+        if($cu>'13.2' && $cu<'13.9'){$tabel_tes='cfit2iqm';} 
+        if($cu>'13.8' && $cu<'99'){$tabel_tes='cfit2iqn';}
+        
+        return $tabel_tes;
+    }
 
     public static function norma($data,$table)
     {

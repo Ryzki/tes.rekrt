@@ -36,11 +36,12 @@
 						<input type="hidden" id="packet_id" name="packet_id" value="{{ $soal->id }}">
 						<input type="hidden" id="test_id" name="test_id" value="{{ $test->id }}"> 
 						<input type="hidden" id="jumlah_soal" name="jumlah_soal" class="jumlah_soal" value="{{ $soal->amount }}"> 
-						@if (request('part') == null)
+						@if (request('part') == null && $part == null)
 							<input type="hidden" name="part" class="part" id="part" value="1">
 						@else
-							<input type="hidden" name="part" class="part" id="part" value="{{ request('part') }}">
+							<input type="hidden" name="part" class="part" id="part" value="{{ $part }}">
 						@endif
+						
 						{{-- //add html button nav and input --}}
 						@for ($i = 1; $i <= $soal->amount; $i++)
 							<a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1" id="button{{ $i }}">{{ $i }}</a>

@@ -1,5 +1,20 @@
 <?php
 
+if(!function_exists('cek_umur_koma')){
+    function cek_umur_koma(){
+        $birthDate = new DateTime(Auth::user()->attribute->birthdate);
+        $today = new DateTime("today");
+        if ($birthDate > $today) { 
+            exit("0,0");
+        }
+        $y = $today->diff($birthDate)->y;
+        $m = $today->diff($birthDate)->m;
+        $d = $today->diff($birthDate)->d;
+        $hasil=$y.".".$m;
+        return $hasil;
+    }
+}
+
 if(!function_exists('cekUmur')){
     function cekUmur(){
         $birthday = Auth::user()->attribute->birthdate;
