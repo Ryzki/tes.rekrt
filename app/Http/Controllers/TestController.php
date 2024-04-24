@@ -8,6 +8,7 @@ use App\Models\Selection;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\MMPIController;
 use App\Http\Controllers\CFIT2AController;
 use App\Http\Controllers\Cfit3aController;
 use App\Http\Controllers\Test\ISTController;
@@ -37,12 +38,14 @@ class TestController extends Controller
         $test_cfit2A = ['cfit2a','cfit2a-1','cfit2a-2','cfit2a-3','cfit2a-4','cfit2b','cfit2b-1','cfit2b-2','cfit2b-3','cfit2b-4'];
         $test_nva = ['numerik-40','verbal60','abstraksi24','16p'];
         $test_laff = ['logika_verbal','apm','a1'];
+        $test_mmpi = ['mmpi','mmpi-2','mmpi-3'];
 
         $this->test_tikid = $test_tikid;
         $this->test_nva = $test_nva;
         $this->test_laff = $test_laff;
         $this->test_cfit3b = $test_cfit3b;
         $this->test_cfit2A = $test_cfit2A;
+        $this->test_mmpi = $test_mmpi;
     }
     /**
      * Display test page
@@ -123,6 +126,8 @@ class TestController extends Controller
             return CFIT3BController::index($request, $path, $test, $selection);
         elseif(in_array($path, $this->test_cfit2A))
             return CFIT2AController::index($request, $path, $test, $selection);
+        elseif(in_array($path, $this->test_mmpi))
+            return MMPIController::index($request, $path, $test, $selection);
         else
             abort(404);
     }
@@ -189,6 +194,8 @@ class TestController extends Controller
             return CFIT3BController::store($request);
         elseif(in_array($request->path,$this->test_cfit2A))
             return CFIT2AController::store($request);
+        elseif(in_array($request->path,$this->test_mmpi))
+            return MMPIController::store($request);
     }
 
     /**

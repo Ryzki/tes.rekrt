@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MMPIController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\CFIT2AController;
 use App\Http\Controllers\Cfit3aController;
@@ -83,6 +84,7 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/abstraksi24/{part}/{id}',[NVAController::class,'getAbstrak'])->name('admin.abstraksi24.next');
 	Route::get('/tes/16p/{part}/{id}',[NVAController::class,'getDataP'])->name('admin.16p.next');
 	Route::get('/tes/{test}/{part}/{id}',[LAFFController::class,'getData']);
+	Route::get('/tes/{test}/{part}/{id}',[MMPIController::class,'getData']);
 
 });
 
