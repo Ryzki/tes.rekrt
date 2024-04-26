@@ -27,25 +27,7 @@
     
     @if($selection == null || ($selection != null && strtotime('now') >= strtotime($selection->test_time)))
 	<div class="row" style="margin-bottom:100px">
-
-        <div class="col-12">
-            <div class="card mb-3">
-                <div class="card-header">
-                    <i class="fa fa-edit"></i> <span class="num fw-bold" data-id="#"> </span><br>
-                </div>
-                
-                <div class="card-body ">
-					<form class="s">
-
-					</form>
-                </div>
-            </div>
-            <div>
-				<a type="button" id="prev" style="display:none;font-size:1rem" class="btn btn-sm btn-warning">Sebelumnya</a>
-				<a type="button" id="next" style="font-size:1rem;float: right;" class="btn btn-sm btn-warning">Selanjutnya</a>
-			</div>
-        </div>
-        <div class="col-12 mb-3">
+        <div class="col-12 mb-3  order-1">
             <div class="card">
                 {{-- <div class="card-header fow-bold text-center">
 					Navigasi Soal
@@ -56,6 +38,7 @@
                         <input type="hidden" id="path" name="path" value="{{ $path }}">
                         <input type="hidden" id="packet_id" name="packet_id" value="{{ $soal->id }}">
                         <input type="hidden" id="test_id" name="test_id" value="{{ $test->id }}">
+                        <input type="hidden" id="jumlah_soal" class="jumlah_soal" name="test_id" value="{{ $soal->amount }}">
 						<input type="hidden" id="part" name="part" class="part" value="1">
                         @for ($i=1; $i <= $soal->amount ; $i++)
                             {{-- <a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1"
@@ -69,21 +52,13 @@
                 {{-- </div> --}}
             </div>
     	</div>
+        <div class="col-12 order-0">
+            @include('test.komponen.form2')
+        </div>
+
 	</div>
 	<nav class="navbar navbar-expand-lg fixed-bottom navbar-light bg-white shadow">
-		<div class="container">
-			<ul class="navbar nav ms-auto">
-				<li class="nav-item">
-					<span id="answered">0</span>/<span id="total">1</span> Soal Terjawab
-				</li>
-				<li class="nav-item ms-3">
-					<a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#tutorialModal" title="Tutorial"><i class="fa fa-question-circle" style="font-size: 1.5rem"></i></a>
-				</li>
-				<li class="nav-item ms-3">
-					<button onclick="deleteItems()" class="btn btn-md btn-primary text-uppercase " id="btn-submit" disabled>Submit</button>
-				</li>
-			</ul>
-		</div>
+		@include('test.komponen.soalSubmit')
 	</nav>
     {{-- <div class="modal fade" id="tutorialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
