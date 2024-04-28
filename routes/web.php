@@ -16,6 +16,7 @@ use App\Http\Controllers\Test\MSDTController;
 use App\Http\Controllers\Test\TikiController;
 use App\Http\Controllers\UserLoginController;
 use App\Http\Controllers\Test\TikiDController;
+use App\Http\Controllers\Test\TIKIMController;
 use App\Http\Controllers\Test\CFIT3BController;
 use App\Http\Controllers\Test\DISC24Controller;
 use App\Http\Controllers\Test\DISC40Controller;
@@ -85,6 +86,7 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/16p/{part}/{id}',[NVAController::class,'getDataP'])->name('admin.16p.next');
 	Route::get('/tes/{test}/{part}/{id}',[LAFFController::class,'getData']);
 	Route::get('/tes/{test}/{part}/{id}',[MMPIController::class,'getData']);
+	Route::get('/tes/tikim/{part}/{id}',[TIKIMController::class,'getData']);
 
 });
 

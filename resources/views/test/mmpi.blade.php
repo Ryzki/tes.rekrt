@@ -38,7 +38,7 @@
                         <input type="hidden" id="path" name="path" value="{{ $path }}">
                         <input type="hidden" id="packet_id" name="packet_id" value="{{ $soal->id }}">
                         <input type="hidden" id="test_id" name="test_id" value="{{ $test->id }}">
-                        <input type="hidden" id="jumlah_soal" class="jumlah_soal" name="test_id" value="{{ $soal->amount }}">
+                        <input type="hidden" id="jumlah_soal" class="jumlah_soal" name="jumlah_soal" value="{{ $soal->amount }}">
 						<input type="hidden" id="part" name="part" class="part" value="1">
                         @for ($i=1; $i <= $soal->amount ; $i++)
                             {{-- <a name="buttonNav" style="font-size:0.75rem;width:3.5rem;border-radius:0.2rem" class="nav_soal btn btn-sm border-warning mt-1"

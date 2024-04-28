@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Packet;
+use App\Models\Result;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +45,16 @@ class MMPIController extends Controller
     }
     public static function store(Request $request)
     {
-        dd($request->all());
+        $jawaban = $request->jawaban;
+
+        $result = new Result;
+        $result->user_id = Auth::user()->id;
+        $result->company_id = Auth::user()->attribute->company_id;
+        $result->test_id = $request->test_id;
+        $result->packet_id = $request->packet_id;
+        $result->result = json_encode($jawaban);
+        $result->save();
+
+        return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
     }
 }
