@@ -101,6 +101,11 @@ class DashboardController extends Controller
         'gears.svg',
         'arrows.svg',
         'thoughts.svg',
+        'keys.svg',
+        'gears.svg',
+        'keys.svg',
+        'keys.svg',
+        'thoughts.svg',
         
     ];
 

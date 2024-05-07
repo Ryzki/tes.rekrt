@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Test\CF3KPKController;
 use App\Models\Test;
 use App\Models\Hasil;
 use App\Models\Selection;
@@ -37,6 +38,7 @@ class TestController extends Controller
         $test_tikid = ['tikid','tikid-1','tikid-2','tikid-3','tikid-4','tikid-5','tikid-6','tikid-7','tikid-8','tikid-9'];
         $test_tikim = ['tikim','tikim-1','tikim-2','tikim-3','tikim-4','tikim-5','tikim-6','tikim-7','tikim-8','tikim-9','tikim-10','tikim-11','tikim-12'];
         $test_cfit3b = ['cfit3b','cfit3b-1','cfit3b-2','cfit3b-3','cfit3b-4'];
+        $test_cf3kpk = ['cf3kpk','cf3kpk-1','cf3kpk-2','cf3kpk-3','cf3kpk-4'];
         $test_cfit2A = ['cfit2a','cfit2a-1','cfit2a-2','cfit2a-3','cfit2a-4','cfit2b','cfit2b-1','cfit2b-2','cfit2b-3','cfit2b-4'];
         $test_nva = ['numerik-40','verbal60','abstraksi24','16p'];
         $test_laff = ['logika_verbal','apm','a1'];
@@ -49,6 +51,7 @@ class TestController extends Controller
         $this->test_cfit2A = $test_cfit2A;
         $this->test_mmpi = $test_mmpi;
         $this->test_tikim = $test_tikim;
+        $this->test_cf3kpk = $test_cf3kpk;
     }
     /**
      * Display test page
@@ -133,6 +136,8 @@ class TestController extends Controller
             return CFIT2AController::index($request, $path, $test, $selection);
         elseif(in_array($path, $this->test_mmpi))
             return MMPIController::index($request, $path, $test, $selection);
+        elseif(in_array($path, $this->test_cf3kpk))
+            return CF3KPKController::index($request, $path, $test, $selection);
         else
             abort(404);
     }
@@ -203,6 +208,8 @@ class TestController extends Controller
             return CFIT2AController::store($request);
         elseif(in_array($request->path,$this->test_mmpi))
             return MMPIController::store($request);
+        elseif(in_array($request->path,$this->test_cf3kpk))
+            return CF3KPKController::store($request);
     }
 
     /**

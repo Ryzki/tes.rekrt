@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Test\CF3KPKController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MMPIController;
 use App\Http\Controllers\TestController;
@@ -87,6 +88,7 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/{test}/{part}/{id}',[LAFFController::class,'getData']);
 	Route::get('/tes/{test}/{part}/{id}',[MMPIController::class,'getData']);
 	Route::get('/tes/tikim/{part}/{id}',[TIKIMController::class,'getData']);
+	Route::get('/tes/{test}/{part}/{id}',[CF3KPKController::class,'getData']);
 
 });
 
