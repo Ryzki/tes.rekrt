@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Test;
 
 use App\Models\Packet;
+use App\Models\Result;
+use App\Models\TesTemporary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -106,47 +108,47 @@ class CF3KPKController extends Controller
 
         if($request->path == 'cf3kpk'){
             $packet_id = 106;
-            // $cek_duplicate = TesTemporary::select('part')->where('part',$request->part)->first();
-            // if($cek_duplicate == null){
+            $cek_duplicate = TesTemporary::select('part')->where('part',$request->part)->first();
+            if($cek_duplicate == null){
 
-            //     $cek_koreksi['benar'] = $save_value;
+                $cek_koreksi['benar'] = $save_value;
 
-            //     $tes_temporary = new TesTemporary;
-            //     $tes_temporary->id_user = Auth::user()->id;
-            //     $tes_temporary->test_id = $request->test_id;
-            //     $tes_temporary->packet_id = $request->packet_id;
-            //     $tes_temporary->json = json_encode($request->jawaban);
-            //     $tes_temporary->part = $request->part;
-            //     $tes_temporary->result_temp = json_encode($cek_koreksi);
-            //     $tes_temporary->save();
-            // }
+                $tes_temporary = new TesTemporary;
+                $tes_temporary->id_user = Auth::user()->id;
+                $tes_temporary->test_id = $request->test_id;
+                $tes_temporary->packet_id = $request->packet_id;
+                $tes_temporary->json = json_encode($request->jawaban);
+                $tes_temporary->part = $request->part;
+                $tes_temporary->result_temp = json_encode($cek_koreksi);
+                $tes_temporary->save();
+            }
             
             $part_next = ($request->part) + 1; //next part soal
             if($part_next >= 5){
-                // $test_id = $request->test_id;
-                // $last_save = array();
-                // $array = TesTemporary::select('result_temp','json')->where('id_user',Auth::user()->id)
-                //                     ->where('test_id',$test_id)
-                //                     ->orderBy('part','asc')
-                //                     ->get();
+                $test_id = $request->test_id;
+                $last_save = array();
+                $array = TesTemporary::select('result_temp','json')->where('id_user',Auth::user()->id)
+                                    ->where('test_id',$test_id)
+                                    ->orderBy('part','asc')
+                                    ->get();
                                     
-                // for($ls=0;$ls < count($array);$ls++){
-                //     $last_save['cfit3b-'.($ls+1)]['score'] = $array[$ls]->result_temp;
-                //     $last_save['cfit3b-'.($ls+1)]['jawaban'] = $array[$ls]->json;
-                // }   
+                for($ls=0;$ls < count($array);$ls++){
+                    $last_save['cf3kpk-'.($ls+1)]['score'] = $array[$ls]->result_temp;
+                    $last_save['cf3kpk-'.($ls+1)]['jawaban'] = $array[$ls]->json;
+                }   
                 
-                // $benar_1 = json_decode($last_save['cfit3b-1']['score'],true);
-                // $benar_2 = json_decode($last_save['cfit3b-2']['score'],true);
-                // $benar_3 = json_decode($last_save['cfit3b-3']['score'],true);
-                // $benar_4 = json_decode($last_save['cfit3b-4']['score'],true);
-                // $jumlah_benar = $benar_1['benar'] + $benar_2['benar'] + $benar_3['benar'] + $benar_4['benar'];
+                $benar_1 = json_decode($last_save['cf3kpk-1']['score'],true);
+                $benar_2 = json_decode($last_save['cf3kpk-2']['score'],true);
+                $benar_3 = json_decode($last_save['cf3kpk-3']['score'],true);
+                $benar_4 = json_decode($last_save['cf3kpk-4']['score'],true);
+                $jumlah_benar = $benar_1['benar'] + $benar_2['benar'] + $benar_3['benar'] + $benar_4['benar'];
                 
-                // $last_save['total_benar'] = $jumlah_benar;
-                // $last_save['iq'] = self::norma($jumlah_benar,'cfit3biq');
-                // $last_save['persentil'] = self::norma($jumlah_benar,'cfit3bp');
+                $last_save['total_benar'] = $jumlah_benar;
+                $last_save['iq'] = self::norma($jumlah_benar,'cfit3biq');
+                $last_save['persentil'] = self::norma($jumlah_benar,'cfit3bp');
 
-                // $save = self::resultStore($request,$last_save,$packet_id);
-                // DB::delete('delete from test_temporary where id_user ='.Auth::user()->id);
+                $save = self::resultStore($request,$last_save,$packet_id);
+                DB::delete('delete from test_temporary where id_user ='.Auth::user()->id);
                 return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
 
 
@@ -167,6 +169,17 @@ class CF3KPKController extends Controller
     {
         $select = DB::table('norma_aptitude')->select($table)->where('nilai', $data)->first();
         return $select->$table;
+    }
+
+    public static function resultStore($request,$last_save,$packet_id)
+    {
+        $result = new Result;
+        $result->user_id = Auth::user()->id;
+        $result->company_id = Auth::user()->attribute->company_id;
+        $result->test_id = $request->test_id;
+        $result->packet_id = $packet_id;
+        $result->result = json_encode($last_save);
+        $result->save();
     }
 
     public static function soal($test_name){
