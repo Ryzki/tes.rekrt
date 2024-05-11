@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Test\CF3KPKController;
 use App\Models\Test;
 use App\Models\Hasil;
 use App\Models\Selection;
@@ -17,6 +16,7 @@ use App\Http\Controllers\Test\NVAController;
 use App\Http\Controllers\Test\SDIController;
 use App\Http\Controllers\Test\TIUController;
 use App\Http\Controllers\Test\WPTController;
+use App\Http\Controllers\Test\CactController;
 use App\Http\Controllers\Test\EPPSController;
 use App\Http\Controllers\Test\LAFFController;
 use App\Http\Controllers\Test\MBTIController;
@@ -25,6 +25,7 @@ use App\Http\Controllers\Test\RMIBController;
 use App\Http\Controllers\Test\TikiController;
 use App\Http\Controllers\Test\TikiDController;
 use App\Http\Controllers\Test\TIKIMController;
+use App\Http\Controllers\Test\CF3KPKController;
 use App\Http\Controllers\Test\CFIT3BController;
 use App\Http\Controllers\Test\DISC24Controller;
 use App\Http\Controllers\Test\DISC40Controller;
@@ -43,6 +44,7 @@ class TestController extends Controller
         $test_nva = ['numerik-40','verbal60','abstraksi24','16p'];
         $test_laff = ['logika_verbal','apm','a1'];
         $test_mmpi = ['mmpi','mmpi-2','mmpi-3'];
+        $test_cact = ['eas4','eas5','frt','cact','c2'];
 
         $this->test_tikid = $test_tikid;
         $this->test_nva = $test_nva;
@@ -52,6 +54,7 @@ class TestController extends Controller
         $this->test_mmpi = $test_mmpi;
         $this->test_tikim = $test_tikim;
         $this->test_cf3kpk = $test_cf3kpk;
+        $this->test_cact = $test_cact;
     }
     /**
      * Display test page
@@ -138,6 +141,8 @@ class TestController extends Controller
             return MMPIController::index($request, $path, $test, $selection);
         elseif(in_array($path, $this->test_cf3kpk))
             return CF3KPKController::index($request, $path, $test, $selection);
+        elseif(in_array($path, $this->test_cact))
+            return CactController::index($request, $path, $test, $selection);
         else
             abort(404);
     }
@@ -210,6 +215,8 @@ class TestController extends Controller
             return MMPIController::store($request);
         elseif(in_array($request->path,$this->test_cf3kpk))
             return CF3KPKController::store($request);
+        elseif(in_array($request->path,$this->test_cact))
+            return CactController::store($request);
     }
 
     /**
