@@ -12,17 +12,17 @@ use Illuminate\Support\Facades\Auth;
 
 class CF3KPKController extends Controller
 {
-    public function getData($test,$part,$id){
+    public function getData($part,$id){
         if($part == 1){
-            $soal = self::soal('cf3kpk-1');
+            $soal = self::soals('cf3kpk-1');
         }else if($part == 2){
-            $soal = self::soal('cf3kpk-2');
+            $soal = self::soals('cf3kpk-2');
         }
         else if($part == 3){
-            $soal = self::soal('cf3kpk-3');
+            $soal = self::soals('cf3kpk-3');
         }
         else if($part == 4){
-            $soal = self::soal('cf3kpk-4');
+            $soal = self::soals('cf3kpk-4');
         }
         else{
             $soal = null;
@@ -33,7 +33,6 @@ class CF3KPKController extends Controller
         return response()->json([
             'quest' => $soal,
             'num' => $id,
-            'test' => $test,
             'part'=> $part
         ]);
     }
@@ -182,7 +181,7 @@ class CF3KPKController extends Controller
         $result->save();
     }
 
-    public static function soal($test_name){
+    public static function soals($test_name){
         $result = array();
 
         if($test_name == 'cf3kpk-1'){

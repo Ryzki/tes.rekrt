@@ -3,18 +3,22 @@
 namespace App\Http\Controllers\Test;
 
 use App\Models\Packet;
+use App\Models\Result;
+use App\Models\Question;
+use App\Models\TesTemporary;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class TIKIMController extends Controller
 {
-    public function getData($part,$id){
+    public function getdata($part,$id){
         $soal = Question::where('packet_id','=',92)->where('number','=',$part)->first();
-        $decode_soal = json_decode($soal->description,true);
+        $decode_soals = json_decode($soal->description,true);
 
         return response()->json([
-            'quest' => $decode_soal,
+            'quest' => $decode_soals,
             'num' => $id,
             'part'=> $part
         ]);
@@ -38,6 +42,9 @@ class TIKIMController extends Controller
                     $part = $request->part;
                     $idx = $test->id + $part;
                 }
+            }else{
+                $idx = $packet->test_id;
+                $part = $packet->part;
             }
         $soal = Packet::select('id','amount')->where('test_id','=',$idx)->where('part','=',$part)->first();
 
@@ -99,12 +106,14 @@ class TIKIMController extends Controller
             }
         }
 
-        dd($save_value);
         if($request->path == 'tikim'){
             $cek_duplicate = TesTemporary::select('part')->where('part',$request->part)->first();
             if($cek_duplicate == null){
 
                 $cek_koreksi['benar'] = $save_value;
+                $cek_koreksi['iq'] = self::norma_tiki($save_value,$request->part,$umur);
+
+                
 
                 $tes_temporary = new TesTemporary;
                 $tes_temporary->id_user = Auth::user()->id;
@@ -120,15 +129,23 @@ class TIKIMController extends Controller
             if($part_next >= 13){
                 $test_id = $request->test_id;
                 $last_save = array();
-                $array = TesTemporary::select('result_temp','json')->where('id_user',Auth::user()->id)
+                $array = TesTemporary::select('result_temp','json','part')->where('id_user',Auth::user()->id)
                                     ->where('test_id',$test_id)
                                     ->orderBy('part','asc')
                                     ->get();
                                     
                 for($ls=0;$ls < count($array);$ls++){
-                    $last_save[$namess.'-'.($ls+1)]['score'] = $array[$ls]->result_temp;
-                    $last_save[$namess.'-'.($ls+1)]['jawaban'] = $array[$ls]->json;
+                    $last_save['tikim-'.($array[$ls]->part)]['score'] = $array[$ls]->result_temp;
+                    $last_save['tikim-'.($array[$ls]->part)]['jawaban'] = $array[$ls]->json;
                 }   
+
+                $result = new Result;
+                $result->user_id = Auth::user()->id;
+                $result->company_id = Auth::user()->attribute->company_id;
+                $result->test_id = $request->test_id;
+                $result->packet_id = $request->packet_id;
+                $result->result = json_encode($last_save);
+                $result->save();
                 
                
                 DB::delete('delete from test_temporary where id_user ='.Auth::user()->id);
@@ -140,34 +157,37 @@ class TIKIMController extends Controller
             }
         }
         else{
+            $cek_koreksi['benar'] = $save_value;
+                $cek_koreksi['iq'] = self::norma_tiki($save_value,$request->part,$umur);
 
+                dd($cek_koreksi);
+                $result = new Result;
+                $result->user_id = Auth::user()->id;
+                $result->company_id = Auth::user()->attribute->company_id;
+                $result->test_id = $request->test_id;
+                $result->packet_id = $request->packet_id;
+                $result->result = json_encode($last_save);
+                $result->save();
             return redirect('/dashboard')->with(['message' => 'Berhasil mengerjakan tes ']);
 
         }
     }
 
-    public static function norma_tiki($data,$table)
+    
+    public static function norma_tiki($data,$part,$usia)
     {
-        $select = DB::table('norma_aptitude')->select($table)->where('nilai', $data)->first();
-        return $select->$table;
+        if($usia>=19){
+            $tabel_tes='tikimb'.$part;
+            $category='tikimb'.$part;
+        }   
+        //umur dibawah 19 tahun
+        else{
+            $tabel_tes='tikima'.$part;
+            $category='tikima'.$part;
+        }  
+
+        $select = DB::table('norma_aptitude')->select($tabel_tes)->where('nilai', $data)->first();
+        return $select->$tabel_tes;
     }
-
-
-   
-function koreksi_tikim2($kodenya){
-    if($usia>60){$usia='60';}              
-    //umur lebih dari 19 tahun
-    elseif($usia=='19' || $usia>19){
-        $tabel_tes='tikimb2';$category='tikimb2';}   
-
-    //umur antara 13 dan 19 tahun
-    elseif($pend==(0||1||5||6||7) && $usia<19){
-        $tabel_tes='tikima2';$category='tikima2';}  
-
-    else{$tabel_tes='tikimb2';$category='tikimb2';}  
-    $ws=cari_norma_tiki($tabel_tes,$benar);
-    //stor ke tabel tes untuk hasilnya
-    mysql_query("UPDATE tikim2 SET RS='$benar',WS='$ws',kategori='$category',tanggal=NOW() WHERE nomor_peserta='$kodenya'");
-}
 
 }

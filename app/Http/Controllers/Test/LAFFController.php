@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\Auth;
 
 class LAFFController extends Controller
 {
-    public function getData($test,$part,$id){
-        if($test == 'logika_verbal'){$test_id = 71;}
-        else if($test == 'apm'){$test_id = 72;}
-        else if($test == 'a1'){$test_id = 73;}
+    public function getData($test_laff,$part,$id){
+        if($test_laff == 'logika_verbal'){$test_id = 71;}
+        else if($test_laff == 'apm'){$test_id = 72;}
+        else if($test_laff == 'a1'){$test_id = 73;}
 
         $soal = Question::where('packet_id','=',$test_id)->where('number','=',$part)->first();
         $decode_soal = json_decode($soal->description,true);

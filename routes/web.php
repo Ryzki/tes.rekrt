@@ -85,10 +85,11 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/verbal60/{part}/{id}',[NVAController::class,'getVerbal'])->name('admin.verbal60.next');
 	Route::get('/tes/abstraksi24/{part}/{id}',[NVAController::class,'getAbstrak'])->name('admin.abstraksi24.next');
 	Route::get('/tes/16p/{part}/{id}',[NVAController::class,'getDataP'])->name('admin.16p.next');
-	Route::get('/tes/{test}/{part}/{id}',[LAFFController::class,'getData']);
-	Route::get('/tes/{test}/{part}/{id}',[MMPIController::class,'getData']);
-	Route::get('/tes/tikim/{part}/{id}',[TIKIMController::class,'getData']);
-	Route::get('/tes/{test}/{part}/{id}',[CF3KPKController::class,'getData']);
+	Route::get('/tes/tikim/{part}/{id}',[TIKIMController::class,'getdata'])->name('admin.tikim.next');
+	Route::get('/tes/cf3kpk/{part}/{id}',[CF3KPKController::class,'getData'])->name('admin.cf3kpk.next');
+	Route::get('/tes/{test_laff}/{part}/{id}',[LAFFController::class,'getData'])->name('admin.laff.next');
+	Route::get('/tes/{mmpi}/{part}',[MMPIController::class,'getMmpi'])->name('admin.mmpi.cek');
+	
 
 });
 

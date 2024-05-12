@@ -10,17 +10,29 @@ use Illuminate\Support\Facades\Auth;
 
 class MMPIController extends Controller
 {
-    public function getData($test,$part,$id){
-        $packet_id = Packet::select('id','name')->where('name','=',$test)->first();
-        $soal = Question::where('packet_id','=',$packet_id->id)->where('number','=',$part)->first();
+
+    // public function getdatas($part,$id){
+    //     $packet_id = Packet::select('id','name')->where('name','=','mmpi')->first();
+    //     $soal = Question::where('packet_id','=',89)->where('number','=',$part)->first();
+    //     $decode_soal = json_decode($soal->description,true);
+
+
+    //     return response()->json([
+    //         'quest' => $decode_soal,
+    //         'num' => $id,
+    //         'part'=> $part
+    //     ]);
+    // }
+
+    public function getMmpi($mmpi,$part){
+        $packet_id = Packet::select('id','name')->where('name','=',$mmpi)->first();
+        $soal = Question::where('packet_id','=',89)->where('number','=',$part)->first();
         $decode_soal = json_decode($soal->description,true);
-
-
+        
         return response()->json([
             'quest' => $decode_soal,
-            'num' => $id,
             'part'=> $part
-        ]);
+        ]);   
     }
     public static function index(Request $request, $path, $test, $selection)
     {
