@@ -11,6 +11,33 @@ use Illuminate\Support\Facades\Auth;
 
 class CactController extends Controller
 {
+
+    public function getSoal($path,$part,$id){
+
+        $data = json_decode(file_get_contents(public_path() . "/assets/js/cact.json"), true);
+        if($path == 'eas4'){        
+            $soal = $data['eas4'];
+            for($i=0;$i<150;$i++){
+                $soal[0]['soal'][$i] = $data['eas4']['jawabA'][$i].' - '.$data['eas4']['jawabB'][$i];
+            }
+            
+        }else if($path == 'eas5'){  
+            $soal = $data['eas5'];
+            // for($i=0;$i<50;$i++){
+            //     $soal[0]['soal'][$i] = $data['eas5']['soal'][$i];
+            // }
+        }else if($path == 'frt'){   $soal = $data['frt'];
+        }else if($path == 'cact'){  $soal = $data['cact'];
+        }else{                      $soal = $data['c2'];
+        }
+
+        return response()->json([
+            'quest' => $soal,
+            'num' => $id,
+            'part'=> 1
+        ]);
+    }
+
     public static function index(Request $request, $path, $test, $selection)
     {
 
@@ -51,6 +78,7 @@ class CactController extends Controller
 
     public static function store(Request $request)
     {
+        dd($request->all());
         $path = $request->path;
         $jawaban = $request->jawaban;
         if($path == 'eas4'){
@@ -84,6 +112,8 @@ class CactController extends Controller
                 $save_value++;
             }
         }
+
+        // dd($save_value);
 
         $last_save['benar'] = $save_value;
         $last_save['ws'] = self::koreksi($path,$save_value);

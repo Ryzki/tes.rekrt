@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Test\CF3KPKController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MMPIController;
+use App\Http\Controllers\SoalController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\CFIT2AController;
 use App\Http\Controllers\Cfit3aController;
@@ -10,6 +10,7 @@ use App\Http\Controllers\Test\NVAController;
 use App\Http\Controllers\Test\TIUController;
 use App\Http\Controllers\Test\WPTController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Test\CactController;
 use App\Http\Controllers\Test\EPPSController;
 use App\Http\Controllers\Test\LAFFController;
 use App\Http\Controllers\Test\MBTIController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Test\TikiController;
 use App\Http\Controllers\UserLoginController;
 use App\Http\Controllers\Test\TikiDController;
 use App\Http\Controllers\Test\TIKIMController;
+use App\Http\Controllers\Test\CF3KPKController;
 use App\Http\Controllers\Test\CFIT3BController;
 use App\Http\Controllers\Test\DISC24Controller;
 use App\Http\Controllers\Test\DISC40Controller;
@@ -64,6 +66,7 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/{path}', [TestController::class,'test']);
 	Route::post('/tes/{path}/store', [TestController::class, 'store']);
 	Route::post('/tes/{path}/delete', [TestController::class, 'delete']);
+
 	Route::get('/tes/msdt/{id}',[MSDTController::class,'getData'])->name('admin.msdt.next');
 	Route::get('/tes/disc-40-soal/{id}',[DISC40Controller::class,'getData'])->name('admin.disc40.next');
 	Route::get('/tes/disc-24-soal/{id}',[DISC24Controller::class,'getData'])->name('admin.disc24.next');
@@ -87,9 +90,11 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/16p/{part}/{id}',[NVAController::class,'getDataP'])->name('admin.16p.next');
 	Route::get('/tes/tikim/{part}/{id}',[TIKIMController::class,'getdata'])->name('admin.tikim.next');
 	Route::get('/tes/cf3kpk/{part}/{id}',[CF3KPKController::class,'getData'])->name('admin.cf3kpk.next');
+	Route::get('/tes/cact/{path_name}/{part}/{id}',[CactController::class,'getSoal'])->name('admin.cact.next');
+
+
 	Route::get('/tes/{test_laff}/{part}/{id}',[LAFFController::class,'getData'])->name('admin.laff.next');
 	Route::get('/tes/{mmpi}/{part}',[MMPIController::class,'getMmpi'])->name('admin.mmpi.cek');
-	
 
 });
 

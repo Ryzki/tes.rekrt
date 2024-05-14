@@ -55,8 +55,11 @@ class CF3KPKController extends Controller
                 $part = $request->part;
                 $idx = $test->id + $part;
             }
-            $soal = Packet::where('test_id','=',$idx)->where('part','=',$part)->where('status','=',1)->first();
-            
+            $soalNoPart = Packet::where('test_id','=',$idx)->where('part','=',$part)->where('status','=',1)->first();
+            $soalPart = Packet::where('name','=',$path)->where('status','=',1)->first();
+            $soal = $path == 'cf3kpk' ? $soalNoPart : $soalPart;
+            $part = $path == 'cf3kpk' ? $part : $soal->part;
+
 
             return view('test.cf3kpk',[ 
                 'total_part' => 4,
