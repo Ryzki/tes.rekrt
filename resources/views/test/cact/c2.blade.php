@@ -26,7 +26,7 @@
     @endif
     @if($selection == null || ($selection != null && strtotime('now') >= strtotime($selection->test_time)))
 	<div id="questmsdt" class="row" style="margin-bottom:100px">
-		<div class="col-12 mb-md-0">
+		<div class="col-3 mb-md-0 order-1">
 			<div class="card">
 				<div class="card-header fw-bold text-center">Navigasi Soal</div>
 				<div class="card-body">
@@ -49,7 +49,7 @@
 				</div>
 			</div>
 		</div>
-	    <div class="col-12 ">
+	    <div class="col-9  order-2">
 			@include('test.komponen.form2')
     	</div>
 	</div>

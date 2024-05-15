@@ -26,7 +26,11 @@
     @endif
     @if($selection == null || ($selection != null && strtotime('now') >= strtotime($selection->test_time)))
 	<div id="questmsdt" class="row" style="margin-bottom:100px">
+		@if ($path == 'eas4')
 		<div class="col-12 mb-md-0">
+		@else
+		<div class="col-3 mb-0">	
+		@endif
 			<div class="card">
 				<div class="card-header fw-bold text-center">Navigasi Soal</div>
 				<div class="card-body">
@@ -49,7 +53,11 @@
 				</div>
 			</div>
 		</div>
-	    <div class="col-12 ">
+		@if ($path == 'eas4')
+		<div class="col-12 mb-md-0">
+		@else
+		<div class="col-9 mb-0">	
+		@endif
 			@include('test.komponen.form2')
     	</div>
 	</div>
