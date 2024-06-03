@@ -45,6 +45,7 @@ class TestController extends Controller
         $test_laff = ['logika_verbal','apm','a1'];
         $test_mmpi = ['mmpi','mmpi-2','mmpi-3'];
         $test_cact = ['eas4','eas5','frt','cact','c2'];
+        $test_wpt = ['wpt','wptlike'];
 
         $this->test_tikid = $test_tikid;
         $this->test_nva = $test_nva;
@@ -55,6 +56,7 @@ class TestController extends Controller
         $this->test_tikim = $test_tikim;
         $this->test_cf3kpk = $test_cf3kpk;
         $this->test_cact = $test_cact;
+        $this->test_wpt = $test_wpt;
     }
     /**
      * Display test page
@@ -111,7 +113,7 @@ class TestController extends Controller
             return RMIBController::index($request, $path, $test, $selection);
         elseif($path == 'tiu')
             return TIUController::index($request, $path, $test, $selection);
-        elseif($path == 'wpt')
+        elseif(in_array($path, $this->test_wpt))
             return WPTController::index($request, $path, $test, $selection);
         elseif($path == 'mbti')
             return MBTIController::index($request, $path, $test, $selection);
@@ -187,7 +189,7 @@ class TestController extends Controller
         // Tes TIU
         elseif($request->path == 'tiu')
             return \App\Http\Controllers\Test\TIUController::store($request);
-        elseif($request->path == 'wpt')
+        elseif(in_array($request->path, $this->test_wpt))
             return \App\Http\Controllers\Test\WPTController::store($request);
         elseif($request->path == 'mbti')
             return \App\Http\Controllers\Test\MBTIController::store($request);

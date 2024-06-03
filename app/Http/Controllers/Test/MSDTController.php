@@ -21,6 +21,7 @@ class MSDTController extends Controller
      */
     public static function index(Request $request, $path, $test, $selection)
     {
+       
         $cek_test = existTest($test->id);
         if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
@@ -92,17 +93,26 @@ class MSDTController extends Controller
             //save jumlah A dan B
             $jumlah = [];
             //change into 8x8 matrix
-            
             $twoDArray = array_chunk($hasil, 8);
+
             for($bk=0;$bk<=7;$bk++){
                 //cek jumlah jawaban A dan B by kolom
                 $arrayResultColumn[$bk] = array_column($twoDArray,$bk);
                 $arrayResultColumn[$bk] = array_count_values($arrayResultColumn[$bk]);
-    
+                
                 //cek jumlah jawaban A dan B by baris
                 $arrayResultRow[$bk] = array_count_values($twoDArray[$bk]);
             }
     
+            for($ck=0;$ck<=7;$ck++){
+                if(!array_key_exists('B',$arrayResultColumn[$ck])){
+                    $arrayResultColumn[$ck]['B'] = 0;
+                }
+                else if(!array_key_exists('A',$arrayResultRow[$ck])){
+                    $arrayResultRow[$ck]['A'] = 0;
+                }
+            }
+
             for($r=0;$r<=7;$r++){
                 //array of jumlah jawaban A tiap kolom ke kanan
                 $countResultA[$r] = $arrayResultRow[$r]['A'];

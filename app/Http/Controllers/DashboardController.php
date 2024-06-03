@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Test;
 use App\Models\Selection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -111,6 +112,7 @@ class DashboardController extends Controller
         'lightning-bolts.svg',
         'keys.svg',
         'thoughts.svg',
+        'gears.svg',
         
     ];
 
@@ -123,8 +125,12 @@ class DashboardController extends Controller
 
         }
         elseif(Auth::user()->role->is_global === 0) {
-            $tests = Auth::user()->attribute->position->tests;
+            $test = Auth::user()->attribute->position->tests;
             // $tests = Auth::user()->attribute->company->tests;
+            $cekk = $test->pluck('id')->toArray();
+            $cekk = array_values(array_unique($cekk));
+            $tests = DB::table('tests')->whereIn('id', $cekk)->get();
+      
         }
 
         // Get the selection
