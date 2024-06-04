@@ -12,8 +12,18 @@ class WPTController extends Controller
 {
     public function getData($num){
         
-        
         $data = json_decode(file_get_contents(public_path() . "/assets/js/wpt.json"), true);
+
+        return response()->json([
+            'quest' => $data,
+            'num' => $num
+        ]);
+    }
+    public function getDataLike($num){
+        
+
+         $data = self::cek();
+        
 
         return response()->json([
             'quest' => $data,
@@ -23,31 +33,29 @@ class WPTController extends Controller
 
     public static function index(Request $request, $path, $test, $selection)
     {
+
         $cek_test = existTest($test->id);
         if($cek_test == false && Auth::user()->role->is_global != 1){
             abort(404);
         }
         else{
-            if($path == 'wpt'){
-
-                $packet = Packet::where('test_id','=',21)->where('status','=',1)->first();
+            $id = $path == 'wpt' ? 21 : $test->id;
+            $packet = Packet::where('test_id','=',$id)->where('status','=',1)->first();
                 
-                return view('test.wpt.wpt', [
-                    'path' => $path,
-                    'test' => $test,
-                    'selection' => $selection,
-                    'packet' => $packet
-                ]);
-            }else{
-                $cek = self::cek();
-                dd(json_encode($cek));
-            }
+            return view('test.wpt.'.$path, [
+                'path' => $path,
+                'test' => $test,
+                'selection' => $selection,
+                'packet' => $packet
+            ]);
+
         }
 
         
     }
 
     public static function store(Request $request){
+        dd($request->all());
         $test_id = $request->test_id;
         $cek_test = existTest($test_id);
         if($cek_test == false && Auth::user()->role->is_global != 1){
@@ -99,6 +107,7 @@ class WPTController extends Controller
         }
     }
 
+    //kunci jawabab test wpt
     public static function data()
     {
         $wpt = [];
@@ -109,7 +118,7 @@ class WPTController extends Controller
         $wpt[5]=["3"];
         $wpt[6]=["1"];
         $wpt[7]=["3"];
-        $wpt[8]=["1/27"];
+        $wpt[8]=["1/27--"]; //1
         $wpt[9]=["1"];
         $wpt[10]=["4"];
         $wpt[11]=["5"];
@@ -119,43 +128,100 @@ class WPTController extends Controller
         $wpt[15]=["3000"];
         $wpt[16]=["3"];
         $wpt[17]=["a", "A"];
-        $wpt[18]=["14"];
+        $wpt[18]=["14--"]; //24
         $wpt[19]=["1"];
         $wpt[20]=["2"];
         $wpt[21]=["20"];
         $wpt[22]=["s" , "S"];
         $wpt[23]=["3&4" , "4&3", "4-3", "4/3", "43", "34", "3-4", "3/4" ];
-        $wpt[24]=["3"];
+        $wpt[24]=["3--"]; //30
         $wpt[25]=["3"];
         $wpt[26]=["1"];
         $wpt[27]=["5"];
         $wpt[28]=["3"];
         $wpt[29]=["8"];
         $wpt[30]=["10"];
-        $wpt[31]=["1/12"];
+        $wpt[31]=["1/12"]; //12
         $wpt[32]=["1"];
         $wpt[33]=["3"];
         $wpt[34]=["24"];
         $wpt[35]=["1/4" , "0,25", "0.25", ",25", ".25"];
         $wpt[36]=["27"];
-        $wpt[37]=["0.1024", ",1024", ".1024", "0,1024"];
+        $wpt[37]=["0.1024", ",1024", ".1024", "0,1024"]; //8.1
         $wpt[38]=["7&10", "10&7", "10/7", "10-7", "107", "710"];
         $wpt[39]=["3"];
         $wpt[40]=["2"];
         $wpt[41]=["1&4", "4&1", "4/1", "4-1", "41", "14", "1/4", "1-4"];
-        $wpt[42]=["4&23", "23&4", "23/4", "23-4", "234", "423", "4/23", "4-23"];
-        $wpt[43]=["0.44", ",44", ".44", "0,44"];
+        $wpt[42]=["4&23", "23&4", "23/4", "23-4", "234", "423", "4/23", "4-23"]; //16
+        $wpt[43]=["0.44", ",44", ".44", "0,44"]; //1
         $wpt[44]=["2"];
-        $wpt[45]=["16000"];
+        $wpt[45]=["16000"]; //32000
         $wpt[46]=["4"];
         $wpt[47]=["3"];
         $wpt[48]=["500"];
-        $wpt[49]=["1,2,3,5", "1235", "1-2-3-5"];
-        $wpt[50]=["67"];
+        $wpt[49]=["1,2,3,5", "1235", "1-2-3-5"]; //4
+        $wpt[50]=["67"]; //25
 
     return $wpt;
     }
 
+    public static function dataWpt()
+    {
+        $wpt[1]="5";
+        $wpt[2]="1";
+        $wpt[3]="4";
+        $wpt[4]="2";
+        $wpt[5]="3";
+        $wpt[6]="1";
+        $wpt[7]="3";
+        $wpt[8]="1";
+        $wpt[9]="1";
+        $wpt[10]="4";
+        $wpt[11]="5";
+        $wpt[12]="4000";
+        $wpt[13]="1";
+        $wpt[14]="3";
+        $wpt[15]="3000";
+        $wpt[16]="3";
+        $wpt[17]="a";
+        $wpt[18]="24";
+        $wpt[19]="1";
+        $wpt[20]="2";
+        $wpt[21]="20";
+        $wpt[22]="s";
+        $wpt[23]="3&4";
+        $wpt[24]="30";
+        $wpt[25]="3";
+        $wpt[26]="1";
+        $wpt[27]="5";
+        $wpt[28]="3";
+        $wpt[29]="8";
+        $wpt[30]="10";
+        $wpt[31]="12";
+        $wpt[32]="1";
+        $wpt[33]="3";
+        $wpt[34]="24";
+        $wpt[35]="1/4";
+        $wpt[36]="27";
+        $wpt[37]="8,1";
+        $wpt[38]="7&10";
+        $wpt[39]="3";
+        $wpt[40]="2";
+        $wpt[41]="1&4";
+        $wpt[42]="16";
+        $wpt[43]="1";
+        $wpt[44]="2";
+        $wpt[45]="32000";
+        $wpt[46]="4";
+        $wpt[47]="3";
+        $wpt[48]="500";
+        $wpt[49]="4";
+        $wpt[50]="25";
+
+        return $wpt;
+    }
+
+    //soal wpt-like
     public static function cek(){
                     
         $soal[0]='Dua bulan lalu pada akhir tahun ini adalah: 1. Maret 2. Mei 3. November  4. Desember 5. Oktober<br><em>Isikan dengan angka saja untuk jawabannya</em>';

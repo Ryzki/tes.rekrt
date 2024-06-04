@@ -76,6 +76,7 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/papikostick/{id}',[PapikostickController::class,'getData'])->name('admin.papikostick.next');
 	Route::get('/tes/tiu/{id}',[TIUController::class,'getData'])->name('admin.tiu.next');
 	Route::get('/tes/wpt/{id}',[WPTController::class,'getData'])->name('admin.wpt.next');
+	Route::get('/tes/wptlike/{id}',[WPTController::class,'getDataLike'])->name('admin.wptlike.next');
 	Route::get('/tes/mbti/{id}',[MBTIController::class,'getData'])->name('admin.mbti.next');
 	Route::get('/tes/tiki/{part}/{id}',[TikiController::class,'getData'])->name('admin.tiki.next');
 	Route::get('/tes/tikid/{part}/{id}',[TikiDController::class,'getData'])->name('admin.tikid.next');
