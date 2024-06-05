@@ -191,7 +191,7 @@
 
 	// Total question
 	function totalQuestion(){
-		var totalRadio = 2;
+		var totalRadio = 51;
 		$("#total").text(totalRadio);
 		return totalRadio;
 	}
