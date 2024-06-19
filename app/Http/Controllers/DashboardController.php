@@ -109,11 +109,12 @@ class DashboardController extends Controller
         'keys.svg',
         'thoughts.svg',
         'keys.svg',
+        'gears.svg',
         'lightning-bolts.svg',
         'keys.svg',
         'thoughts.svg',
         'gears.svg',
-        
+
     ];
 
         // Get tests
@@ -130,7 +131,7 @@ class DashboardController extends Controller
             $cekk = $test->pluck('id')->toArray();
             $cekk = array_values(array_unique($cekk));
             $tests = DB::table('tests')->whereIn('id', $cekk)->get();
-      
+
         }
 
         // Get the selection

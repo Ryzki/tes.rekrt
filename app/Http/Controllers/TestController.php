@@ -32,7 +32,7 @@ use App\Http\Controllers\Test\DISC40Controller;
 use App\Http\Controllers\Test\PapikostickController;
 
 class TestController extends Controller
-{    
+{
     public function __construct()
     {
         //inisialisasi parameter
@@ -60,7 +60,7 @@ class TestController extends Controller
     }
     /**
      * Display test page
-     * 
+     *
      * @param  string $path
      * @param  \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
@@ -74,12 +74,12 @@ class TestController extends Controller
         // Get the test
         $test = Test::where('code','=',$path)->firstOrFail(); // Get tes
         // $check = Auth::user()->role_id == 6 ? Hasil::where('id_user','=',Auth::user()->id)->first() : null; // Check
-        
+
         // Get the selection
         if(Auth::user()->role_id == role('applicant')) {
             $selection = Selection::where('user_id','=',Auth::user()->id)->first();
         }
-            
+
         // Test DISC 40
         if($path == 'disc-40-soal')
             return DISC40Controller::index($request, $path, $test, $selection);
@@ -127,6 +127,8 @@ class TestController extends Controller
             return Cfit3aController::indexPart($request, $path, $test, $selection);
         elseif($path == 'epps')
             return EPPSController::index($request, $path, $test, $selection);
+        elseif($path == 'neopi')
+            return \App\Http\Controllers\NeopiController::index($request, $path, $test, $selection);
         elseif(in_array($path, $this->test_tikid))
             return TikiDController::index($request, $path, $test, $selection);
         elseif(in_array($path, $this->test_tikim))
@@ -145,6 +147,7 @@ class TestController extends Controller
             return CF3KPKController::index($request, $path, $test, $selection);
         elseif(in_array($path, $this->test_cact))
             return CactController::index($request, $path, $test, $selection);
+
         else
             abort(404);
     }
@@ -180,7 +183,7 @@ class TestController extends Controller
         // Tes Assesment 2.0
         elseif($request->path == 'assesment-20' || $request->path == 'assesment-21')
             return \App\Http\Controllers\Test\Assesment20Controller::store($request);
-        // Tes IST        
+        // Tes IST
         elseif($request->path == 'ist')
             return \App\Http\Controllers\Test\ISTController::store($request);
         // Tes RMIB
@@ -201,6 +204,8 @@ class TestController extends Controller
             return \App\Http\Controllers\Cfit3aController::store($request);
         elseif($request->path == 'epps')
             return \App\Http\Controllers\Test\EPPSController::store($request);
+        elseif($request->path == 'neopi')
+            return \App\Http\Controllers\NeopiController::store($request);
         elseif(in_array($request->path,$this->test_nva))
             return \App\Http\Controllers\Test\NVAController::store($request);
         elseif(in_array($request->path,$this->test_tikid))
@@ -244,7 +249,7 @@ class TestController extends Controller
         // Get tes
         $tes = Tes::where('path','=',$path)->firstOrFail(); // Get tes
         $check = Auth::user()->role_id == 6 ? Hasil::where('id_user','=',Auth::user()->id)->first() : null; // Check
-        
+
         // Jika role pelamar
         if(Auth::user()->role_id == 4){
         	$akun = Pelamar::where('id_user','=',Auth::user()->id)->first(); // Get akun

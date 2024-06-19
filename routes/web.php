@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MMPIController;
 use App\Http\Controllers\SoalController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\NeopiController;
 use App\Http\Controllers\CFIT2AController;
 use App\Http\Controllers\Cfit3aController;
 use App\Http\Controllers\Test\NVAController;
@@ -92,7 +93,7 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/tikim/{part}/{id}',[TIKIMController::class,'getdata'])->name('admin.tikim.next');
 	Route::get('/tes/cf3kpk/{part}/{id}',[CF3KPKController::class,'getData'])->name('admin.cf3kpk.next');
 	Route::get('/tes/cact/{path_name}/{part}/{id}',[CactController::class,'getSoal'])->name('admin.cact.next');
-
+	Route::get('/tes/neopi/{id}',[NeopiController::class,'getData'])->name('admin.neopi.next');
 
 	Route::get('/tes/{test_laff}/{part}/{id}',[LAFFController::class,'getData'])->name('admin.laff.next');
 	Route::get('/tes/{mmpi}/{part}',[MMPIController::class,'getMmpi'])->name('admin.mmpi.cek');
