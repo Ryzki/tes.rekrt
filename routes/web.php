@@ -7,6 +7,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\NeopiController;
 use App\Http\Controllers\CFIT2AController;
 use App\Http\Controllers\Cfit3aController;
+use App\Http\Controllers\Test\CPMController;
 use App\Http\Controllers\Test\NVAController;
 use App\Http\Controllers\Test\TIUController;
 use App\Http\Controllers\Test\WPTController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\Test\CFIT3BController;
 use App\Http\Controllers\Test\DISC24Controller;
 use App\Http\Controllers\Test\DISC40Controller;
 use App\Http\Controllers\Test\AssesmentController;
+use App\Http\Controllers\Test\OccupationController;
 use App\Http\Controllers\Test\Assesment10Controller;
 use App\Http\Controllers\Test\Assesment20Controller;
 use App\Http\Controllers\Test\PapikostickController;
@@ -94,6 +96,8 @@ Route::group(['middleware' => ['user']], function() {
 	Route::get('/tes/cf3kpk/{part}/{id}',[CF3KPKController::class,'getData'])->name('admin.cf3kpk.next');
 	Route::get('/tes/cact/{path_name}/{part}/{id}',[CactController::class,'getSoal'])->name('admin.cact.next');
 	Route::get('/tes/neopi/{id}',[NeopiController::class,'getData'])->name('admin.neopi.next');
+	Route::get('/tes/occupational/{id}',[OccupationController::class,'getData'])->name('admin.occupational.next');
+	Route::get('/tes/cpm/{id}',[CPMController::class,'getData'])->name('admin.cpm.next');
 
 	Route::get('/tes/{test_laff}/{part}/{id}',[LAFFController::class,'getData'])->name('admin.laff.next');
 	Route::get('/tes/{mmpi}/{part}',[MMPIController::class,'getMmpi'])->name('admin.mmpi.cek');

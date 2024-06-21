@@ -177,11 +177,12 @@
 
         function nextId(num){
             $.ajax({
-                url: "/tes/neopi/"+num,
+                url: "/tes/occupational/"+num,
                 type: 'get',
                 dataType: 'json',
                 success: function(data){
                     quest = data.quest
+                    console.log(quest)
 
                     num = Number(num);
                     items = num;
@@ -189,9 +190,9 @@
                     page = sessionStorage.setItem('page',num);
 
                     $('.num').text('Soal '+num);
-                    value = ['A','B','C','D','E'];
-                    label = ['Sangat tidak setuju','Tidak setuju','Netral','setuju','Sangat setuju'];
-                    opsiSoalE = textSoal(num,quest,label,'radio',null,name_input,value);
+                    value = ['A','B'];
+                    label = [quest['jawabA'][num-1],quest['jawabB'][num-1]];
+                    opsiSoalE = textNoSoal(num,quest,label,'radio',name_input,value,'col-12');
                     $('.s').empty().append(opsiSoalE);
                     $('.radioClass'+(num-1)).click(function(){
                         var yname = $('input[type="radio"]:checked').attr('value');
@@ -211,19 +212,19 @@
 
                     num > 1 ? $('#prev').show() : $('#prev').hide();
                     //hide next button
-                    num >= 240 ? $('#next').hide() : $('#next').show();
+                    num >= 156 ? $('#next').hide() : $('#next').show();
 
                 }
             })
         }
 
         function getCheckedValue(num){
-        var radioVal = sessionStorage.getItem('jawaban'+num);
-        if(radioVal){
-                const radioCek = document.querySelector(`input[name="`+name_input+`[`+(num-1)+`]"][value="${radioVal}"]`);
-                radioCek.checked = true;
+            var radioVal = sessionStorage.getItem('jawaban'+num);
+            if(radioVal){
+                    const radioCek = document.querySelector(`input[name="`+name_input+`[`+(num-1)+`]"][value="${radioVal}"]`);
+                    radioCek.checked = true;
+            }
         }
-    }
 
     })
 
@@ -243,7 +244,7 @@
 
 	// Total question
 	function totalQuestion(){
-		var totalRadio = 240;
+		var totalRadio = 4;
 		$("#total").text(totalRadio);
 		return totalRadio;
 	}

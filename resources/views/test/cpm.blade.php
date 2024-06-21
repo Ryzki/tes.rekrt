@@ -27,7 +27,7 @@
 
     @if($selection == null || ($selection != null && strtotime('now') >= strtotime($selection->test_time)))
 	<div class="row" style="margin-bottom:100px">
-	    <div class="col-12 mb-3 order-1">
+	    <div class="col-12 col-sm-4 mb-3 order-0">
             <div class="card">
                 <div class="card-header fow-bold text-center">
 					Navigasi Soal
@@ -50,7 +50,7 @@
                 </div>
             </div>
     	</div>
-        <div class="col-12 order-0">
+        <div class="col-12 col-sm-8 order-1">
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fa fa-edit"></i> <span class="num fw-bold" data-id="#"> </span><br>
@@ -145,7 +145,7 @@
 		$("#answered").text(getActive);
 
 
-		for(let i = 1; i <= 240; i++){
+		for(let i = 1; i <= 36; i++){
 			var name = sessionStorage.getItem('jawaban'+i);
 			if(name != null){
 				$('#button'+i).addClass('active');
@@ -177,21 +177,23 @@
 
         function nextId(num){
             $.ajax({
-                url: "/tes/neopi/"+num,
+                url: "/tes/cpm/"+num,
                 type: 'get',
                 dataType: 'json',
                 success: function(data){
                     quest = data.quest
+                    console.log(quest)
+                    num = Number(num)
+                    items = num
+                    number = num-1
+                    page = sessionStorage.setItem('page',num)
 
-                    num = Number(num);
-                    items = num;
-                    number = num-1;
-                    page = sessionStorage.setItem('page',num);
+                    $('.num').text('Soal '+num)
+                    src = '../assets/images/gambar/cpm/'
+                    value = ['A','B','C','D','E','F']
+                    label = [quest[1]['jawabA'][num-1],quest[2]['jawabB'][num-1],quest[3]['jawabC'][num-1],quest[4]['jawabD'][num-1],quest[5]['jawabE'][num-1],quest[6]['jawabF'][num-1]];
+                    opsiSoalE = gambarGambar(num,quest,src,label,'radio',name_input,value);
 
-                    $('.num').text('Soal '+num);
-                    value = ['A','B','C','D','E'];
-                    label = ['Sangat tidak setuju','Tidak setuju','Netral','setuju','Sangat setuju'];
-                    opsiSoalE = textSoal(num,quest,label,'radio',null,name_input,value);
                     $('.s').empty().append(opsiSoalE);
                     $('.radioClass'+(num-1)).click(function(){
                         var yname = $('input[type="radio"]:checked').attr('value');
@@ -202,7 +204,7 @@
                         sessionStorage.setItem('active',activeLength);
                         sessionStorage.setItem('jawaban'+num,yname);
 
-                        if(num < 240){
+                        if(num < 36){
                             nextId(num+1);
                         };
                     });
@@ -211,7 +213,7 @@
 
                     num > 1 ? $('#prev').show() : $('#prev').hide();
                     //hide next button
-                    num >= 240 ? $('#next').hide() : $('#next').show();
+                    num >= 36 ? $('#next').hide() : $('#next').show();
 
                 }
             })
@@ -243,7 +245,7 @@
 
 	// Total question
 	function totalQuestion(){
-		var totalRadio = 240;
+		var totalRadio = 36;
 		$("#total").text(totalRadio);
 		return totalRadio;
 	}

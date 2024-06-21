@@ -47,7 +47,6 @@ class NeopiController extends Controller
 
     public static function store(Request $request)
     {
-        // dd($request->all());
         $jawaban = $request->jawaban;
 
         $result = new Result;

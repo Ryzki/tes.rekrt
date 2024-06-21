@@ -129,6 +129,10 @@ class TestController extends Controller
             return EPPSController::index($request, $path, $test, $selection);
         elseif($path == 'neopi')
             return \App\Http\Controllers\NeopiController::index($request, $path, $test, $selection);
+        elseif($path == 'cpm')
+            return \App\Http\Controllers\Test\CPMController::index($request, $path, $test, $selection);
+        elseif($path == 'occupational')
+            return \App\Http\Controllers\Test\OccupationController::index($request, $path, $test, $selection);
         elseif(in_array($path, $this->test_tikid))
             return TikiDController::index($request, $path, $test, $selection);
         elseif(in_array($path, $this->test_tikim))
@@ -206,6 +210,10 @@ class TestController extends Controller
             return \App\Http\Controllers\Test\EPPSController::store($request);
         elseif($request->path == 'neopi')
             return \App\Http\Controllers\NeopiController::store($request);
+        elseif($request->path == 'occupational')
+            return \App\Http\Controllers\Test\OccupationController::store($request);
+        elseif($request->path == 'cpm')
+            return \App\Http\Controllers\Test\CPMController::store($request);
         elseif(in_array($request->path,$this->test_nva))
             return \App\Http\Controllers\Test\NVAController::store($request);
         elseif(in_array($request->path,$this->test_tikid))
